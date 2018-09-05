@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 PKGNAME='ocs-store'
 PKGVER='3.3.1'
