@@ -13,13 +13,14 @@ BUILDDIR="${PROJDIR}/build_${PKGNAME}"
 appimage() { # docker-image: ubuntu:14.04
     install_build_deps_appimage
     add_pkguser
-    su -c "export HOME=/home/${PKGUSER} && source /opt/qt59/bin/qt59-env.sh && "${PKGSCRIPT}" build_appimage" ${PKGUSER}
+    su -c "export HOME=/home/${PKGUSER} && "${PKGSCRIPT}" build_appimage" ${PKGUSER}
     transfer_file "$(find "${BUILDDIR}" -type f -name "${PKGNAME}*-x86_64.AppImage")"
 }
 
 install_build_deps_appimage() {
     apt update -qq
     apt -y install curl git
+    apt -y install build-essential
     $(git clone https://github.com/tj/n.git -b master --single-branch --depth=1 "${PROJDIR}/n" && cd "${PROJDIR}/n" && make install && rm -rf "${PROJDIR}/n" && n lts)
     apt -y install libgconf-2-4 libxss1 libcanberra-gtk-module libgnome-keyring0
 }
