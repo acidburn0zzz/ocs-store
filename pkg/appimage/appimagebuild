@@ -10,6 +10,7 @@ curl -fsSL -o appimagetool https://github.com/AppImage/AppImageKit/releases/down
 chmod 755 appimagetool
 ./appimagetool --appimage-extract
 
+./scripts/prepare
 make
 make DESTDIR="${PKGNAME}.AppDir" prefix=/usr install
 
