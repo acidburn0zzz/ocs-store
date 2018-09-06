@@ -21,10 +21,10 @@
   "dependencies": {
     "electron-store": "2.0.0",
     "import-export": "1.0.1",
-    "request": "2.87.0"
+    "request": "2.88.0"
   },
   "devDependencies": {
-    "electron": "2.0.4",
-    "electron-packager": "12.1.0"
+    "electron": "2.0.8",
+    "electron-packager": "12.1.1"
   }
 }
