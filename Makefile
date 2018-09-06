@@ -27,7 +27,6 @@ build: $(TARGET) ;
 
 clean:
 	$(RM) $(srcdir)/node_modules
-	$(RM) $(srcdir)/bin
 	$(RM) $(srcdir)/dist
 
 install:
@@ -45,12 +44,7 @@ uninstall:
 
 $(TARGET): $(TARGET)-linux-x64 ;
 
-$(TARGET)-linux-x64: ocs-manager
+$(TARGET)-linux-x64:
 	cd $(srcdir) ; \
 		npm install ; \
 		npm run package
-
-ocs-manager:
-	$(MKDIR) $(srcdir)/bin
-	curl -fsSL -o $(srcdir)/bin/ocs-manager https://gitlab.opencode.net/OCS/ocs-store/uploads/****/ocs-manager-0.7.0-1-x86_64.AppImage
-	chmod 755 $(srcdir)/bin/ocs-manager
