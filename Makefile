@@ -3,8 +3,6 @@ SHELL = /bin/sh
 TARGET = ocs-store
 srcdir = .
 
-build_tmpdir = ./build_tmp
-
 DESTDIR =
 prefix = /usr/local
 exec_prefix = $(prefix)
@@ -28,7 +26,6 @@ rebuild: clean build ;
 build: $(TARGET) ;
 
 clean:
-	$(RM) $(build_tmpdir)
 	$(RM) $(srcdir)/node_modules
 	$(RM) $(srcdir)/bin
 	$(RM) $(srcdir)/dist
@@ -54,8 +51,6 @@ $(TARGET)-linux-x64: ocs-manager
 		npm run package
 
 ocs-manager:
-	$(MKDIR) $(build_tmpdir)
-	git clone https://gitlab.opencode.net/OCS/ocs-manager.git -b release-0.6.5 --single-branch --depth=1 $(build_tmpdir)/ocs-manager
-	cd $(build_tmpdir)/ocs-manager ; \
-		./scripts/package build_appimage
-	$(INSTALL_PROGRAM) `find "$(build_tmpdir)/ocs-manager" -type f -name "ocs-manager*-x86_64.AppImage"` $(srcdir)/bin/ocs-manager
+	$(MKDIR) $(srcdir)/bin
+	curl -fsSL -o $(srcdir)/bin/ocs-manager https://gitlab.opencode.net/OCS/ocs-store/uploads/****/ocs-manager-0.7.0-1-x86_64.AppImage
+	chmod 755 $(srcdir)/bin/ocs-manager
