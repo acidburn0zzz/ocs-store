@@ -16,7 +16,7 @@ export default class Component {
             element = document.querySelector(element);
         }
 
-        this.element = element ? element : document.createElement('div');
+        this.element = element || document.createElement('div');
         this.innerHTML = this.element.innerHTML;
         this.state = state;
 
@@ -28,7 +28,7 @@ export default class Component {
     _build() {
         const html = this.html();
         const style = this.style();
-        this.element.innerHTML = style ? `<style scoped>${style}</style>${html}` : html;
+        this.element.innerHTML = style ? `<style>${style}</style>${html}` : html;
         this.script();
     }
 

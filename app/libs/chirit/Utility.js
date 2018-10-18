@@ -13,7 +13,7 @@ export default class Utility {
         const params = {};
         if (window.location.search.length > 1) {
             const queries = window.location.search.substring(1).split('&');
-            for (var i = 0; i < queries.length; i++) {
+            for (let i = 0; i < queries.length; i++) {
                 const kv = queries[i].split('=');
                 const key = decodeURIComponent(kv[0]);
                 const value = kv[1] ? decodeURIComponent(kv[1]) : '';
@@ -130,7 +130,7 @@ export default class Utility {
             + addition;
         const stringArray = strings.split('');
         let randomString = '';
-        for (var i = 0; i < length; i++) {
+        for (let i = 0; i < length; i++) {
             randomString += stringArray[Math.floor(Math.random() * stringArray.length)];
         }
         return randomString;
