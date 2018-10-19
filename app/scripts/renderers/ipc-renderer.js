@@ -9,6 +9,7 @@ const url = require('url');
         'opendesktop.org', 'www.opendesktop.org',
         'forum.opendesktop.org',
 
+        'appimagehub.com', 'www.appimagehub.com',
         'linux-apps.com', 'www.linux-apps.com',
         'linux-appimages.org', 'www.linux-appimages.org',
 
