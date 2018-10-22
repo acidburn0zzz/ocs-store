@@ -1,8 +1,8 @@
 const electronStore = require('electron-store');
 
-import Component from '../../libs/chirit/Component.js';
+import Chirit from '../../libs/chirit/Chirit.js';
 
-export default class ToolBar extends Component {
+export default class ToolBar extends Chirit.Component {
 
     init() {
         if (!this.state) {

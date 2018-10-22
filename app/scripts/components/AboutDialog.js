@@ -1,8 +1,8 @@
-import Component from '../../libs/chirit/Component.js';
+import Chirit from '../../libs/chirit/Chirit.js';
 
 import packageMeta from '../../../package.json';
 
-export default class AboutDialog extends Component {
+export default class AboutDialog extends Chirit.Component {
 
     html() {
         return `

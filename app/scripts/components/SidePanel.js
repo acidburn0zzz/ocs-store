@@ -1,8 +1,8 @@
-import Component from '../../libs/chirit/Component.js';
+import Chirit from '../../libs/chirit/Chirit.js';
 
 import packageMeta from '../../../package.json';
 
-export default class SidePanel extends Component {
+export default class SidePanel extends Chirit.Component {
 
     html() {
         return `

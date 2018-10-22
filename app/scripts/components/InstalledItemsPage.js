@@ -1,8 +1,8 @@
 const electron = require('electron');
 
-import Component from '../../libs/chirit/Component.js';
+import Chirit from '../../libs/chirit/Chirit.js';
 
-export default class InstalledItemsPage extends Component {
+export default class InstalledItemsPage extends Chirit.Component {
 
     html() {
         if (!this.state) {

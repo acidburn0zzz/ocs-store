@@ -1,11 +1,11 @@
-import Component from '../../libs/chirit/Component.js';
+import Chirit from '../../libs/chirit/Chirit.js';
 
 import ToolBar from './ToolBar.js';
 import StatusBar from './StatusBar.js';
 import MainArea from './MainArea.js';
 import SidePanel from './SidePanel.js';
 
-export default class Root extends Component {
+export default class Root extends Chirit.Component {
 
     init() {
         console.log('Component building started');

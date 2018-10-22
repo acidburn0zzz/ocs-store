@@ -1,6 +1,6 @@
-import Component from '../../libs/chirit/Component.js';
+import Chirit from '../../libs/chirit/Chirit.js';
 
-export default class BrowsePage extends Component {
+export default class BrowsePage extends Chirit.Component {
 
     html() {
         return `

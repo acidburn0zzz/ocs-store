@@ -7,7 +7,8 @@ const request = require('request');
 
 const packageMeta = require('../../../package.json');
 
-import StateManager from '../../libs/chirit/StateManager.js';
+import Chirit from '../../libs/chirit/Chirit.js';
+
 import Root from '../components/Root.js';
 
 {
@@ -16,7 +17,7 @@ import Root from '../components/Root.js';
 
     const webSocketUrl = require(path.join(remote.app.getPath('appData'), 'ocs-manager', 'application.json')).websocket_url;
     const webSocket = new WebSocket(webSocketUrl);
-    const stateManager = new StateManager();
+    const stateManager = new Chirit.StateManager();
     const root = new Root('[data-component="Root"]');
     const mainWebview = root.mainArea.browsePage.element.querySelector('[data-webview="main"]');
 
