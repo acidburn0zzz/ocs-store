@@ -7,10 +7,10 @@
  * @link        https://github.com/akiraohgaki/chirit
  */
 
-export default class StatusManager {
+export default class StateManager {
 
     constructor(eventTarget) {
-        // "eventTarget" will be Element object or selector string
+        // "eventTarget" should be Element object or selector string
         if (typeof eventTarget === 'string') {
             eventTarget = document.querySelector(eventTarget);
         }
@@ -22,23 +22,23 @@ export default class StatusManager {
             this.dispatch(event.type, event.detail);
         };
 
-        this._status = new Map();
+        this._states = new Map();
         this._actions = new Map();
         this._views = new Map();
     }
 
-    getStatus() {
-        return this._status;
+    getStates() {
+        return this._states;
     }
 
     getState(type) {
-        return this._status.get(type);
+        return this._states.get(type);
     }
 
     registerAction(type, action, options) {
         const actions = this._actions.has(type) ? this._actions.get(type) : new Map();
         if (!actions.size) {
-            this._status.set(type, {});
+            this._states.set(type, {});
             this._eventTarget.addEventListener(type, this._eventListener, false);
         }
         actions.set(action, options);
@@ -55,7 +55,7 @@ export default class StatusManager {
                 }
                 else {
                     this._actions.delete(type);
-                    this._status.delete(type);
+                    this._states.delete(type);
                     this._eventTarget.removeEventListener(type, this._eventListener, false);
                 }
             }
@@ -98,12 +98,12 @@ export default class StatusManager {
         }
 
         Promise.all(promises)
-            .then((status) => {
+            .then((states) => {
                 const state = {};
-                for (const _state of status) {
+                for (const _state of states) {
                     Object.assign(state, _state);
                 }
-                this._status.set(type, state);
+                this._states.set(type, state);
 
                 if (!this._views.has(type)) {
                     console.log(`No views for type "${type}"`); // This case is not error

@@ -67,7 +67,7 @@ export default class Utility {
     }
 
     static convertDatetimeToHumanReadable(datetime) {
-        // Must be datetime in ISO 8601 format
+        // "datetime" should be ISO 8601 formatted string
 
         const minute = 60 * 1000;
         const hour = 60 * minute;

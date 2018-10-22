@@ -11,7 +11,7 @@ export default class Component {
 
     // Subclass should use init() instead of constructor()
     constructor(element, state) {
-        // "element" will be Element object or selector string
+        // "element" should be Element object or selector string
         if (typeof element === 'string') {
             element = document.querySelector(element);
         }

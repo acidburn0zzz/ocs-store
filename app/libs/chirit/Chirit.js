@@ -8,7 +8,7 @@
  */
 
 import Component from './Component.js';
-import StatusManager from './StatusManager.js';
+import StateManager from './StateManager.js';
 import WebStorage from './WebStorage.js';
 import Utility from './Utility.js';
 
@@ -18,8 +18,8 @@ export default class Chirit {
         return Component;
     }
 
-    static get StatusManager() {
-        return StatusManager;
+    static get StateManager() {
+        return StateManager;
     }
 
     static get WebStorage() {
