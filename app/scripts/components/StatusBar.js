@@ -1,8 +1,8 @@
-import Component from '../../libs/chirit/Component.js';
+import Chirit from '../../libs/chirit/Chirit.js';
 
 import StatusBarItem from './StatusBarItem.js';
 
-export default class StatusBar extends Component {
+export default class StatusBar extends Chirit.Component {
 
     init() {
         this.items = {};

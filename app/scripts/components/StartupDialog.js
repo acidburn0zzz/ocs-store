@@ -1,8 +1,8 @@
-import Component from '../../libs/chirit/Component.js';
+import Chirit from '../../libs/chirit/Chirit.js';
 
 import packageMeta from '../../../package.json';
 
-export default class StartupDialog extends Component {
+export default class StartupDialog extends Chirit.Component {
 
     html() {
         return `

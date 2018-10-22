@@ -1,4 +1,4 @@
-import Component from '../../libs/chirit/Component.js';
+import Chirit from '../../libs/chirit/Chirit.js';
 
 import StartupDialog from './StartupDialog.js';
 import AboutDialog from './AboutDialog.js';
@@ -8,7 +8,7 @@ import BrowsePage from './BrowsePage.js';
 import CollectionPage from './CollectionPage.js';
 import InstalledItemsPage from './InstalledItemsPage.js';
 
-export default class Root extends Component {
+export default class Root extends Chirit.Component {
 
     html() {
         return `

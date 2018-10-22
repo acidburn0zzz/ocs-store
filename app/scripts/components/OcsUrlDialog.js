@@ -1,8 +1,8 @@
 const url = require('url');
 
-import Component from '../../libs/chirit/Component.js';
+import Chirit from '../../libs/chirit/Chirit.js';
 
-export default class OcsUrlDialog extends Component {
+export default class OcsUrlDialog extends Chirit.Component {
 
     html() {
         if (!this.state) {

@@ -7,7 +7,8 @@ const request = require('request');
 
 const packageMeta = require('../../../package.json');
 
-import StatusManager from '../../libs/chirit/StatusManager.js';
+import Chirit from '../../libs/chirit/Chirit.js';
+
 import Root from '../components/Root.js';
 
 {
@@ -16,7 +17,7 @@ import Root from '../components/Root.js';
 
     const webSocketUrl = require(path.join(remote.app.getPath('appData'), 'ocs-manager', 'application.json')).websocket_url;
     const webSocket = new WebSocket(webSocketUrl);
-    const statusManager = new StatusManager();
+    const stateManager = new Chirit.StateManager();
     const root = new Root('[data-component="Root"]');
     const mainWebview = root.mainArea.browsePage.element.querySelector('[data-webview="main"]');
 
@@ -31,7 +32,7 @@ import Root from '../components/Root.js';
         document.title = packageMeta.productName;
 
         setupWebSocket();
-        setupStatusManager();
+        setupStateManager();
         setupWebView();
         setupEvent();
 
@@ -39,7 +40,7 @@ import Root from '../components/Root.js';
             root.mainArea.startupDialog.show();
         }
 
-        statusManager.dispatch('browse-page');
+        stateManager.dispatch('browse-page');
     }
 
     function setupWebSocket() {
@@ -243,16 +244,16 @@ import Root from '../components/Root.js';
         };
     }
 
-    function setupStatusManager() {
-        statusManager.registerAction('side-panel', () => {
+    function setupStateManager() {
+        stateManager.registerAction('side-panel', () => {
             root.sidePanel.toggle();
         });
 
-        statusManager.registerAction('about-dialog', () => {
+        stateManager.registerAction('about-dialog', () => {
             root.mainArea.aboutDialog.show();
         });
 
-        statusManager.registerAction('ocs-url-dialog', (resolve, reject, params) => {
+        stateManager.registerAction('ocs-url-dialog', (resolve, reject, params) => {
             root.mainArea.ocsUrlDialog.update({
                 ocsUrl: params.ocsUrl,
                 providerKey: params.providerKey,
@@ -262,21 +263,21 @@ import Root from '../components/Root.js';
             root.mainArea.ocsUrlDialog.show();
         });
 
-        statusManager.registerAction('process-ocs-url', (resolve, reject, params) => {
+        stateManager.registerAction('process-ocs-url', (resolve, reject, params) => {
             root.mainArea.ocsUrlDialog.hide();
             sendWebSocketMessage('', 'ItemHandler::getItemByOcsUrl', [params.ocsUrl, params.providerKey, params.contentId]);
         });
 
-        statusManager.registerAction('open-destination', (resolve, reject, params) => {
+        stateManager.registerAction('open-destination', (resolve, reject, params) => {
             const url = `file://${installTypes[params.installType].destination}`;
             sendWebSocketMessage(url, 'SystemHandler::openUrl', [url]);
         });
 
-        statusManager.registerAction('remove-statusbar-item', (resolve, reject, params) => {
+        stateManager.registerAction('remove-statusbar-item', (resolve, reject, params) => {
             root.statusBar.removeItem(params);
         });
 
-        statusManager.registerAction('browse-page', () => {
+        stateManager.registerAction('browse-page', () => {
             root.toolBar.update({
                 active: 'start-page',
                 backAction: 'main-webview-back',
@@ -290,7 +291,7 @@ import Root from '../components/Root.js';
             root.mainArea.changePage('browsePage');
         });
 
-        statusManager.registerAction('start-page', (resolve, reject, params) => {
+        stateManager.registerAction('start-page', (resolve, reject, params) => {
             const store = new electronStore({name: 'application'});
 
             if (params.startPage) {
@@ -299,22 +300,22 @@ import Root from '../components/Root.js';
 
             mainWebview.setAttribute('src', store.get('startPage'));
 
-            statusManager.dispatch('browse-page');
+            stateManager.dispatch('browse-page');
         });
 
-        statusManager.registerAction('main-webview-back', () => {
+        stateManager.registerAction('main-webview-back', () => {
             if (mainWebview.canGoBack()) {
                 mainWebview.goBack();
             }
         });
 
-        statusManager.registerAction('main-webview-forward', () => {
+        stateManager.registerAction('main-webview-forward', () => {
             if (mainWebview.canGoForward()) {
                 mainWebview.goForward();
             }
         });
 
-        statusManager.registerAction('collection-page', () => {
+        stateManager.registerAction('collection-page', () => {
             root.toolBar.update({
                 active: 'collection-page',
                 backAction: '',
@@ -328,28 +329,28 @@ import Root from '../components/Root.js';
             root.mainArea.changePage('collectionPage');
         });
 
-        statusManager.registerAction('installed-items-page', (resolve, reject, params) => {
+        stateManager.registerAction('installed-items-page', (resolve, reject, params) => {
             sendWebSocketMessage(params.installType, 'DesktopThemeHandler::isApplicableType', [params.installType]);
         });
 
-        statusManager.registerAction('open-url', (resolve, reject, params) => {
+        stateManager.registerAction('open-url', (resolve, reject, params) => {
             sendWebSocketMessage(params.url, 'SystemHandler::openUrl', [params.url]);
         });
 
-        statusManager.registerAction('open-file', (resolve, reject, params) => {
+        stateManager.registerAction('open-file', (resolve, reject, params) => {
             const url = `file://${params.path}`;
             sendWebSocketMessage(url, 'SystemHandler::openUrl', [url]);
         });
 
-        statusManager.registerAction('update-item', (resolve, reject, params) => {
+        stateManager.registerAction('update-item', (resolve, reject, params) => {
             sendWebSocketMessage(params.path, 'UpdateHandler::update', [params.itemKey]);
         });
 
-        statusManager.registerAction('apply-theme', (resolve, reject, params) => {
+        stateManager.registerAction('apply-theme', (resolve, reject, params) => {
             sendWebSocketMessage(params.path, 'DesktopThemeHandler::applyTheme', [params.path, params.installType]);
         });
 
-        statusManager.registerAction('remove-file', (resolve, reject, params) => {
+        stateManager.registerAction('remove-file', (resolve, reject, params) => {
             sendWebSocketMessage(params.itemKey, 'ItemHandler::uninstall', [params.itemKey]);
         });
     }
@@ -388,14 +389,14 @@ import Root from '../components/Root.js';
             if (event.channel === 'user-profile') {
             }
             else if (event.channel === 'ocs-url') {
-                statusManager.dispatch('ocs-url-dialog', {
+                stateManager.dispatch('ocs-url-dialog', {
                     ocsUrl: event.args[0],
                     providerKey: event.args[1],
                     contentId: event.args[2]
                 });
             }
             else if (event.channel === 'external-url') {
-                statusManager.dispatch('open-url', {url: event.args[0]});
+                stateManager.dispatch('open-url', {url: event.args[0]});
             }
         });
     }
@@ -414,7 +415,7 @@ import Root from '../components/Root.js';
                     params = JSON.parse(targetElement.getAttribute('data-params'));
                 }
 
-                statusManager.dispatch(type, params);
+                stateManager.dispatch(type, params);
             }
             else if (event.target.closest('a[data-dispatch]')) {
                 event.preventDefault();
@@ -428,13 +429,13 @@ import Root from '../components/Root.js';
                     params = JSON.parse(targetElement.getAttribute('data-params'));
                 }
 
-                statusManager.dispatch(type, params);
+                stateManager.dispatch(type, params);
             }
             else if (event.target.closest('a[target]')) {
                 event.preventDefault();
                 event.stopPropagation();
 
-                statusManager.dispatch('open-url', {url: event.target.closest('a[target]').getAttribute('href')});
+                stateManager.dispatch('open-url', {url: event.target.closest('a[target]').getAttribute('href')});
             }
         }, false);
     }
