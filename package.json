@@ -3,11 +3,6 @@
   "productName": "OCS-Store",
   "version": "3.4.1",
   "description": "Store Frontend and Management Application based on OpenCollaborationServices (OCS) of Opendesktop.org.",
-  "keywords": [
-    "Opendesktop",
-    "OCS",
-    "Electron"
-  ],
   "author": "Opendesktop.org",
   "license": "GPL-3.0",
   "homepage": "https://www.opendesktop.org/",
