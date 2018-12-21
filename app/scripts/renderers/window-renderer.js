@@ -382,6 +382,32 @@ import Root from '../components/Root.js';
             }
         });
 
+        mainWebview.addEventListener('will-navigate', (event) => {
+            // See also ipc-renderer.js
+            if (event.url.startsWith('ocs://') || event.url.startsWith('ocss://')) {
+                event.stopPropagation();
+
+                // Parse page URL
+                // https://www.opendesktop.org/p/123456789/?key=val#hash
+                // Then make provider key and content id
+                // providerKey = https://www.opendesktop.org/ocs/v1/
+                // contentId = 123456789
+                const pageUrlParts = mainWebview.getURL().split('?')[0].split('#')[0].split('/p/');
+                let providerKey = '';
+                let contentId = '';
+                if (pageUrlParts[0] && pageUrlParts[1]) {
+                    providerKey = `${pageUrlParts[0]}/ocs/v1/`;
+                    contentId = pageUrlParts[1].split('/')[0];
+                }
+
+                statusManager.dispatch('ocs-url-dialog', {
+                    ocsUrl: event.url,
+                    providerKey: providerKey,
+                    contentId: contentId
+                });
+            }
+        });
+
         mainWebview.addEventListener('ipc-message', (event) => {
             console.log('IPC message received');
             console.log([event.channel, event.args]);
