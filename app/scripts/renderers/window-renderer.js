@@ -400,7 +400,7 @@ import Root from '../components/Root.js';
                     contentId = pageUrlParts[1].split('/')[0];
                 }
 
-                statusManager.dispatch('ocs-url-dialog', {
+                stateManager.dispatch('ocs-url-dialog', {
                     ocsUrl: event.url,
                     providerKey: providerKey,
                     contentId: contentId
