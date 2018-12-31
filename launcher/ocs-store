@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Newer openssl workaround
+export OPENSSL_CONF=/etc/ssl/
+
 PREFIX="$(cd "$(dirname "${0}")" && pwd)"
 
 if [ -f "${PREFIX}/ocs-store-linux-x64/ocs-store" ]; then
