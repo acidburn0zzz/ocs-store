@@ -10,6 +10,7 @@ export default class ToolBar extends Chirit.Component {
                 active: '',
                 backAction: '',
                 forwardAction: '',
+                refreshAction: '',
                 homeAction: '',
                 collectionAction: '',
                 indicator: false,
@@ -21,6 +22,7 @@ export default class ToolBar extends Chirit.Component {
     html() {
         const backButtonAttr = this.state.backAction ? `data-dispatch="${this.state.backAction}"` : 'disabled';
         const forwardButtonAttr = this.state.forwardAction ? `data-dispatch="${this.state.forwardAction}"` : 'disabled';
+        const refreshButtonAttr = this.state.refreshAction ? `data-dispatch="${this.state.refreshAction}"` : 'disabled';
         const homeButtonAttr = this.state.homeAction ? `data-dispatch="${this.state.homeAction}"` : 'disabled';
         const collectionButtonAttr = this.state.collectionAction ? `data-dispatch="${this.state.collectionAction}"` : 'disabled';
         const collectionButtonImportant = this.state.updateAvailable ? 'important' : '';
@@ -28,10 +30,11 @@ export default class ToolBar extends Chirit.Component {
         return `
             <button class="toolbar-button icon-chevron-left" ${backButtonAttr}></button>
             <button class="toolbar-button icon-chevron-right" ${forwardButtonAttr}></button>
+            <button class="toolbar-button icon-refresh refresh-button" ${refreshButtonAttr}></button>
+            <span class="toolbar-indicator icon-loading"></span>
             <button class="toolbar-button icon-home label page-button" ${homeButtonAttr}>Browse</button>
             <button class="toolbar-button icon-folder label page-button ${collectionButtonImportant}" ${collectionButtonAttr}>Installed</button>
             <span class="toolbar-spacer"></span>
-            <span class="toolbar-indicator icon-loading"></span>
             <select class="toolbar-select" name="startPage">
             <option value="">Choose Startpage</option>
             <option value="https://www.opendesktop.org/">opendesktop.org</option>
@@ -154,11 +157,13 @@ export default class ToolBar extends Chirit.Component {
     showIndicator() {
         this.state.indicator = true;
         this.element.querySelector('.toolbar-indicator').style.display = 'inline-block';
+        this.element.querySelector('.refresh-button').style.display = 'none';
     }
 
     hideIndicator() {
         this.state.indicator = false;
         this.element.querySelector('.toolbar-indicator').style.display = 'none';
+        this.element.querySelector('.refresh-button').style.display = 'inline-block';
     }
 
 }

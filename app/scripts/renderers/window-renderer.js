@@ -96,6 +96,7 @@ import Root from '../components/Root.js';
                     active: root.toolBar.state.active,
                     backAction: root.toolBar.state.backAction,
                     forwardAction: root.toolBar.state.forwardAction,
+                    refreshAction: root.toolBar.state.refreshAction,
                     homeAction: root.toolBar.state.homeAction,
                     collectionAction: root.toolBar.state.collectionAction,
                     indicator: root.toolBar.state.indicator,
@@ -128,6 +129,7 @@ import Root from '../components/Root.js';
                     active: 'collection-page',
                     backAction: 'collection-page',
                     forwardAction: '',
+                    refreshAction: '',
                     homeAction: 'browse-page',
                     collectionAction: 'collection-page',
                     indicator: root.toolBar.state.indicator,
@@ -282,6 +284,7 @@ import Root from '../components/Root.js';
                 active: 'start-page',
                 backAction: 'main-webview-back',
                 forwardAction: 'main-webview-forward',
+                refreshAction: 'main-webview-refresh',
                 homeAction: 'start-page',
                 collectionAction: 'collection-page',
                 indicator: root.toolBar.state.indicator,
@@ -315,11 +318,16 @@ import Root from '../components/Root.js';
             }
         });
 
+        stateManager.registerAction('main-webview-refresh', () => {
+            mainWebview.reload();
+        });
+
         stateManager.registerAction('collection-page', () => {
             root.toolBar.update({
                 active: 'collection-page',
                 backAction: '',
                 forwardAction: '',
+                refreshAction: '',
                 homeAction: 'browse-page',
                 collectionAction: 'collection-page',
                 indicator: root.toolBar.state.indicator,
