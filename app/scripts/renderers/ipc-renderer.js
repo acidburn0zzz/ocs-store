@@ -6,31 +6,30 @@ const url = require('url');
     const ipcRenderer = electron.ipcRenderer;
 
     const memberSites = [
-        'opendesktop.org', 'www.opendesktop.org',
-        'forum.opendesktop.org',
+        'opendesktop.org',
 
-        'appimagehub.com', 'www.appimagehub.com',
-        'linux-apps.com', 'www.linux-apps.com',
-        'linux-appimages.org', 'www.linux-appimages.org',
+        'appimagehub.com',
+        'linux-apps.com',
+        'linux-appimages.org',
 
-        'app-addons.org', 'www.app-addons.org',
+        'app-addons.org',
         'addons.videolan.org',
         'share.krita.org',
 
-        'cinnamon-look.org', 'www.cinnamon-look.org',
-        'compiz-themes.org', 'www.compiz-themes.org',
-        'enlightenment-themes.org', 'www.enlightenment-themes.org',
-        'gnome-look.org', 'www.gnome-look.org',
-        'mate-look.org', 'www.mate-look.org',
+        'cinnamon-look.org',
+        'compiz-themes.org',
+        'enlightenment-themes.org',
+        'gnome-look.org',
+        'mate-look.org',
         'store.kde.org',
-        'trinity-look.org', 'www.trinity-look.org',
-        'xfce-look.org', 'www.xfce-look.org',
-        'box-look.org', 'www.box-look.org',
+        'trinity-look.org',
+        'xfce-look.org',
+        'box-look.org',
 
-        'cccliparts.org', 'www.cccliparts.org',
-        'free-artwork.org', 'www.free-artwork.org',
+        'cccliparts.org',
+        'free-artwork.org',
 
-        'historical-look.org', 'www.historical-look.org'
+        'historical-look.org',
     ];
 
     function modifyDocument() {
@@ -42,8 +41,7 @@ const url = require('url');
         }
     }
 
-    function modifyStyle() {
-    }
+    //function modifyStyle() {}
 
     function modifyEvent() {
         document.body.addEventListener('click', (event) => {
@@ -78,12 +76,20 @@ const url = require('url');
                     ipcRenderer.sendToHost('ocs-url', targetUrl, providerKey, contentId);
                 }
                 else if (parsedUrl.hostname) {
+                    let isMemberSite = false;
+                    for (const memberSite of memberSites) {
+                        if (parsedUrl.hostname.endsWith(memberSite)) {
+                            isMemberSite = true;
+                            break;
+                        }
+                    }
+
                     if (parsedUrl.hostname === 'dl.opendesktop.org') {
                         event.preventDefault();
                         const ocsUrl = `ocs://download?url=${encodeURIComponent(targetUrl)}&type=downloads`;
                         ipcRenderer.sendToHost('ocs-url', ocsUrl, providerKey, contentId);
                     }
-                    else if (memberSites.indexOf(parsedUrl.hostname) !== -1) {
+                    else if (isMemberSite) {
                         if (targetElement.getAttribute('target')) {
                             event.preventDefault();
                             location.href = targetUrl;
