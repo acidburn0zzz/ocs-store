@@ -105,29 +105,17 @@ summary {
 
 /* Sections */
 body {
-    line-height: 1.45;
+    background-color: #ffffff;
+    color: #444444;
     font-style: normal;
     font-weight: normal;
+    font-size: 90%;
+    line-height: 1.45;
+    font-family: Arial, Helvetica, sans-serif;
     text-align: left;
-    vertical-align: baseline;
     letter-spacing: 0.05em;
-}
-@media screen {
-    body {
-        background-color: #ffffff;
-        color: #444444;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 90%;
-        cursor: default;
-    }
-}
-@media print {
-    body {
-        background-color: transparent;
-        color: #000000;
-        font-family: 'Times New Roman', Times, serif;
-        font-size: 14pt;
-    }
+    vertical-align: baseline;
+    cursor: default;
 }
 
 h1,
@@ -136,20 +124,10 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
     font-weight: bold;
     font-size: 100%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
     letter-spacing: 0.1em;
-}
-@media print {
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        page-break-after: avoid;
-    }
 }
 
 h1 {
@@ -181,59 +159,26 @@ dl {
 
 hr {
     border: 0;
-    border-top-style: dashed;
-}
-@media screen {
-    hr {
-        border-top-width: 1px;
-        border-top-color: #d4d9df;
-    }
-}
-@media print {
-    hr {
-        border-top-width: 1pt;
-        border-top-color: #cccccc;
-    }
+    border-top: 1px dashed #d4d9df;
 }
 
 pre {
+    margin-left: 1em;
     padding: 0.5em;
+    overflow: auto;
+    border-left: 0.5em solid #d4d9df;
+    background-color: #fafdff;
+    color: #000000;
     font-family: 'Courier New', Courier, monospace;
-}
-@media screen {
-    pre {
-        overflow: auto;
-        margin-left: 1em;
-        border-left: 0.5em solid #d4d9df;
-        background-color: #fafdff;
-        color: #000000;
-    }
-}
-@media print {
-    pre {
-        overflow: hidden;
-        margin-left: 1.5em;
-        border: 1pt solid #cccccc;
-    }
 }
 
 blockquote {
+    margin-left: 1em;
     padding: 0.5em;
+    border-left: 0.5em solid #fdd35c;
+    background-color: #fff3b8;
+    color: #000000;
     font-family: 'Times New Roman', Times, serif;
-}
-@media screen {
-    blockquote {
-        margin-left: 1em;
-        border-left: 0.5em solid #fdd35c;
-        background-color: #fff3b8;
-        color: #000000;
-    }
-}
-@media print {
-    blockquote {
-        margin-left: 1.5em;
-        border: 1pt dashed #cccccc;
-    }
 }
 
 ol,
@@ -248,26 +193,13 @@ dt {
 
 /* Text-level semantics */
 a {
+    background-color: transparent;
+    color: #0075c2;
     text-decoration: none;
+    outline: none;
 }
-@media screen {
-    a {
-        background-color: transparent;
-        color: #0075c2;
-        outline: none;
-    }
-    a:hover {
-        color: #4496d3;
-    }
-}
-@media print {
-    a {
-        color: #000000;
-    }
-    a[href]::after {
-        font-size: 90%;
-        content: ' (' attr(href) ') ';
-    }
+a:hover {
+    color: #4496d3;
 }
 
 em,
@@ -276,12 +208,8 @@ strong {
     font-weight: bold;
 }
 
-/*strong {
-}*/
-@media screen {
-    strong {
-        color: #c70067;
-    }
+strong {
+    color: #c70067;
 }
 
 dfn,
@@ -290,32 +218,15 @@ abbr {
     font-style: normal;
     text-decoration: none;
 }
-@media screen {
-    dfn[title],
-    abbr[title] {
-        border-bottom: 1px dotted;
-        cursor: help;
-    }
-}
-@media print {
-    dfn[title]::after,
-    abbr[title]::after {
-        content: ' (' attr(title) ') ';
-    }
+dfn[title],
+abbr[title] {
+    border-bottom: 1px dotted;
+    cursor: help;
 }
 
-/*mark {
-}*/
-@media screen {
-    mark {
-        background-color: #fff352;
-        color: #000000;
-    }
-}
-@media print {
-    mark {
-        border: 1pt solid #cccccc;
-    }
+mark {
+    background-color: #fff352;
+    color: #000000;
 }
 
 br {
@@ -328,12 +239,8 @@ ins {
 }
 
 del {
+    opacity: 0.5;
     text-decoration: line-through;
-}
-@media screen {
-    del {
-        opacity: 0.5;
-    }
 }
 
 /* Embedded content */
@@ -372,22 +279,13 @@ button,
 select,
 textarea {
     font-size: 100%;
-    vertical-align: middle;
     letter-spacing: normal;
+    vertical-align: middle;
 }
 
 textarea {
+    overflow: auto;
     font-family: 'Courier New', Courier, monospace;
-}
-@media screen {
-    textarea {
-        overflow: auto;
-    }
-}
-@media print {
-    textarea {
-        overflow: hidden;
-    }
 }
 
 fieldset {
