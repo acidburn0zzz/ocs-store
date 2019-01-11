@@ -4,7 +4,7 @@
 
 Store Frontend and Management Application based on OpenCollaborationServices (OCS) of Opendesktop.org.
 
-Copyright: 2017-2018, Opendesktop.org
+Copyright: 2017-2019, Opendesktop.org
 
 License: GPL-3+
 
