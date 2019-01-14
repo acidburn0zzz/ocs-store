@@ -1,0 +1,37 @@
+.icon-ocs-store {
+    background-image: url(app-icons/ocs-store.svg);
+}
+
+.icon-menu {
+    background-image: url(material-design-icons/baseline-more_vert-24px.svg);
+    /*background-image: url(material-design-icons/baseline-menu-24px.svg);*/
+}
+
+.icon-home {
+    background-image: url(material-design-icons/baseline-home-24px.svg);
+}
+
+.icon-collection {
+    background-image: url(material-design-icons/baseline-folder_open-24px.svg);
+    /*background-image: url(material-design-icons/baseline-folder-24px.svg);*/
+}
+
+.icon-back {
+    background-image: url(material-design-icons/baseline-arrow_back-24px.svg);
+}
+
+.icon-forward {
+    background-image: url(material-design-icons/baseline-arrow_forward-24px.svg);
+}
+
+.icon-refresh {
+    background-image: url(material-design-icons/baseline-refresh-24px.svg);
+}
+
+.icon-close {
+    background-image: url(material-design-icons/baseline-close-24px.svg);
+}
+
+.icon-download {
+    background-image: url(material-design-icons/baseline-cloud_download-24px.svg);
+}
