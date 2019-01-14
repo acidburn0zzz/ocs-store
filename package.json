@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "electron-store": "2.*.*",
-    "import-export": "1.*.*",
-    "request": "2.*.*"
+    "request": "2.*.*",
+    "import-export": "1.*.*"
   },
   "devDependencies": {
     "electron": "4.*.*",
