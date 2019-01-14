@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 <meta charset="UTF-8">
@@ -8,17 +8,17 @@
 
 <title></title>
 
-<link href="./images/images.css" rel="stylesheet">
-<link href="./styles/reset.css" rel="stylesheet">
-<link href="./styles/style.css" rel="stylesheet">
+<link href="./libs/chirit/css/alt.css" rel="stylesheet">
+<link href="./libs/chirit/css/ui.css" rel="stylesheet">
+<link href="./styles/global.css" rel="stylesheet">
 </head>
 
-<body>
-<div data-component="Root"></div>
+<body class="flex-column">
+<root-component class="flex-auto flex-column"></root-component>
 
 <script>
-require('import-export'); // Polyfill to use ES6 modules syntax in nodejs
-require('./scripts/renderers/window-renderer.js');
+require('import-export'); // ES6 modules syntax polyfill
+require('./scripts/renderers/browser-window.js');
 </script>
 </body>
 
