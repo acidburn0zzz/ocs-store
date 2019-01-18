@@ -9,7 +9,7 @@ const ocsManagerConfig = require('./configs/ocs-manager.json');
 
 const isDebugMode = process.argv.includes('--debug');
 
-let mainWindow = null;
+let topWindow = null;
 let ocsManager = null;
 
 function startOcsManager() {
@@ -46,31 +46,35 @@ function createWindow() {
 
     const windowBounds = store.get('windowBounds');
 
-    mainWindow = new BrowserWindow({
+    topWindow = new BrowserWindow({
         title: packageMeta.productName,
         icon: `${__dirname}/images/app-icons/ocs-store.png`,
         x: windowBounds.x,
         y: windowBounds.y,
         width: windowBounds.width,
-        height: windowBounds.height
+        height: windowBounds.height,
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
 
-    mainWindow.loadURL(`file://${__dirname}/index.html`);
+    if (!isDebugMode) {
+        topWindow.setMenu(null);
+    }
+
+    topWindow.loadURL(`file://${__dirname}/index.html`);
 
     if (isDebugMode) {
-        mainWindow.webContents.openDevTools();
-    }
-    else {
-        mainWindow.setMenu(null);
+        topWindow.webContents.openDevTools();
     }
 
-    mainWindow.on('close', () => {
+    topWindow.on('close', () => {
         const store = new ElectronStore({name: 'application'});
-        store.set('windowBounds', mainWindow.getBounds());
+        store.set('windowBounds', topWindow.getBounds());
     });
 
-    mainWindow.on('closed', () => {
-        mainWindow = null;
+    topWindow.on('closed', () => {
+        topWindow = null;
     });
 }
 
@@ -90,7 +94,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-    if (mainWindow === null) {
+    if (topWindow === null) {
         createWindow();
     }
 });
