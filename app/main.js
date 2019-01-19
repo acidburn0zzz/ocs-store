@@ -24,11 +24,11 @@ function startOcsManager() {
     });
 
     ocsManager.stdout.on('data', (data) => {
-        console.log(`${ocsManagerConfig.bin} stdout: ${data}`);
+        console.log(`[${ocsManagerConfig.bin}] ${data}`);
     });
 
     ocsManager.stderr.on('data', (data) => {
-        console.error(`${ocsManagerConfig.bin} stderr: ${data}`);
+        console.error(`[${ocsManagerConfig.bin}] ${data}`);
     });
 }
 
