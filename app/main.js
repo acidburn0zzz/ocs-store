@@ -1,6 +1,6 @@
 const {spawn} = require('child_process');
 
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 const ElectronStore = require('electron-store');
 
 const packageMeta = require('../package.json');
@@ -117,5 +117,14 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
     if (topWindow === null) {
         createWindow();
+    }
+});
+
+ipcMain.on('data', (event, ...args) => {
+    if (args[0] === 'isDebugMode') {
+        event.returnValue = isDebugMode;
+    }
+    else if (args[0] === 'ocsManagerUrl') {
+        event.returnValue = ocsManagerUrl;
     }
 });
