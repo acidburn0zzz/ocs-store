@@ -38,7 +38,7 @@ export default class OcsManagerWsApi {
         }
     }
 
-    dispatchFunc(func, data = [], id = '') {
+    send(id, func, data = []) {
         if (this.isConnected) {
             id = id || Utility.generateRandomString(24);
             this._webSocket.send(JSON.stringify({
