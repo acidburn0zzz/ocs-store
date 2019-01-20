@@ -11,24 +11,45 @@ const isDebugMode = process.argv.includes('--debug');
 
 let topWindow = null;
 let ocsManager = null;
+let ocsManagerUrl = '';
 
-function startOcsManager() {
-    ocsManager = spawn(ocsManagerConfig.bin, ['-p', ocsManagerConfig.port]);
+async function startOcsManager() {
+    return new Promise((resolve) => {
+        let url = '';
 
-    ocsManager.on('close', (code) => {
-        console.log(`${ocsManagerConfig.bin} exited with code ${code}`);
-    });
+        const resolveUrl = (data) => {
+            const matches = data.toString()
+                .match(/Websocket server started at: "(wss?:\/\/.+)"/);
+            if (matches) {
+                url = matches[1];
+                resolve(url);
+            }
+        };
 
-    ocsManager.on('error', () => {
-        console.error(`Failed to start ${ocsManagerConfig.bin}`);
-    });
+        ocsManager = spawn(ocsManagerConfig.bin, ['-p', ocsManagerConfig.port]);
 
-    ocsManager.stdout.on('data', (data) => {
-        console.log(`[${ocsManagerConfig.bin}] ${data}`);
-    });
+        ocsManager.stdout.on('data', (data) => {
+            console.log(`[${ocsManagerConfig.bin}] ${data}`);
+            if (!url) {
+                resolveUrl(data);
+            }
+        });
 
-    ocsManager.stderr.on('data', (data) => {
-        console.error(`[${ocsManagerConfig.bin}] ${data}`);
+        ocsManager.stderr.on('data', (data) => {
+            console.error(`[${ocsManagerConfig.bin}] ${data}`);
+            if (!url) {
+                resolveUrl(data);
+            }
+        });
+
+        ocsManager.on('close', (code) => {
+            console.log(`${ocsManagerConfig.bin} exited with code ${code}`);
+        });
+
+        ocsManager.on('error', () => {
+            console.error(`Failed to start ${ocsManagerConfig.bin}`);
+            resolve(url);
+        });
     });
 }
 
@@ -78,8 +99,8 @@ function createWindow() {
     });
 }
 
-app.on('ready', () => {
-    startOcsManager();
+app.on('ready', async () => {
+    ocsManagerUrl = await startOcsManager();
     createWindow();
 });
 
