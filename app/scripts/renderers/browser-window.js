@@ -7,6 +7,7 @@ import Chirit from '../../libs/chirit/Chirit.js';
 
 import RootComponent from '../components/RootComponent.js';
 import PageComponent from '../components/PageComponent.js';
+import ToolbarComponent from '../components/ToolbarComponent.js';
 
 import OcsManagerWsApi from '../api/OcsManagerWsApi.js';
 
@@ -22,5 +23,6 @@ const ocsManagerWsApi = new OcsManagerWsApi(ocsManagerUrl);
 new OcsManagerModule(stateManager, ocsManagerWsApi);
 
 PageComponent.define('page-component');
+ToolbarComponent.define('toolbar-component');
 
 //stateManager.dispatch('');
