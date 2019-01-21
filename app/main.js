@@ -120,11 +120,27 @@ app.on('activate', () => {
     }
 });
 
-ipcMain.on('data', (event, ...args) => {
-    if (args[0] === 'isDebugMode') {
-        event.returnValue = isDebugMode;
+ipcMain.on('app', (event, key) => {
+    const data = {
+        package: packageMeta,
+        config: appConfig,
+        isDebugMode: isDebugMode
+    };
+    event.returnValue = key ? data[key] : data;
+});
+
+ipcMain.on('ocs-manager', (event, key) => {
+    const data = {
+        config: ocsManagerConfig,
+        url: ocsManagerUrl
+    };
+    event.returnValue = key ? data[key] : data;
+});
+
+ipcMain.on('store-application', (event, key, value) => {
+    const store = new ElectronStore({name: 'application'});
+    if (key && value) {
+        store.set(key, value);
     }
-    else if (args[0] === 'ocsManagerUrl') {
-        event.returnValue = ocsManagerUrl;
-    }
+    event.returnValue = key ? store.get(key) : store.store;
 });

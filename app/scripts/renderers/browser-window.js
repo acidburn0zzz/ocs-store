@@ -1,8 +1,5 @@
 const {ipcRenderer} = require('electron');
 
-const packageMeta = require('../../../package.json');
-//const appConfig = require('../../configs/application.json');
-
 import Chirit from '../../libs/chirit/Chirit.js';
 
 import RootComponent from '../components/RootComponent.js';
@@ -16,14 +13,13 @@ import OcsManagerWsApi from '../api/OcsManagerWsApi.js';
 
 import OcsManagerModule from '../modules/OcsManagerModule.js';
 
-document.title = packageMeta.productName;
+document.title = ipcRenderer.sendSync('app', 'package').productName;
 
 RootComponent.define('root-component');
 const stateManager = new Chirit.StateManager('root-component');
 stateManager.target.state = stateManager.state;
 
-const ocsManagerUrl = ipcRenderer.sendSync('data', 'ocsManagerUrl');
-const ocsManagerWsApi = new OcsManagerWsApi(ocsManagerUrl);
+const ocsManagerWsApi = new OcsManagerWsApi(ipcRenderer.sendSync('ocs-manager', 'url'));
 
 new OcsManagerModule(stateManager, ocsManagerWsApi);
 
