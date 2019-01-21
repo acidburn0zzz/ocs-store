@@ -23,6 +23,7 @@ stateManager.target.state = stateManager.state;
 const ocsManagerWsApi = new OcsManagerWsApi(ipcRenderer.sendSync('ocs-manager', 'url'));
 
 new OcsManagerModule(stateManager, ocsManagerWsApi);
+new WebviewModule(stateManager);
 
 PageComponent.define('page-component');
 ToolbarComponent.define('toolbar-component');
