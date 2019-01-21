@@ -3,7 +3,7 @@
 
 <head>
 <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self' 'unsafe-inline'; script-src 'strict-dynamic' 'nonce-nonce123'; connect-src *">
+    content="default-src 'self' 'unsafe-inline'; connect-src *">
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +19,7 @@
 <body class="flex-column">
 <root-component class="flex-auto flex-column"></root-component>
 
-<script nonce="nonce123">
+<script>
 require('import-export'); // ES6 modules syntax polyfill
 require('./scripts/renderers/browser-window.js');
 </script>
