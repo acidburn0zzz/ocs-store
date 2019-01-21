@@ -6,7 +6,32 @@ export default class ToolbarComponent extends BaseComponent {
         return `
             ${this.sharedStyle}
 
+            <style>
+            nav {
+                height: 32px;
+                background-color: #eeeeee;
+            }
+            nav ul {
+                list-style: none;
+                height: 100%;
+                margin: 0 4px;
+                align-items: center;
+            }
+            nav ul li {
+                margin: 0 2px;
+            }
+            </style>
+
             <nav>
+            <ul class="flex">
+            <li><menubutton-component data-ref="back"></menubutton-component></li>
+            <li><menubutton-component data-ref="forward"></menubutton-component></li>
+            <li><menubutton-component data-ref="refresh"></menubutton-component></li>
+            <li><menubutton-component data-ref="home"></menubutton-component></li>
+            <li><menubutton-component data-ref="collection"></menubutton-component></li>
+            <li class="flex-auto"></li>
+            <li><menubutton-component data-ref="menu"></menubutton-component></li>
+            </ul>
             </nav>
         `;
     }
