@@ -15,17 +15,19 @@ export default class MenubuttonComponent extends BaseComponent {
                 display: inline-block;
             }
             button.button {
+                box-shadow: none;
                 width: 24px;
                 height: 24px;
                 border: 0;
-                background-color: rgba(255,255,255,0.1);
+                background-color: rgba(0,0,0,0);
                 background-position: center center;
                 background-repeat: no-repeat;
-                background-size: 24px 24px;
+                background-size: 18px 18px;
                 transition: background-color 0.2s ease-out;
             }
             button.button:hover {
-                background-color: rgba(255,255,255,0.2);
+                border: 0;
+                background-color: rgba(0,0,0,0.1);
             }
             </style>
 
