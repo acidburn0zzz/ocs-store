@@ -13,7 +13,7 @@ export default class WebviewComponent extends BaseComponent {
     componentUpdatedCallback() {
         const webviewElement = document.createElement('webview');
         webviewElement.setAttribute('partition', 'persist:opendesktop');
-        webviewElement.setAttribute('preload', './scripts/renderers/webview-ipc.js');
+        webviewElement.setAttribute('preload', './scripts/renderers/webview.js');
         webviewElement.setAttribute('src', ipcRenderer.sendSync('store-application', 'startPage'));
         webviewElement.className = 'flex-auto';
         this.contentRoot.appendChild(webviewElement);
