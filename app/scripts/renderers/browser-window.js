@@ -1,6 +1,6 @@
 const {ipcRenderer} = require('electron');
 
-//const packageMeta = require('../../../package.json');
+const packageMeta = require('../../../package.json');
 //const appConfig = require('../../configs/application.json');
 
 import Chirit from '../../libs/chirit/Chirit.js';
@@ -15,6 +15,8 @@ import MenubuttonComponent from '../components/MenubuttonComponent.js';
 import OcsManagerWsApi from '../api/OcsManagerWsApi.js';
 
 import OcsManagerModule from '../modules/OcsManagerModule.js';
+
+document.title = packageMeta.productName;
 
 RootComponent.define('root-component');
 const stateManager = new Chirit.StateManager('root-component');
