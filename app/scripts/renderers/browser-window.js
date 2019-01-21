@@ -12,6 +12,7 @@ import MenubuttonComponent from '../components/MenubuttonComponent.js';
 import OcsManagerWsApi from '../api/OcsManagerWsApi.js';
 
 import OcsManagerModule from '../modules/OcsManagerModule.js';
+import WebviewModule from '../modules/WebviewModule.js';
 
 document.title = ipcRenderer.sendSync('app', 'package').productName;
 
