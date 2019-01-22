@@ -11,6 +11,8 @@ export default class WebviewComponent extends BaseComponent {
             src: ipcRenderer.sendSync('store-application', 'startPage'),
             isDebugMode: ipcRenderer.sendSync('app', 'isDebugMode')
         };
+
+        this._webviewElement = null;
     }
 
     render() {
@@ -20,36 +22,37 @@ export default class WebviewComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
-        const webviewElement = document.createElement('webview');
-        webviewElement.setAttribute('partition', this.state.partition);
-        webviewElement.setAttribute('preload', this.state.preload);
-        webviewElement.setAttribute('src', this.state.src);
-        webviewElement.className = 'flex-auto';
-        this.contentRoot.appendChild(webviewElement);
+        this._webviewElement = document.createElement('webview');
+        this._webviewElement.setAttribute('partition', this.state.partition);
+        this._webviewElement.setAttribute('preload', this.state.preload);
+        this._webviewElement.setAttribute('src', this.state.src);
+        this._webviewElement.className = 'flex-auto';
 
-        webviewElement.addEventListener('did-start-loading', () => {
+        this.contentRoot.appendChild(this._webviewElement);
+
+        this._webviewElement.addEventListener('did-start-loading', () => {
             this.dispatch('webview-did-start-loading', {});
         });
 
-        webviewElement.addEventListener('did-stop-loading', () => {
+        this._webviewElement.addEventListener('did-stop-loading', () => {
             this.dispatch('webview-did-stop-loading', {});
         });
 
-        webviewElement.addEventListener('dom-ready', () => {
+        this._webviewElement.addEventListener('dom-ready', () => {
             if (this.state.isDebugMode) {
-                webviewElement.openDevTools();
+                this._webviewElement.openDevTools();
             }
-            webviewElement.send('ipc-message');
+            this._webviewElement.send('ipc-message');
         });
 
-        webviewElement.addEventListener('new-window', (event) => {
+        this._webviewElement.addEventListener('new-window', (event) => {
             console.log(event);
         });
 
-        webviewElement.addEventListener('will-navigate', (event) => {
+        this._webviewElement.addEventListener('will-navigate', (event) => {
             console.log(event);
             if (event.url.startsWith('ocs://') || event.url.startsWith('ocss://')) {
-                const info = this._detectOcsApiInfo(webviewElement.getURL());
+                const info = this._detectOcsApiInfo(this._webviewElement.getURL());
                 this.dispatch('ocs-url', {
                     url: event.url,
                     ...info
@@ -57,18 +60,18 @@ export default class WebviewComponent extends BaseComponent {
             }
         });
 
-        webviewElement.addEventListener('did-navigate', (event) => {
+        this._webviewElement.addEventListener('did-navigate', (event) => {
             console.log(event);
         });
 
-        webviewElement.addEventListener('ipc-message', (event) => {
+        this._webviewElement.addEventListener('ipc-message', (event) => {
             console.log(event);
             switch (event.channel) {
                 //case 'user-profile': {
                 //    break;
                 //}
                 case 'ocs-url': {
-                    const info = this._detectOcsApiInfo(webviewElement.getURL());
+                    const info = this._detectOcsApiInfo(this._webviewElement.getURL());
                     this.dispatch('ocs-url', {
                         url: event.args[0],
                         ...info
@@ -81,6 +84,26 @@ export default class WebviewComponent extends BaseComponent {
                 }
             }
         });
+    }
+
+    setSrc(url) {
+        this._webviewElement.setAttribute('src', url);
+    }
+
+    goBack() {
+        if (this._webviewElement.canGoBack()) {
+            this._webviewElement.goBack();
+        }
+    }
+
+    goForward() {
+        if (this._webviewElement.canGoForward()) {
+            this._webviewElement.goForward();
+        }
+    }
+
+    reload() {
+        this._webviewElement.reload();
     }
 
     _detectOcsApiInfo(url) {
