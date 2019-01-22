@@ -5,7 +5,7 @@ import BaseComponent from './BaseComponent.js';
 export default class WebviewComponent extends BaseComponent {
 
     init() {
-        this.state = {
+        this._defaultState = {
             partition: 'persist:opendesktop',
             preload: './scripts/renderers/webview.js',
             src: ipcRenderer.sendSync('store-application', 'startPage'),
@@ -24,9 +24,9 @@ export default class WebviewComponent extends BaseComponent {
     componentUpdatedCallback() {
         this._webviewElement = document.createElement('webview');
 
-        this._webviewElement.setAttribute('partition', this.state.partition);
-        this._webviewElement.setAttribute('preload', this.state.preload);
-        this._webviewElement.setAttribute('src', this.state.src);
+        this._webviewElement.setAttribute('partition', this._defaultState.partition);
+        this._webviewElement.setAttribute('preload', this._defaultState.preload);
+        this._webviewElement.setAttribute('src', this._defaultState.src);
         this._webviewElement.className = 'flex-auto';
 
         this._webviewElement.addEventListener('did-start-loading', () => {
@@ -38,7 +38,7 @@ export default class WebviewComponent extends BaseComponent {
         });
 
         this._webviewElement.addEventListener('dom-ready', () => {
-            if (this.state.isDebugMode) {
+            if (this._defaultState.isDebugMode) {
                 this._webviewElement.openDevTools();
             }
             this._webviewElement.send('ipc-message');
