@@ -47,8 +47,11 @@ export default class MenubuttonComponent extends BaseComponent {
                 case 'forward':
                     this.dispatch('webview-navigation', {method: 'goForward'});
                     break;
-                case 'refresh':
+                case 'reload':
                     this.dispatch('webview-navigation', {method: 'reload'});
+                    break;
+                case 'stop':
+                    this.dispatch('webview-navigation', {method: 'stop'});
                     break;
                 case 'home':
                     this.dispatch('webview-navigation', {

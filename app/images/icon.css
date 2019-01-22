@@ -24,8 +24,12 @@
     background-image: url(material-design-icons/baseline-arrow_forward-24px.svg);
 }
 
-.icon-refresh {
+.icon-reload {
     background-image: url(material-design-icons/baseline-refresh-24px.svg);
+}
+
+.icon-stop {
+    background-image: url(material-design-icons/baseline-close-24px.svg);
 }
 
 .icon-close {
