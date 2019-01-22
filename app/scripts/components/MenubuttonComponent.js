@@ -1,3 +1,5 @@
+const {ipcRenderer} = require('electron');
+
 import BaseComponent from './BaseComponent.js';
 
 export default class MenubuttonComponent extends BaseComponent {
@@ -37,22 +39,24 @@ export default class MenubuttonComponent extends BaseComponent {
 
     componentUpdatedCallback() {
         const buttonElement = this.contentRoot.querySelector('button');
-        buttonElement.addEventListener('click', (event) => {
-            event.preventDefault();
+        buttonElement.addEventListener('click', () => {
             switch (this.getAttribute('data-ref')) {
-                case 'home':
-                    this.dispatch('', {});
-                    break;
-                case 'collection':
-                    this.dispatch('', {});
-                    break;
                 case 'back':
-                    this.dispatch('', {});
+                    this.dispatch('webview-navigation', {method: 'goBack'});
                     break;
                 case 'forward':
-                    this.dispatch('', {});
+                    this.dispatch('webview-navigation', {method: 'goForward'});
                     break;
                 case 'refresh':
+                    this.dispatch('webview-navigation', {method: 'reload'});
+                    break;
+                case 'home':
+                    this.dispatch('webview-navigation', {
+                        method: 'setSrc',
+                        url: ipcRenderer.sendSync('store-application', 'startPage')
+                    });
+                    break;
+                case 'collection':
                     this.dispatch('', {});
                     break;
             }
