@@ -4,6 +4,15 @@ import BaseComponent from './BaseComponent.js';
 
 export default class WebviewComponent extends BaseComponent {
 
+    init() {
+        this.state = {
+            partition: 'persist:opendesktop',
+            preload: './scripts/renderers/webview.js',
+            src: ipcRenderer.sendSync('store-application', 'startPage'),
+            isDebugMode: ipcRenderer.sendSync('app', 'isDebugMode')
+        };
+    }
+
     render() {
         return `
             ${this.sharedStyle}
@@ -12,9 +21,9 @@ export default class WebviewComponent extends BaseComponent {
 
     componentUpdatedCallback() {
         const webviewElement = document.createElement('webview');
-        webviewElement.setAttribute('partition', 'persist:opendesktop');
-        webviewElement.setAttribute('preload', './scripts/renderers/webview.js');
-        webviewElement.setAttribute('src', ipcRenderer.sendSync('store-application', 'startPage'));
+        webviewElement.setAttribute('partition', this.state.partition);
+        webviewElement.setAttribute('preload', this.state.preload);
+        webviewElement.setAttribute('src', this.state.src);
         webviewElement.className = 'flex-auto';
         this.contentRoot.appendChild(webviewElement);
 
@@ -25,7 +34,7 @@ export default class WebviewComponent extends BaseComponent {
         });
 
         webviewElement.addEventListener('dom-ready', () => {
-            if (ipcRenderer.sendSync('app', 'isDebugMode')) {
+            if (this.state.isDebugMode) {
                 webviewElement.openDevTools();
             }
         });
