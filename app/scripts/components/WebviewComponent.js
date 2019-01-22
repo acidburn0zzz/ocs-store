@@ -107,6 +107,10 @@ export default class WebviewComponent extends BaseComponent {
         this._webviewElement.reload();
     }
 
+    stop() {
+        this._webviewElement.stop();
+    }
+
     _detectOcsApiInfo(url) {
         // Detect provider key and content id from page url
         // https://www.opendesktop.org/p/123456789/?key=val#hash

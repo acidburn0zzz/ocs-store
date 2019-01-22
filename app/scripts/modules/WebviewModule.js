@@ -23,6 +23,9 @@ export default class WebviewModule {
             case 'reload':
                 webviewComponent.reload();
                 break;
+            case 'stop':
+                webviewComponent.stop();
+                break;
         }
         return false;
     }
