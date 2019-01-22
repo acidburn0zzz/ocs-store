@@ -27,7 +27,7 @@ export default class ToolbarComponent extends BaseComponent {
             <ul class="flex">
             <li><menubutton-component data-ref="back"></menubutton-component></li>
             <li><menubutton-component data-ref="forward"></menubutton-component></li>
-            <li><menubutton-component data-ref="refresh"></menubutton-component></li>
+            <li><menubutton-component data-ref="reload"></menubutton-component></li>
             <li><menubutton-component data-ref="home"></menubutton-component></li>
             <li><menubutton-component data-ref="collection"></menubutton-component></li>
             <li class="flex-auto"></li>

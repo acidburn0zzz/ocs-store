@@ -15,6 +15,8 @@ export default class MenubuttonComponent extends BaseComponent {
             <style>
             :host {
                 display: inline-block;
+                width: 30px;
+                height: 30px;
             }
             button.button {
                 box-shadow: none;

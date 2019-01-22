@@ -2,11 +2,17 @@ export default class WebviewModule {
 
     constructor(stateManager) {
         this.stateManager = stateManager;
-        this.webviewComponent = this.stateManager.target.contentRoot
-            .querySelector('webview-component');
+
+        const root = this.stateManager.target.contentRoot;
+        this.webviewComponent = root.querySelector('webview-component');
+        this.toolbarComponent = root.querySelector('toolbar-component');
 
         this.stateManager.actionHandler
             .add('webview-navigation', this.navigationAction.bind(this));
+
+        this.stateManager.viewHandler
+            .add('webview-did-start-loading', this.didStartLoadingView.bind(this))
+            .add('webview-did-stop-loading', this.didStopLoadingView.bind(this));
     }
 
     navigationAction(params) {
@@ -28,6 +34,18 @@ export default class WebviewModule {
                 break;
         }
         return false;
+    }
+
+    didStartLoadingView() {
+        this.toolbarComponent.contentRoot
+            .querySelector('menubutton-component[data-ref="reload"]')
+            .setAttribute('data-ref', 'stop');
+    }
+
+    didStopLoadingView() {
+        this.toolbarComponent.contentRoot
+            .querySelector('menubutton-component[data-ref="stop"]')
+            .setAttribute('data-ref', 'reload');
     }
 
 }
