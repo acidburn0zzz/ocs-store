@@ -18,13 +18,13 @@ export default class MenubuttonComponent extends BaseComponent {
             }
             button.button {
                 box-shadow: none;
-                width: 24px;
-                height: 24px;
+                width: 30px;
+                height: 30px;
                 border: 0;
                 background-color: rgba(0,0,0,0);
                 background-position: center center;
                 background-repeat: no-repeat;
-                background-size: 18px 18px;
+                background-size: 24px 24px;
                 transition: background-color 0.2s ease-out;
             }
             button.button:hover {

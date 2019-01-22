@@ -8,7 +8,7 @@ export default class ToolbarComponent extends BaseComponent {
 
             <style>
             nav {
-                height: 32px;
+                height: 40px;
                 border-bottom: 1px solid rgba(0,0,0,0.1);
                 background-color: #eeeeee;
             }
