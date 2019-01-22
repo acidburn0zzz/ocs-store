@@ -3,7 +3,7 @@ const {spawn} = require('child_process');
 const {app, BrowserWindow, ipcMain} = require('electron');
 const ElectronStore = require('electron-store');
 
-const packageMeta = require('../package.json');
+const appPackage = require('../package.json');
 const appConfig = require('./configs/application.json');
 const ocsManagerConfig = require('./configs/ocs-manager.json');
 
@@ -60,15 +60,15 @@ function stopOcsManager() {
 }
 
 function createWindow() {
-    const store = new ElectronStore({
+    const appConfigStore = new ElectronStore({
         name: 'application',
         defaults: appConfig.defaults
     });
 
-    const windowBounds = store.get('windowBounds');
+    const windowBounds = appConfigStore.get('windowBounds');
 
     topWindow = new BrowserWindow({
-        title: packageMeta.productName,
+        title: appPackage.productName,
         icon: `${__dirname}/images/app-icons/ocs-store.png`,
         x: windowBounds.x,
         y: windowBounds.y,
@@ -90,8 +90,8 @@ function createWindow() {
     }
 
     topWindow.on('close', () => {
-        const store = new ElectronStore({name: 'application'});
-        store.set('windowBounds', topWindow.getBounds());
+        const appConfigStore = new ElectronStore({name: 'application'});
+        appConfigStore.set('windowBounds', topWindow.getBounds());
     });
 
     topWindow.on('closed', () => {
@@ -122,7 +122,7 @@ app.on('activate', () => {
 
 ipcMain.on('app', (event, key) => {
     const data = {
-        package: packageMeta,
+        package: appPackage,
         config: appConfig,
         isDebugMode: isDebugMode
     };
@@ -138,9 +138,9 @@ ipcMain.on('ocs-manager', (event, key) => {
 });
 
 ipcMain.on('store-application', (event, key, value) => {
-    const store = new ElectronStore({name: 'application'});
+    const appConfigStore = new ElectronStore({name: 'application'});
     if (key && value) {
-        store.set(key, value);
+        appConfigStore.set(key, value);
     }
-    event.returnValue = key ? store.get(key) : store.store;
+    event.returnValue = key ? appConfigStore.get(key) : appConfigStore.store;
 });
