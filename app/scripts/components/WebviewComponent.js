@@ -23,12 +23,11 @@ export default class WebviewComponent extends BaseComponent {
 
     componentUpdatedCallback() {
         this._webviewElement = document.createElement('webview');
+
         this._webviewElement.setAttribute('partition', this.state.partition);
         this._webviewElement.setAttribute('preload', this.state.preload);
         this._webviewElement.setAttribute('src', this.state.src);
         this._webviewElement.className = 'flex-auto';
-
-        this.contentRoot.appendChild(this._webviewElement);
 
         this._webviewElement.addEventListener('did-start-loading', () => {
             this.dispatch('webview-did-start-loading', {});
@@ -84,6 +83,8 @@ export default class WebviewComponent extends BaseComponent {
                 }
             }
         });
+
+        this.contentRoot.appendChild(this._webviewElement);
     }
 
     setSrc(url) {
