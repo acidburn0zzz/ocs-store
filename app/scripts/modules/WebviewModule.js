@@ -2,29 +2,29 @@ export default class WebviewModule {
 
     constructor(stateManager) {
         this.stateManager = stateManager;
+        this.webviewComponent = this.stateManager.target.contentRoot
+            .querySelector('webview-component');
 
-        this.stateManager.eventHandler
-            .add('webview-navigation', this.navigationEvent.bind(this));
+        this.stateManager.actionHandler
+            .add('webview-navigation', this.navigationAction.bind(this));
     }
 
-    navigationEvent(params) {
-        const webviewComponent = this.stateManager.target.contentRoot
-            .querySelector('webview-component');
+    navigationAction(params) {
         switch (params.method) {
             case 'setSrc':
-                webviewComponent.setSrc(params.url);
+                this.webviewComponent.setSrc(params.url);
                 break;
             case 'goBack':
-                webviewComponent.goBack();
+                this.webviewComponent.goBack();
                 break;
             case 'goForward':
-                webviewComponent.goForward();
+                this.webviewComponent.goForward();
                 break;
             case 'reload':
-                webviewComponent.reload();
+                this.webviewComponent.reload();
                 break;
             case 'stop':
-                webviewComponent.stop();
+                this.webviewComponent.stop();
                 break;
         }
         return false;
