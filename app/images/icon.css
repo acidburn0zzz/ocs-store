@@ -3,17 +3,16 @@
 }
 
 .icon-menu {
-    background-image: url(material-design-icons/baseline-more_vert-24px.svg);
     /*background-image: url(material-design-icons/baseline-menu-24px.svg);*/
+    background-image: url(material-design-icons/baseline-more_vert-24px.svg);
 }
 
 .icon-home {
-    background-image: url(material-design-icons/baseline-home-24px.svg);
+    background-image: url(material-design-icons/outline-home-24px.svg);
 }
 
 .icon-collection {
-    background-image: url(material-design-icons/baseline-folder-24px.svg);
-    /*background-image: url(material-design-icons/baseline-folder_open-24px.svg);*/
+    background-image: url(material-design-icons/outline-folder-24px.svg);
 }
 
 .icon-back {
@@ -37,5 +36,5 @@
 }
 
 .icon-download {
-    background-image: url(material-design-icons/baseline-cloud_download-24px.svg);
+    background-image: url(material-design-icons/outline-cloud_download-24px.svg);
 }
