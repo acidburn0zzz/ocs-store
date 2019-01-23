@@ -90,7 +90,7 @@ export default class WebviewComponent extends BaseComponent {
         this.contentRoot.appendChild(this._webviewElement);
     }
 
-    setUrl(url) {
+    loadUrl(url) {
         this._webviewElement.setAttribute('src', url);
     }
 

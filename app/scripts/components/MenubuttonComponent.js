@@ -57,7 +57,7 @@ export default class MenubuttonComponent extends BaseComponent {
                     break;
                 case 'home':
                     this.dispatch('webview-navigation', {
-                        method: 'setUrl',
+                        method: 'loadUrl',
                         url: ipcRenderer.sendSync('store-application', 'startPage')
                     });
                     break;
