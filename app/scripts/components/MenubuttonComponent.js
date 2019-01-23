@@ -20,8 +20,8 @@ export default class MenubuttonComponent extends BaseComponent {
             }
             button.button {
                 box-shadow: none;
-                width: 30px;
-                height: 30px;
+                width: 100%;
+                height: 100%;
                 border: 0;
                 background-color: rgba(0,0,0,0);
                 background-position: center center;
