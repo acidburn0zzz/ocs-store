@@ -14,7 +14,7 @@ export default class ToolbarComponent extends BaseComponent {
             }
             nav ul {
                 list-style: none;
-                height: 100%;
+                height: inherit;
                 margin: 0 4px;
                 align-items: center;
             }

@@ -21,8 +21,8 @@ export default class OmniboxComponent extends BaseComponent {
             }
             div.widget {
                 box-shadow: none;
-                width: 100%;
-                height: 100%;
+                width: inherit;
+                height: inherit;
                 border: 0;
                 background-color: rgba(255,255,255,0.5);
                 align-items: center;
