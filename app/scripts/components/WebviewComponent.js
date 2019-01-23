@@ -41,7 +41,10 @@ export default class WebviewComponent extends BaseComponent {
             if (this._defaultState.isDebugMode) {
                 this._webviewElement.openDevTools();
             }
+
             this._webviewElement.send('ipc-message');
+
+            this.dispatch('webview-dom-ready', {});
         });
 
         this._webviewElement.addEventListener('new-window', (event) => {
