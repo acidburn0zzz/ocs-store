@@ -91,6 +91,14 @@ export default class WebviewComponent extends BaseComponent {
         this._webviewElement.setAttribute('src', url);
     }
 
+    getUrl() {
+        return this._webviewElement.getURL();
+    }
+
+    getTitle() {
+        return this._webviewElement.getTitle();
+    }
+
     goBack() {
         if (this._webviewElement.canGoBack()) {
             this._webviewElement.goBack();
