@@ -17,8 +17,8 @@ export default class WebviewModule {
 
     navigationAction(params) {
         switch (params.method) {
-            case 'setSrc':
-                this.webviewComponent.setSrc(params.url);
+            case 'setUrl':
+                this.webviewComponent.setUrl(params.url);
                 break;
             case 'goBack':
                 this.webviewComponent.goBack();
