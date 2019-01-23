@@ -38,13 +38,13 @@ export default class WebviewComponent extends BaseComponent {
         });
 
         this._webviewElement.addEventListener('dom-ready', () => {
+            this.dispatch('webview-dom-ready', {});
+
             if (this.state.isDebugMode) {
                 this._webviewElement.openDevTools();
             }
 
             this._webviewElement.send('ipc-message');
-
-            this.dispatch('webview-dom-ready', {});
         });
 
         this._webviewElement.addEventListener('new-window', (event) => {
