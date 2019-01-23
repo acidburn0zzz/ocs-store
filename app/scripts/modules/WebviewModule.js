@@ -8,12 +8,47 @@ export default class WebviewModule {
         this.toolbarComponent = container.querySelector('toolbar-component');
 
         this.stateManager.actionHandler
+            .add('webview-loading', this.loadingAction.bind(this))
+            .add('webview-page', this.pageAction.bind(this))
             .add('webview-navigation', this.navigationAction.bind(this));
 
         this.stateManager.viewHandler
-            .add('webview-did-start-loading', this.didStartLoadingView.bind(this))
-            .add('webview-did-stop-loading', this.didStopLoadingView.bind(this))
-            .add('webview-dom-ready', this.domReadyView.bind(this));
+            .add('webview-loading', this.loadingView.bind(this))
+            .add('webview-page', this.pageView.bind(this));
+    }
+
+    loadingAction(params) {
+        return {
+            isLoading: params.isLoading || false
+        };
+    }
+
+    loadingView(state) {
+        if (state.isLoading) {
+            this.toolbarComponent.contentRoot
+                .querySelector('menubutton-component[data-ref="reload"]')
+                .setAttribute('data-ref', 'stop');
+        }
+        else {
+            this.toolbarComponent.contentRoot
+                .querySelector('menubutton-component[data-ref="stop"]')
+                .setAttribute('data-ref', 'reload');
+        }
+    }
+
+    pageAction(params) {
+        return {
+            url: params.url || '',
+            title: params.title || ''
+        };
+    }
+
+    pageView(state) {
+        if (state.url && state.title) {
+            this.toolbarComponent.contentRoot
+                .querySelector('omnibox-component')
+                .update();
+        }
     }
 
     navigationAction(params) {
@@ -35,27 +70,6 @@ export default class WebviewModule {
                 break;
         }
         return false;
-    }
-
-    didStartLoadingView() {
-        this.toolbarComponent.contentRoot
-            .querySelector('menubutton-component[data-ref="reload"]')
-            .setAttribute('data-ref', 'stop');
-    }
-
-    didStopLoadingView() {
-        this.toolbarComponent.contentRoot
-            .querySelector('menubutton-component[data-ref="stop"]')
-            .setAttribute('data-ref', 'reload');
-    }
-
-    domReadyView() {
-        this.toolbarComponent.contentRoot
-            .querySelector('omnibox-component')
-            .update({
-                url: this.webviewComponent.getUrl(),
-                title: this.webviewComponent.getTitle()
-            });
     }
 
 }

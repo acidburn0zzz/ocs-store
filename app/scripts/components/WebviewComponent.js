@@ -30,15 +30,18 @@ export default class WebviewComponent extends BaseComponent {
         this._webviewElement.className = 'flex-auto';
 
         this._webviewElement.addEventListener('did-start-loading', () => {
-            this.dispatch('webview-did-start-loading', {});
+            this.dispatch('webview-loading', {isLoading: true});
         });
 
         this._webviewElement.addEventListener('did-stop-loading', () => {
-            this.dispatch('webview-did-stop-loading', {});
+            this.dispatch('webview-loading', {isLoading: false});
         });
 
         this._webviewElement.addEventListener('dom-ready', () => {
-            this.dispatch('webview-dom-ready', {});
+            this.dispatch('webview-page', {
+                url: this._webviewElement.getURL(),
+                title: this._webviewElement.getTitle()
+            });
 
             if (this.state.isDebugMode) {
                 this._webviewElement.openDevTools();
@@ -48,11 +51,9 @@ export default class WebviewComponent extends BaseComponent {
         });
 
         this._webviewElement.addEventListener('new-window', (event) => {
-            console.log(event);
         });
 
         this._webviewElement.addEventListener('will-navigate', (event) => {
-            console.log(event);
             if (event.url.startsWith('ocs://') || event.url.startsWith('ocss://')) {
                 const info = this._detectOcsApiInfo(this._webviewElement.getURL());
                 this.dispatch('ocs-url', {
@@ -63,11 +64,9 @@ export default class WebviewComponent extends BaseComponent {
         });
 
         this._webviewElement.addEventListener('did-navigate', (event) => {
-            console.log(event);
         });
 
         this._webviewElement.addEventListener('ipc-message', (event) => {
-            console.log(event);
             switch (event.channel) {
                 //case 'user-profile': {
                 //    break;

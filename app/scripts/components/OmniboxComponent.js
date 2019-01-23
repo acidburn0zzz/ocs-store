@@ -2,14 +2,11 @@ import BaseComponent from './BaseComponent.js';
 
 export default class OmniboxComponent extends BaseComponent {
 
-    init() {
-        this.state = {
-            url: '',
-            title: ''
-        };
-    }
-
     render() {
+        const webviewPageState = this.rootState.get('webview-page');
+        const url = webviewPageState.url || '';
+        const title = webviewPageState.title || '';
+
         return `
             ${this.sharedStyle}
 
@@ -43,12 +40,13 @@ export default class OmniboxComponent extends BaseComponent {
             }
             </style>
 
-            <button class="button">${this.state.title}</button>
+            <button class="button">${title}</button>
 
             <div class="widget">
+
             <div class="widget-content">
             <h4>Open in browser</h4>
-            <p><a data-url="${this.state.url}">${this.state.url}</a></p>
+            <p><a data-url="${url}">${url}</a></p>
             </div>
 
             <div class="widget-content">
@@ -62,6 +60,7 @@ export default class OmniboxComponent extends BaseComponent {
             <li><a data-url="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</a></li>
             </ul>
             </div>
+
             </div>
         `;
     }
