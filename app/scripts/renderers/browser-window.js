@@ -8,6 +8,7 @@ import ToolbarComponent from '../components/ToolbarComponent.js';
 import StatusbarComponent from '../components/StatusbarComponent.js';
 import WebviewComponent from '../components/WebviewComponent.js';
 import MenubuttonComponent from '../components/MenubuttonComponent.js';
+import OmniboxComponent from '../components/OmniboxComponent.js';
 
 import OcsManagerWsApi from '../api/OcsManagerWsApi.js';
 
@@ -30,5 +31,6 @@ ToolbarComponent.define('toolbar-component');
 StatusbarComponent.define('statusbar-component');
 WebviewComponent.define('webview-component');
 MenubuttonComponent.define('menubutton-component');
+OmniboxComponent.define('omnibox-component');
 
 //stateManager.dispatch('');
