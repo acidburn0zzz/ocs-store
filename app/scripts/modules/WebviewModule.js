@@ -49,6 +49,13 @@ export default class WebviewModule {
             .setAttribute('data-ref', 'reload');
     }
 
-    domReadyView() {}
+    domReadyView() {
+        this.toolbarComponent.contentRoot
+            .querySelector('omnibox-component')
+            .update({
+                url: this.webviewComponent.getUrl(),
+                title: this.webviewComponent.getTitle()
+            });
+    }
 
 }
