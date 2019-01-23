@@ -19,30 +19,49 @@ export default class OmniboxComponent extends BaseComponent {
                 width: 500px;
                 height: 30px;
             }
-            div.widget {
+            button.button {
                 box-shadow: none;
                 width: inherit;
                 height: inherit;
                 border: 0;
-                background-color: rgba(255,255,255,0.5);
-                align-items: center;
-                cursor: pointer;
+                background-color: rgba(100,100,100,0.1);
                 transition: background-color 0.2s ease-out;
-            }
-            div.widget:hover {
-                background-color: rgba(255,255,255,1.0);
-            }
-            div.widget span {
-                display: inline-block;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
-                margin: 0 1em;
+            }
+            button.button:hover {
+                border: 0;
+                background-color: rgba(0,0,0,0.1);
+            }
+            div.widget {
+                position: absolute;
+                z-index: 2000;
+                width: inherit;
+                background-color: #ffffff;
+                text-align: left;
             }
             </style>
 
-            <div class="flex widget">
-            <span>${this.state.title}</span>
+            <button class="button">${this.state.title}</button>
+
+            <div class="widget">
+            <div class="widget-content">
+            <h4>Open in browser</h4>
+            <p><a data-url="${this.state.url}">${this.state.url}</a></p>
+            </div>
+
+            <div class="widget-content">
+            <h4>Choose startpage</h4>
+            <ul>
+            <li><a data-url="https://www.opendesktop.org/">opendesktop.org</a></li>
+            <li><a data-url="https://www.opendesktop.org/s/Gnome">gnome-look.org</a></li>
+            <li><a data-url="https://store.kde.org/">store.kde.org</a></li>
+            <li><a data-url="https://www.opendesktop.org/s/XFCE">xfce-look.org</a></li>
+            <li><a data-url="https://www.opendesktop.org/s/Window-Managers">box-look.org</a></li>
+            <li><a data-url="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</a></li>
+            </ul>
+            </div>
             </div>
         `;
     }
