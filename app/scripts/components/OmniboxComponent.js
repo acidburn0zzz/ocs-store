@@ -1,3 +1,5 @@
+const {ipcRenderer} = require('electron');
+
 import BaseComponent from './BaseComponent.js';
 
 export default class OmniboxComponent extends BaseComponent {
@@ -6,6 +8,7 @@ export default class OmniboxComponent extends BaseComponent {
         const webviewPageState = this.rootState.get('webview-page');
         const url = webviewPageState.url || '';
         const title = webviewPageState.title || '';
+        const startPage = ipcRenderer.sendSync('store-application', 'startPage');
 
         return `
             ${this.sharedStyle}
@@ -16,51 +19,85 @@ export default class OmniboxComponent extends BaseComponent {
                 width: 500px;
                 height: 30px;
             }
-            button.button {
+
+            div.toggler {
+                width: inherit;
+                height: inherit;
+            }
+            div.toggler button.button {
                 box-shadow: none;
                 width: inherit;
                 height: inherit;
                 border: 0;
                 background-color: rgba(100,100,100,0.1);
-                transition: background-color 0.2s ease-out;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
+                transition: background-color 0.2s ease-out;
             }
-            button.button:hover {
+            div.toggler button.button:hover {
                 border: 0;
                 background-color: rgba(0,0,0,0.1);
             }
+
             div.widget {
                 position: absolute;
                 z-index: 2000;
                 width: inherit;
                 background-color: #ffffff;
-                text-align: left;
+            }
+            div.widget-content {
+                margin: 1em 0;
+            }
+            div.widget-content h4 {
+                padding-top: 24px;
+                background-position: top center;
+                background-repeat: no-repeat;
+                background-size: 24px 24px;
+                color: #777777;
+                font-weight: normal;
+                text-align: center;
+            }
+            div.widget-content ul {
+                list-style: none;
+                margin: 0;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            div.widget-content ul li {
+                width: 50%;
+                padding: 5px;
+            }
+            div.widget-content ul li button.button {
+                box-shadow: none;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+            div.widget-content ul li button.button[data-url="${startPage}"] {
+                border-color: #68a4d9;
             }
             </style>
 
+            <div class="toggler">
             <button class="button">${title}</button>
+            </div>
 
             <div class="widget">
-
-            <div class="widget-content">
-            <h4>Open in browser</h4>
-            <p><a data-url="${url}">${url}</a></p>
+            <div class="widget-header">
+            <button class="button-accept width-1of1" data-url="${url}">Open in Browser</button>
             </div>
-
             <div class="widget-content">
-            <h4>Choose startpage</h4>
-            <ul>
-            <li><a data-url="https://www.opendesktop.org/">opendesktop.org</a></li>
-            <li><a data-url="https://www.opendesktop.org/s/Gnome">gnome-look.org</a></li>
-            <li><a data-url="https://store.kde.org/">store.kde.org</a></li>
-            <li><a data-url="https://www.opendesktop.org/s/XFCE">xfce-look.org</a></li>
-            <li><a data-url="https://www.opendesktop.org/s/Window-Managers">box-look.org</a></li>
-            <li><a data-url="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</a></li>
+            <h4 class="icon-home">Choose Startpage</h4>
+            <ul class="flex">
+            <li><button class="button width-1of1" data-url="https://www.opendesktop.org/">opendesktop.org</button></li>
+            <li><button class="button width-1of1" data-url="https://www.opendesktop.org/s/Gnome">gnome-look.org</button></li>
+            <li><button class="button width-1of1" data-url="https://store.kde.org/">store.kde.org</button></li>
+            <li><button class="button width-1of1" data-url="https://www.opendesktop.org/s/XFCE">xfce-look.org</button></li>
+            <li><button class="button width-1of1" data-url="https://www.opendesktop.org/s/Window-Managers">box-look.org</button></li>
+            <li><button class="button width-1of1" data-url="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</button></li>
             </ul>
             </div>
-
             </div>
         `;
     }
