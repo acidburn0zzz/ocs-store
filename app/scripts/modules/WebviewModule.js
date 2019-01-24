@@ -26,17 +26,8 @@ export default class WebviewModule {
         };
     }
 
-    loadingView(state) {
-        if (state.isLoading) {
-            this.toolbarComponent.contentRoot
-                .querySelector('menubutton-component[data-ref="reload"]')
-                .setAttribute('data-ref', 'stop');
-        }
-        else {
-            this.toolbarComponent.contentRoot
-                .querySelector('menubutton-component[data-ref="stop"]')
-                .setAttribute('data-ref', 'reload');
-        }
+    loadingView() {
+        this.toolbarComponent.checkLoadingStatus();
     }
 
     pageAction(params) {

@@ -34,6 +34,18 @@ export default class ToolbarComponent extends BaseComponent {
                     margin-right: calc(32px * 4);
                 }
             }
+
+            div[data-indicator] {
+                z-index: 1;
+                position: relative;
+                top: -2px;
+                left: 0;
+                height: 2px;
+                background-color: red;
+            }
+            div[data-indicator="inactive"] {
+                display: none;
+            }
             </style>
 
             <nav data-toolbar>
@@ -47,7 +59,30 @@ export default class ToolbarComponent extends BaseComponent {
             <li><menubutton-component data-ref="menu"></menubutton-component></li>
             </ul>
             </nav>
+
+            <div data-indicator="inactive"></div>
         `;
+    }
+
+    checkLoadingStatus() {
+        if (this.rootState.get('webview-loading').isLoading) {
+            const reloadButton = this.contentRoot.querySelector('menubutton-component[data-ref="reload"]');
+            if (reloadButton) {
+                reloadButton.setAttribute('data-ref', 'stop');
+            }
+
+            this.contentRoot.querySelector('div[data-indicator]')
+                .setAttribute('data-indicator', 'active');
+        }
+        else {
+            const stopButton = this.contentRoot.querySelector('menubutton-component[data-ref="stop"]');
+            if (stopButton) {
+                stopButton.setAttribute('data-ref', 'reload');
+            }
+
+            this.contentRoot.querySelector('div[data-indicator]')
+                .setAttribute('data-indicator', 'inactive');
+        }
     }
 
 }
