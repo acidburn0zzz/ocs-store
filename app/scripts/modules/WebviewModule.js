@@ -1,3 +1,5 @@
+const {ipcRenderer} = require('electron');
+
 export default class WebviewModule {
 
     constructor(stateManager) {
@@ -10,6 +12,7 @@ export default class WebviewModule {
         this.stateManager.actionHandler
             .add('webview-loading', this.loadingAction.bind(this))
             .add('webview-page', this.pageAction.bind(this))
+            .add('webview-startpage', this.startpageAction.bind(this))
             .add('webview-navigation', this.navigationAction.bind(this));
 
         this.stateManager.viewHandler
@@ -49,6 +52,12 @@ export default class WebviewModule {
                 .querySelector('omnibox-component')
                 .update();
         }
+    }
+
+    startpageAction(params) {
+        ipcRenderer.sendSync('store-application', 'startPage', params.url);
+        this.webviewComponent.loadUrl(params.url);
+        return false;
     }
 
     navigationAction(params) {

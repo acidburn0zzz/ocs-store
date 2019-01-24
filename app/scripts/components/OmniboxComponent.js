@@ -8,8 +8,6 @@ export default class OmniboxComponent extends BaseComponent {
         this._omniboxElement = null;
         this._paletteElement = null;
         this._togglerElement = null;
-
-        this._toggle = this._toggle.bind(this);
     }
 
     render() {
@@ -65,9 +63,9 @@ export default class OmniboxComponent extends BaseComponent {
                 background-position: top center;
                 background-repeat: no-repeat;
                 background-size: 24px 24px;
+                color: #666666;
                 font-weight: normal;
                 text-align: center;
-                opacity: 0.75;
             }
             div[data-palette] ul {
                 list-style: none;
@@ -135,8 +133,23 @@ export default class OmniboxComponent extends BaseComponent {
         this._paletteElement = this.contentRoot.querySelector('div[data-palette]');
         this._togglerElement = this.contentRoot.querySelector('div[data-toggler]');
 
-        this._omniboxElement.addEventListener('click', this._toggle, false);
-        this._togglerElement.addEventListener('click', this._toggle, false);
+        this._omniboxElement.addEventListener('click', this._toggle.bind(this), false);
+        this._togglerElement.addEventListener('click', this._toggle.bind(this), false);
+
+        this._paletteElement.addEventListener('click', (event) => {
+            if (event.target.closest('button[data-external-url]')) {
+                const url = event.target.closest('button[data-external-url]')
+                    .getAttribute('data-external-url');
+                this.dispatch('external-url', {url: url});
+                this._toggle();
+            }
+            else if (event.target.closest('button[data-startpage-url]')) {
+                const url = event.target.closest('button[data-startpage-url]')
+                    .getAttribute('data-startpage-url');
+                this.dispatch('webview-startpage', {url: url});
+                this._toggle();
+            }
+        }, false);
     }
 
     _toggle() {
