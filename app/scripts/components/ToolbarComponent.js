@@ -21,6 +21,15 @@ export default class ToolbarComponent extends BaseComponent {
             nav ul li {
                 margin: 0 2px;
             }
+            nav ul li.flex {
+                justify-content: center;
+            }
+
+            @media (min-width: 900px) {
+                nav ul li.flex {
+                    margin-right: calc(32px * 4);
+                }
+            }
             </style>
 
             <nav>
@@ -30,7 +39,7 @@ export default class ToolbarComponent extends BaseComponent {
             <li><menubutton-component data-ref="reload"></menubutton-component></li>
             <li><menubutton-component data-ref="home"></menubutton-component></li>
             <li><menubutton-component data-ref="collection"></menubutton-component></li>
-            <li class="flex-auto"><omnibox-component></omnibox-component></li>
+            <li class="flex-auto flex"><omnibox-component></omnibox-component></li>
             <li><menubutton-component data-ref="menu"></menubutton-component></li>
             </ul>
             </nav>

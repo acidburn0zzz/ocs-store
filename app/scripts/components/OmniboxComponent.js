@@ -54,6 +54,7 @@ export default class OmniboxComponent extends BaseComponent {
                 z-index: 2000;
                 width: inherit;
                 background-color: #ffffff;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             }
             div[data-palette] div.widget-content {
                 margin: 1em 0;
