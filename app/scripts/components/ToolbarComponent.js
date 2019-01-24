@@ -7,32 +7,32 @@ export default class ToolbarComponent extends BaseComponent {
             ${this.sharedStyle}
 
             <style>
-            nav {
+            nav[data-toolbar] {
                 height: 40px;
                 border-bottom: 1px solid rgba(0,0,0,0.1);
                 background-color: #eeeeee;
             }
-            nav ul {
+            nav[data-toolbar] ul {
                 list-style: none;
                 height: inherit;
                 margin: 0 4px;
                 align-items: center;
             }
-            nav ul li {
+            nav[data-toolbar] ul li {
                 margin: 0 2px;
             }
-            nav ul li.flex {
+            nav[data-toolbar] ul li.flex {
                 justify-content: center;
             }
 
             @media (min-width: 900px) {
-                nav ul li.flex {
+                nav[data-toolbar] ul li.flex {
                     margin-right: calc(32px * 4);
                 }
             }
             </style>
 
-            <nav>
+            <nav data-toolbar>
             <ul class="flex">
             <li><menubutton-component data-ref="back"></menubutton-component></li>
             <li><menubutton-component data-ref="forward"></menubutton-component></li>
