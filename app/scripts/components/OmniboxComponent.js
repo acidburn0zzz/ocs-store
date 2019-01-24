@@ -50,8 +50,10 @@ export default class OmniboxComponent extends BaseComponent {
             }
 
             div[data-palette] {
-                position: absolute;
-                z-index: 2000;
+                z-index: 1000;
+                position: relative;
+                top: 0;
+                left: 0;
                 width: inherit;
                 background-color: #ffffff;
                 box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -92,8 +94,8 @@ export default class OmniboxComponent extends BaseComponent {
             }
 
             div[data-toggler] {
+                z-index: 999;
                 position: absolute;
-                z-index: 1000;
                 top: 0;
                 left: 0;
                 width: 100%;

@@ -7,8 +7,12 @@ export default class ToolbarComponent extends BaseComponent {
             ${this.sharedStyle}
 
             <style>
-            nav[data-toolbar] {
+            :host {
                 height: 40px;
+            }
+
+            nav[data-toolbar] {
+                height: inherit;
                 border-bottom: 1px solid rgba(0,0,0,0.1);
                 background-color: #eeeeee;
             }
