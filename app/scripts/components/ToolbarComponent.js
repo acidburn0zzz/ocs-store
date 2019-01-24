@@ -14,7 +14,7 @@ export default class ToolbarComponent extends BaseComponent {
             nav[data-toolbar] {
                 height: inherit;
                 border-bottom: 1px solid rgba(0,0,0,0.1);
-                background-color: #eeeeee;
+                background-color: #f5f5f5;
             }
             nav[data-toolbar] ul {
                 list-style: none;
@@ -41,10 +41,24 @@ export default class ToolbarComponent extends BaseComponent {
                 top: -2px;
                 left: 0;
                 height: 2px;
-                background-color: red;
+                background-color: #68a4d9;
             }
             div[data-indicator="inactive"] {
                 display: none;
+            }
+            div[data-indicator="active"] {
+                animation-name: loading;
+                animation-duration: 2s;
+                animation-iteration-count: infinite;
+                animation-direction: alternate;
+            }
+            @keyframes loading {
+                0% {
+                    opacity: 0.3;
+                }
+                100% {
+                    opacity: 1.0;
+                }
             }
             </style>
 
