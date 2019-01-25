@@ -35,7 +35,7 @@ export default class OmniboxComponent extends BaseComponent {
                 width: inherit;
                 height: inherit;
                 border: 0;
-                background-color: rgba(100,100,100,0.1);
+                background-color: var(--color-active-secondary);
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
@@ -43,10 +43,10 @@ export default class OmniboxComponent extends BaseComponent {
             }
             div[data-omnibox] button.button:hover {
                 border: 0;
-                background-color: rgba(0,0,0,0.1);
+                background-color: var(--color-active);
             }
             div[data-omnibox="inactive"] button.button {
-                background-color: rgba(0,0,0,0.1);
+                background-color: var(--color-active);
             }
 
             div[data-palette] {
@@ -55,8 +55,8 @@ export default class OmniboxComponent extends BaseComponent {
                 top: 0;
                 left: 0;
                 width: inherit;
-                background-color: #ffffff;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                background-color: var(--color-content);
+                box-shadow: 0 10px 30px var(--color-shadow);
             }
             div[data-palette] div.widget-content {
                 margin: 1em 0;
@@ -66,7 +66,7 @@ export default class OmniboxComponent extends BaseComponent {
                 background-position: top center;
                 background-repeat: no-repeat;
                 background-size: 24px 24px;
-                color: #666666;
+                color: var(--color-text-secondary);
                 font-weight: normal;
                 text-align: center;
             }
@@ -87,7 +87,7 @@ export default class OmniboxComponent extends BaseComponent {
                 text-overflow: ellipsis;
             }
             div[data-palette] ul li button.button[data-startpage-url="${startPage}"] {
-                border-color: #68a4d9;
+                border-color: var(--color-information);
             }
             div[data-palette="inactive"] {
                 display: none;

@@ -23,7 +23,7 @@ export default class MenubuttonComponent extends BaseComponent {
                 width: inherit;
                 height: inherit;
                 border: 0;
-                background-color: rgba(0,0,0,0);
+                background-color: transparent;
                 background-position: center center;
                 background-repeat: no-repeat;
                 background-size: 24px 24px;
@@ -31,7 +31,7 @@ export default class MenubuttonComponent extends BaseComponent {
             }
             button.button:hover {
                 border: 0;
-                background-color: rgba(0,0,0,0.1);
+                background-color: var(--color-active);
             }
             </style>
 
