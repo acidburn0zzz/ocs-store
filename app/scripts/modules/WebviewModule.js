@@ -33,16 +33,18 @@ export default class WebviewModule {
     pageAction(params) {
         return {
             url: params.url || '',
-            title: params.title || ''
+            title: params.title || '',
+            canGoBack: params.canGoBack || false,
+            canGoForward: params.canGoForward || false
         };
     }
 
-    pageView(state) {
-        if (state.url && state.title) {
-            this.toolbarComponent.contentRoot
-                .querySelector('omnibox-component')
-                .update();
-        }
+    pageView() {
+        this.toolbarComponent.checkWebviewPageStatus();
+
+        this.toolbarComponent.contentRoot
+            .querySelector('omnibox-component')
+            .update();
     }
 
     startpageAction(params) {

@@ -79,7 +79,8 @@ export default class ToolbarComponent extends BaseComponent {
     }
 
     checkWebviewLoadingStatus() {
-        if (this.rootState.get('webview-loading').isLoading) {
+        const webviewLoadingState = this.rootState.get('webview-loading');
+        if (webviewLoadingState.isLoading) {
             const reloadButton = this.contentRoot
                 .querySelector('navbutton-component[data-type="webview"][data-action="reload"]');
             if (reloadButton) {
@@ -98,6 +99,28 @@ export default class ToolbarComponent extends BaseComponent {
 
             this.contentRoot.querySelector('div[data-indicator]')
                 .setAttribute('data-indicator', 'inactive');
+        }
+    }
+
+    checkWebviewPageStatus() {
+        const webviewPageState = this.rootState.get('webview-page');
+
+        const backButton = this.contentRoot
+            .querySelector('navbutton-component[data-type="webview"][data-action="back"]');
+        if (webviewPageState.canGoBack) {
+            backButton.removeAttribute('disabled');
+        }
+        else {
+            backButton.setAttribute('disabled', 'disabled');
+        }
+
+        const forwardButton = this.contentRoot
+            .querySelector('navbutton-component[data-type="webview"][data-action="forward"]');
+        if (webviewPageState.canGoForward) {
+            forwardButton.removeAttribute('disabled');
+        }
+        else {
+            forwardButton.setAttribute('disabled', 'disabled');
         }
     }
 

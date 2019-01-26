@@ -40,7 +40,9 @@ export default class WebviewComponent extends BaseComponent {
         this._webviewElement.addEventListener('dom-ready', () => {
             this.dispatch('webview-page', {
                 url: this._webviewElement.getURL(),
-                title: this._webviewElement.getTitle()
+                title: this._webviewElement.getTitle(),
+                canGoBack: this._webviewElement.canGoBack(),
+                canGoForward: this._webviewElement.canGoForward()
             });
 
             if (this.state.isDebugMode) {
