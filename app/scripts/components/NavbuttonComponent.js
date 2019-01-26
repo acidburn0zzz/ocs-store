@@ -3,10 +3,11 @@ import BaseComponent from './BaseComponent.js';
 export default class NavbuttonComponent extends BaseComponent {
 
     static get componentObservedAttributes() {
-        return ['data-type', 'data-action', 'data-icon'];
+        return ['disabled', 'data-type', 'data-action', 'data-icon'];
     }
 
     render() {
+        const disabled = this.hasAttribute('disabled') ? 'disabled' : '';
         const icon = this.getAttribute('data-icon') || this.getAttribute('data-action') || '';
 
         return `
@@ -20,12 +21,15 @@ export default class NavbuttonComponent extends BaseComponent {
             }
             </style>
 
-            <button-component data-icon="${icon}"></button-component>
+            <button-component data-icon="${icon}" ${disabled}></button-component>
         `;
     }
 
     componentUpdatedCallback() {
-        if (this.getAttribute('data-type') && this.getAttribute('data-action')) {
+        if (!this.hasAttribute('disabled')
+            && this.getAttribute('data-type')
+            && this.getAttribute('data-action')
+        ) {
             const buttonComponent = this.contentRoot.querySelector('button-component');
             buttonComponent.addEventListener('click', () => {
                 this.dispatch(

@@ -3,10 +3,13 @@ import BaseComponent from './BaseComponent.js';
 export default class ButtonComponent extends BaseComponent {
 
     static get componentObservedAttributes() {
-        return ['data-icon'];
+        return ['disabled', 'data-icon'];
     }
 
     render() {
+        const disabled = this.hasAttribute('disabled') ? 'disabled' : '';
+        const icon = `icon-${this.getAttribute('data-icon')}`;
+
         return `
             ${this.sharedStyle}
 
@@ -33,7 +36,7 @@ export default class ButtonComponent extends BaseComponent {
             }
             </style>
 
-            <button class="button icon-${this.getAttribute('data-icon')}"></button>
+            <button class="button ${icon}" ${disabled}></button>
         `;
     }
 
