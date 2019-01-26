@@ -64,11 +64,11 @@ export default class ToolbarComponent extends BaseComponent {
 
             <nav data-toolbar>
             <ul class="flex">
-            <li><menubutton-component data-ref="back"></menubutton-component></li>
-            <li><menubutton-component data-ref="forward"></menubutton-component></li>
-            <li><menubutton-component data-ref="reload"></menubutton-component></li>
-            <li><menubutton-component data-ref="home"></menubutton-component></li>
-            <li><menubutton-component data-ref="collection"></menubutton-component></li>
+            <li><navbutton-component data-type="webview" data-action="back"></navbutton-component></li>
+            <li><navbutton-component data-type="webview" data-action="forward"></navbutton-component></li>
+            <li><navbutton-component data-type="webview" data-action="reload"></navbutton-component></li>
+            <li><navbutton-component data-type="webview" data-action="home"></navbutton-component></li>
+            <li><navbutton-component data-type="collection" data-action="collection"></navbutton-component></li>
             <li class="flex-auto flex"><omnibox-component></omnibox-component></li>
             <li><menubutton-component data-ref="menu"></menubutton-component></li>
             </ul>

@@ -7,6 +7,8 @@ import PageComponent from '../components/PageComponent.js';
 import ToolbarComponent from '../components/ToolbarComponent.js';
 import StatusbarComponent from '../components/StatusbarComponent.js';
 import WebviewComponent from '../components/WebviewComponent.js';
+import ButtonComponent from '../components/ButtonComponent.js';
+import NavbuttonComponent from '../components/NavbuttonComponent.js';
 import MenubuttonComponent from '../components/MenubuttonComponent.js';
 import OmniboxComponent from '../components/OmniboxComponent.js';
 
@@ -30,6 +32,8 @@ PageComponent.define('page-component');
 ToolbarComponent.define('toolbar-component');
 StatusbarComponent.define('statusbar-component');
 WebviewComponent.define('webview-component');
+ButtonComponent.define('button-component');
+NavbuttonComponent.define('navbutton-component');
 MenubuttonComponent.define('menubutton-component');
 OmniboxComponent.define('omnibox-component');
 
