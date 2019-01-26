@@ -22,6 +22,41 @@ export default class WebviewComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
+        if (!this._webviewElement) {
+            this._createWebviewElement();
+        }
+        this.contentRoot.appendChild(this._webviewElement);
+    }
+
+    loadUrl(url) {
+        this._webviewElement.setAttribute('src', url);
+    }
+
+    getUrl() {
+        return this._webviewElement.getURL();
+    }
+
+    getTitle() {
+        return this._webviewElement.getTitle();
+    }
+
+    goBack() {
+        this._webviewElement.goBack();
+    }
+
+    goForward() {
+        this._webviewElement.goForward();
+    }
+
+    reload() {
+        this._webviewElement.reload();
+    }
+
+    stop() {
+        this._webviewElement.stop();
+    }
+
+    _createWebviewElement() {
         this._webviewElement = document.createElement('webview');
 
         this._webviewElement.setAttribute('partition', this.state.partition);
@@ -87,40 +122,6 @@ export default class WebviewComponent extends BaseComponent {
                 }
             }
         });
-
-        this.contentRoot.appendChild(this._webviewElement);
-    }
-
-    loadUrl(url) {
-        this._webviewElement.setAttribute('src', url);
-    }
-
-    getUrl() {
-        return this._webviewElement.getURL();
-    }
-
-    getTitle() {
-        return this._webviewElement.getTitle();
-    }
-
-    goBack() {
-        if (this._webviewElement.canGoBack()) {
-            this._webviewElement.goBack();
-        }
-    }
-
-    goForward() {
-        if (this._webviewElement.canGoForward()) {
-            this._webviewElement.goForward();
-        }
-    }
-
-    reload() {
-        this._webviewElement.reload();
-    }
-
-    stop() {
-        this._webviewElement.stop();
     }
 
     _detectOcsApiInfo(url) {
