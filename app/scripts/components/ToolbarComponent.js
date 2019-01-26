@@ -70,7 +70,7 @@ export default class ToolbarComponent extends BaseComponent {
             <li><navbutton-component data-type="webview" data-action="home"></navbutton-component></li>
             <li><navbutton-component data-type="collection" data-action="collection"></navbutton-component></li>
             <li class="flex-auto flex"><omnibox-component></omnibox-component></li>
-            <li><menubutton-component data-ref="menu"></menubutton-component></li>
+            <li><menubutton-component></menubutton-component></li>
             </ul>
             </nav>
 
