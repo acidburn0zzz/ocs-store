@@ -78,20 +78,22 @@ export default class ToolbarComponent extends BaseComponent {
         `;
     }
 
-    checkLoadingStatus() {
+    checkWebviewLoadingStatus() {
         if (this.rootState.get('webview-loading').isLoading) {
-            const reloadButton = this.contentRoot.querySelector('menubutton-component[data-ref="reload"]');
+            const reloadButton = this.contentRoot
+                .querySelector('navbutton-component[data-type="webview"][data-action="reload"]');
             if (reloadButton) {
-                reloadButton.setAttribute('data-ref', 'stop');
+                reloadButton.setAttribute('data-action', 'stop');
             }
 
             this.contentRoot.querySelector('div[data-indicator]')
                 .setAttribute('data-indicator', 'active');
         }
         else {
-            const stopButton = this.contentRoot.querySelector('menubutton-component[data-ref="stop"]');
+            const stopButton = this.contentRoot
+                .querySelector('navbutton-component[data-type="webview"][data-action="stop"]');
             if (stopButton) {
-                stopButton.setAttribute('data-ref', 'reload');
+                stopButton.setAttribute('data-action', 'reload');
             }
 
             this.contentRoot.querySelector('div[data-indicator]')

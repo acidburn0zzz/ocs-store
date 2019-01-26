@@ -27,7 +27,7 @@ export default class WebviewModule {
     }
 
     loadingView() {
-        this.toolbarComponent.checkLoadingStatus();
+        this.toolbarComponent.checkWebviewLoadingStatus();
     }
 
     pageAction(params) {
@@ -52,14 +52,16 @@ export default class WebviewModule {
     }
 
     navigationAction(params) {
-        switch (params.method) {
-            case 'loadUrl':
-                this.webviewComponent.loadUrl(params.url);
+        switch (params.action) {
+            case 'home':
+                this.webviewComponent.loadUrl(
+                    ipcRenderer.sendSync('store-application', 'startPage')
+                );
                 break;
-            case 'goBack':
+            case 'back':
                 this.webviewComponent.goBack();
                 break;
-            case 'goForward':
+            case 'forward':
                 this.webviewComponent.goForward();
                 break;
             case 'reload':
