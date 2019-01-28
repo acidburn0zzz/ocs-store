@@ -58,6 +58,16 @@ export default class OmniboxComponent extends BaseComponent {
                 background-color: var(--color-content);
                 box-shadow: 0 10px 30px var(--color-shadow);
             }
+            div[data-palette] a[data-external-url] {
+                display: inline-block;
+                padding-right: 18px;
+                background-position: center right;
+                background-repeat: no-repeat;
+                background-size: 16px 16px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
             div[data-palette] div.widget-content {
                 margin: 1em 0;
             }
@@ -112,7 +122,7 @@ export default class OmniboxComponent extends BaseComponent {
 
             <div class="widget" data-palette="inactive">
             <div class="widget-header">
-            <button class="button-accept width-1of1" data-external-url="${url}">Open in Browser</button>
+            <a href="#" class="icon-open-browser width-1of1" data-external-url="${url}">${url}</a>
             </div>
             <div class="widget-content">
             <h4 class="icon-home">Choose Startpage</h4>
@@ -140,8 +150,8 @@ export default class OmniboxComponent extends BaseComponent {
         this._togglerElement.addEventListener('click', this._toggle.bind(this), false);
 
         this._paletteElement.addEventListener('click', (event) => {
-            if (event.target.closest('button[data-external-url]')) {
-                const url = event.target.closest('button[data-external-url]')
+            if (event.target.closest('a[data-external-url]')) {
+                const url = event.target.closest('a[data-external-url]')
                     .getAttribute('data-external-url');
                 this.dispatch('external-url', {url: url});
                 this._toggle();
