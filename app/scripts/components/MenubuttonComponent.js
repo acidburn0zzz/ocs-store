@@ -48,6 +48,14 @@ export default class MenubuttonComponent extends BaseComponent {
                 background-color: var(--color-active);
                 color: var(--color-text);
             }
+            nav[data-menuitems] ul li:first-child a {
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+            }
+            nav[data-menuitems] ul li:last-child a {
+                border-bottom-left-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
             nav[data-menuitems="inactive"] {
                 display: none;
             }
