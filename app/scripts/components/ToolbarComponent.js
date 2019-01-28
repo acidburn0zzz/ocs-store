@@ -23,6 +23,7 @@ export default class ToolbarComponent extends BaseComponent {
                 align-items: center;
             }
             nav[data-toolbar] ul li {
+                height: 30px;
                 margin: 0 2px;
             }
             nav[data-toolbar] ul li.flex {
