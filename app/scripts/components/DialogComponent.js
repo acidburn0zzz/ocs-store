@@ -53,7 +53,7 @@ export default class DialogComponent extends BaseComponent {
         const widgetElement = this.contentRoot.querySelector('div[data-overlay] div.widget');
         widgetElement.addEventListener('click', (event) => {
             if (event.target.closest('[data-action="close"]')) {
-                this.parentNode.removeChild(this);
+                this.close();
             }
         });
     }
@@ -64,6 +64,10 @@ export default class DialogComponent extends BaseComponent {
 
     componentDisconnectedCallback() {
         this.dispatch('dialog-close', {});
+    }
+
+    close() {
+        this.parentNode.removeChild(this);
     }
 
 }
