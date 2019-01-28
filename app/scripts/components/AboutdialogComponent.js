@@ -17,10 +17,10 @@ export default class AboutdialogComponent extends BaseComponent {
                 text-align: center;
             }
             div[slot="content"] h4 {
-                padding-top: 72px;
+                padding-top: calc(96px + 1em);
                 background-position: top center;
                 background-repeat: no-repeat;
-                background-size: 64px 64px;
+                background-size: 96px 96px;
             }
             </style>
 
@@ -36,7 +36,7 @@ export default class AboutdialogComponent extends BaseComponent {
             </p>
             <p>
             Website: <a href="${this._packageMeta.homepage}" target="webview">${this._packageMeta.homepage}</a><br>
-            Repository: <a href="${this._packageMeta.repository}" target="webview">${this._packageMeta.repository}</a><br>
+            Project: <a href="${this._packageMeta.repository}" target="webview">${this._packageMeta.repository}</a><br>
             Report a bug: <a href="${this._packageMeta.bugs}" target="webview">${this._packageMeta.bugs}</a>
             </p>
             </div>
