@@ -77,7 +77,7 @@ export default class MenubuttonComponent extends BaseComponent {
             <button-component data-icon="menu"></button-component>
             </div>
 
-            <nav class="widget" data-menuitems="inactive">
+            <nav class="widget fade-in" data-menuitems="inactive">
             <ul class="linklist">
             <li><a href="#" data-action="aboutdialog">About ${this._packageMeta.productName}</a></li>
             </ul>

@@ -42,3 +42,21 @@ h6 {
 :disabled {
     opacity: 0.5;
 }
+
+.fade-in,
+.fade-out {
+    animation-name: fade;
+    animation-duration: 0.2s;
+}
+.fade-out {
+    animation-direction: reverse;
+    animation-fill-mode: forwards;
+}
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1.0;
+    }
+}

@@ -33,7 +33,7 @@ export default class DialogComponent extends BaseComponent {
 
             <div class="flex" data-overlay>
 
-            <div class="widget">
+            <div class="widget fade-in">
             <div class="widget-header flex">
             <div class="flex-auto"><slot name="title"></slot></div>
             <div><button-component data-action="close" data-icon="close"></button-component></div>

@@ -120,7 +120,7 @@ export default class OmniboxComponent extends BaseComponent {
             <button class="button">${title}</button>
             </div>
 
-            <div class="widget" data-palette="inactive">
+            <div class="widget fade-in" data-palette="inactive">
             <div class="widget-header">
             <a href="${url}" class="icon-open-browser width-1of1" target="_blank">${url}</a>
             </div>
