@@ -58,7 +58,7 @@ export default class OmniboxComponent extends BaseComponent {
                 background-color: var(--color-content);
                 box-shadow: 0 10px 30px var(--color-shadow);
             }
-            div[data-palette] a[data-external-url] {
+            div[data-palette] a[target="_blank"] {
                 display: inline-block;
                 padding-right: 18px;
                 background-position: center right;
@@ -96,7 +96,7 @@ export default class OmniboxComponent extends BaseComponent {
                 white-space: nowrap;
                 text-overflow: ellipsis;
             }
-            div[data-palette] ul li button.button[data-startpage-url="${startPage}"] {
+            div[data-palette] ul li button.button[name="startpage"][value="${startPage}"] {
                 border-color: var(--color-information);
             }
             div[data-palette="inactive"] {
@@ -122,17 +122,17 @@ export default class OmniboxComponent extends BaseComponent {
 
             <div class="widget" data-palette="inactive">
             <div class="widget-header">
-            <a href="#" class="icon-open-browser width-1of1" data-external-url="${url}">${url}</a>
+            <a href="${url}" class="icon-open-browser width-1of1" target="_blank">${url}</a>
             </div>
             <div class="widget-content">
             <h4 class="icon-home">Choose Startpage</h4>
             <ul class="flex">
-            <li><button class="button width-1of1" data-startpage-url="https://www.opendesktop.org/">opendesktop.org</button></li>
-            <li><button class="button width-1of1" data-startpage-url="https://www.opendesktop.org/s/Gnome">gnome-look.org</button></li>
-            <li><button class="button width-1of1" data-startpage-url="https://store.kde.org/">store.kde.org</button></li>
-            <li><button class="button width-1of1" data-startpage-url="https://www.opendesktop.org/s/XFCE">xfce-look.org</button></li>
-            <li><button class="button width-1of1" data-startpage-url="https://www.opendesktop.org/s/Window-Managers">box-look.org</button></li>
-            <li><button class="button width-1of1" data-startpage-url="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</button></li>
+            <li><button class="button width-1of1" name="startpage" value="https://www.opendesktop.org/">opendesktop.org</button></li>
+            <li><button class="button width-1of1" name="startpage" value="https://www.opendesktop.org/s/Gnome">gnome-look.org</button></li>
+            <li><button class="button width-1of1" name="startpage" value="https://store.kde.org/">store.kde.org</button></li>
+            <li><button class="button width-1of1" name="startpage" value="https://www.opendesktop.org/s/XFCE">xfce-look.org</button></li>
+            <li><button class="button width-1of1" name="startpage" value="https://www.opendesktop.org/s/Window-Managers">box-look.org</button></li>
+            <li><button class="button width-1of1" name="startpage" value="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</button></li>
             </ul>
             </div>
             </div>
@@ -150,16 +150,20 @@ export default class OmniboxComponent extends BaseComponent {
         this._togglerElement.addEventListener('click', this._toggle.bind(this), false);
 
         this._paletteElement.addEventListener('click', (event) => {
-            if (event.target.closest('a[data-external-url]')) {
-                const url = event.target.closest('a[data-external-url]')
-                    .getAttribute('data-external-url');
-                this.dispatch('external-url', {url: url});
+            if (event.target.closest('a')) {
+                event.preventDefault();
+                const anchorElement = event.target.closest('a');
+                if (anchorElement.getAttribute('target') === '_blank') {
+                    this.dispatch('external-url', {url: anchorElement.href});
+                }
                 this._toggle();
             }
-            else if (event.target.closest('button[data-startpage-url]')) {
-                const url = event.target.closest('button[data-startpage-url]')
-                    .getAttribute('data-startpage-url');
-                this.dispatch('webview-startpage', {url: url});
+            else if (event.target.closest('button')) {
+                event.preventDefault();
+                const buttonElement = event.target.closest('button');
+                if (buttonElement.getAttribute('name') === 'startpage') {
+                    this.dispatch('webview-startpage', {url: buttonElement.value});
+                }
                 this._toggle();
             }
         }, false);
