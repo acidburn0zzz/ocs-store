@@ -3,8 +3,8 @@
 }
 
 .icon-menu {
-    /*background-image: url(material-design-icons/baseline-menu-24px.svg);*/
-    background-image: url(material-design-icons/baseline-more_vert-24px.svg);
+    /*background-image: url(material-design-icons/outline-menu-24px.svg);*/
+    background-image: url(material-design-icons/outline-more_vert-24px.svg);
 }
 
 .icon-home {
@@ -16,23 +16,27 @@
 }
 
 .icon-back {
-    background-image: url(material-design-icons/baseline-arrow_back-24px.svg);
+    background-image: url(material-design-icons/outline-arrow_back-24px.svg);
 }
 
 .icon-forward {
-    background-image: url(material-design-icons/baseline-arrow_forward-24px.svg);
+    background-image: url(material-design-icons/outline-arrow_forward-24px.svg);
 }
 
 .icon-reload {
-    background-image: url(material-design-icons/baseline-refresh-24px.svg);
+    background-image: url(material-design-icons/outline-refresh-24px.svg);
 }
 
 .icon-stop {
-    background-image: url(material-design-icons/baseline-close-24px.svg);
+    background-image: url(material-design-icons/outline-close-24px.svg);
+}
+
+.icon-open-browser {
+    background-image: url(material-design-icons/outline-open_in_new-24px.svg);
 }
 
 .icon-close {
-    background-image: url(material-design-icons/baseline-close-24px.svg);
+    background-image: url(material-design-icons/outline-close-24px.svg);
 }
 
 .icon-download {
