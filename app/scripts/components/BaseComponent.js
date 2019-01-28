@@ -2,6 +2,10 @@ import Chirit from '../../libs/chirit/Chirit.js';
 
 export default class BaseComponent extends Chirit.Component {
 
+    get rootComponent() {
+        return document.querySelector('root-component');
+    }
+
     get rootState() {
         return document.querySelector('root-component').state;
     }
