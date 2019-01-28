@@ -11,6 +11,7 @@ import ButtonComponent from '../components/ButtonComponent.js';
 import NavbuttonComponent from '../components/NavbuttonComponent.js';
 import MenubuttonComponent from '../components/MenubuttonComponent.js';
 import OmniboxComponent from '../components/OmniboxComponent.js';
+import DialogComponent from '../components/DialogComponent.js';
 
 import OcsManagerWsApi from '../api/OcsManagerWsApi.js';
 
@@ -36,5 +37,6 @@ ButtonComponent.define('button-component');
 NavbuttonComponent.define('navbutton-component');
 MenubuttonComponent.define('menubutton-component');
 OmniboxComponent.define('omnibox-component');
+DialogComponent.define('dialog-component');
 
 //stateManager.dispatch('');
