@@ -49,4 +49,13 @@ export default class DialogComponent extends BaseComponent {
         `;
     }
 
+    componentUpdatedCallback() {
+        const buttonComponent = this.contentRoot.querySelector('div.widget-header button-component');
+        buttonComponent.addEventListener('click', this._remove.bind(this));
+    }
+
+    _remove() {
+        this.parentNode.removeChild(this);
+    }
+
 }
