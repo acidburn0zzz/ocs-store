@@ -36,7 +36,7 @@ export default class DialogComponent extends BaseComponent {
             <div class="widget">
             <div class="widget-header flex">
             <div class="flex-auto"><slot name="title"></slot></div>
-            <div><button-component data-icon="close"></button-component></div>
+            <div><button-component data-action="close" data-icon="close"></button-component></div>
             </div>
             <div class="widget-content"><slot name="content"></slot></div>
             <div class="widget-footer flex">
@@ -50,12 +50,20 @@ export default class DialogComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
-        const buttonComponent = this.contentRoot.querySelector('div.widget-header button-component');
-        buttonComponent.addEventListener('click', this._remove.bind(this));
+        const widgetElement = this.contentRoot.querySelector('div[data-overlay] div.widget');
+        widgetElement.addEventListener('click', (event) => {
+            if (event.target.closest('[data-action="close"]')) {
+                this.parentNode.removeChild(this);
+            }
+        });
     }
 
-    _remove() {
-        this.parentNode.removeChild(this);
+    componentConnectedCallback() {
+        this.dispatch('dialog-open', {});
+    }
+
+    componentDisconnectedCallback() {
+        this.dispatch('dialog-close', {});
     }
 
 }
