@@ -71,7 +71,6 @@ export default class MenubuttonComponent extends BaseComponent {
 
             <nav class="widget" data-menuitems="inactive">
             <ul class="linklist">
-            <li><a href="#" data-action="">Feedback</a></li>
             <li><a href="#" data-action="">About ${productName}</a></li>
             </ul>
             </nav>
