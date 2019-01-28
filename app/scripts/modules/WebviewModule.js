@@ -55,6 +55,9 @@ export default class WebviewModule {
 
     navigationAction(params) {
         switch (params.action) {
+            case 'load':
+                this.webviewComponent.loadUrl(params.url);
+                break;
             case 'home':
                 this.webviewComponent.loadUrl(
                     ipcRenderer.sendSync('store-application', 'startPage')
