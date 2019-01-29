@@ -11,6 +11,7 @@ export default class OcsManagerModule {
         this.updateCheckAfter = 24; // hours
 
         this.stateManager.actionHandler
+            .add('ocs-url', this.ocsUrlAction.bind(this))
             .add('external-url', this.externalUrlAction.bind(this));
 
         this.ocsManagerWsApi.eventHandler
@@ -61,6 +62,11 @@ export default class OcsManagerModule {
     }
 
     //// Handlers for stateManager ////
+
+    ocsUrlAction(params) {
+        this.ocsManagerWsApi.send('', 'ItemHandler::getItemByOcsUrl', [params.url, params.providerKey, params.contentId]);
+        return false;
+    }
 
     externalUrlAction(params) {
         this.ocsManagerWsApi.send('', 'SystemHandler::openUrl', [params.url]);
