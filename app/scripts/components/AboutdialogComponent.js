@@ -36,7 +36,7 @@ export default class AboutdialogComponent extends BaseComponent {
             </p>
             <p>
             Website: <a href="${this._packageMeta.homepage}" target="webview">${this._packageMeta.homepage}</a><br>
-            Project: <a href="${this._packageMeta.repository}" target="webview">${this._packageMeta.repository}</a><br>
+            Project page: <a href="${this._packageMeta.repository}" target="webview">${this._packageMeta.repository}</a><br>
             Report a bug: <a href="${this._packageMeta.bugs}" target="webview">${this._packageMeta.bugs}</a>
             </p>
             </div>
