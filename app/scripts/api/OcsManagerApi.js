@@ -4,13 +4,13 @@ export default class OcsManagerApi {
         this._url = url;
 
         this._websocket = null;
-        this._funcHandler = new Map();
+        this._callback = new Map();
 
         this._autoReconnect = false;
     }
 
-    get funcHandler() {
-        return this._funcHandler;
+    get callback() {
+        return this._callback;
     }
 
     get isConnected() {
@@ -29,8 +29,8 @@ export default class OcsManagerApi {
 
                 this._websocket.addEventListener('message', (event) => {
                     const message = event.data ? JSON.parse(event.data) : {};
-                    if (message.func && this._funcHandler.has(message.func)) {
-                        const handler = this._funcHandler.get(message.func);
+                    if (message.func && this._callback.has(message.func)) {
+                        const handler = this._callback.get(message.func);
                         handler(message);
                     }
                 });
