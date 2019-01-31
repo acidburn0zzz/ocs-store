@@ -83,11 +83,13 @@ export default class OcsManagerModule {
     //// For ocsManagerApi ////
 
     async ItemHandler_metadataSetChanged(message) {
+        console.log(message);
         message = await this.ocsManagerApi.sendSync('ItemHandler::metadataSet', []);
         console.log(message.data[0]);
     }
 
     ItemHandler_downloadStarted(message) {
+        console.log(message);
         if (message.data[0].status !== 'success_downloadstart') {
             console.error(new Error(message.data[0].message));
         }
@@ -98,6 +100,7 @@ export default class OcsManagerModule {
     }
 
     ItemHandler_downloadFinished(message) {
+        console.log(message);
         if (message.data[0].status !== 'success_download') {
             console.error(new Error(message.data[0].message));
         }
@@ -105,10 +108,12 @@ export default class OcsManagerModule {
     }
 
     ItemHandler_downloadProgress(message) {
+        console.log(message);
         // update component
     }
 
     ItemHandler_saveStarted(message) {
+        console.log(message);
         if (message.data[0].status !== 'success_savestart') {
             console.error(new Error(message.data[0].message));
         }
@@ -116,6 +121,7 @@ export default class OcsManagerModule {
     }
 
     ItemHandler_saveFinished(message) {
+        console.log(message);
         if (message.data[0].status !== 'success_save') {
             console.error(new Error(message.data[0].message));
         }
@@ -123,6 +129,7 @@ export default class OcsManagerModule {
     }
 
     ItemHandler_installStarted(message) {
+        console.log(message);
         if (message.data[0].status !== 'success_installstart') {
             console.error(new Error(message.data[0].message));
         }
@@ -130,6 +137,7 @@ export default class OcsManagerModule {
     }
 
     async ItemHandler_installFinished(message) {
+        console.log(message);
         if (message.data[0].status !== 'success_install') {
             console.error(new Error(message.data[0].message));
         }
@@ -147,12 +155,14 @@ export default class OcsManagerModule {
     */
 
     ItemHandler_uninstallStarted(message) {
+        console.log(message);
         if (message.data[0].status !== 'success_uninstallstart') {
             console.error(new Error(message.data[0].message));
         }
     }
 
     async ItemHandler_uninstallFinished(message) {
+        console.log(message);
         if (message.data[0].status !== 'success_uninstall') {
             console.error(new Error(message.data[0].message));
         }
@@ -163,12 +173,14 @@ export default class OcsManagerModule {
     }
 
     UpdateHandler_checkAllStarted(message) {
+        console.log(message);
         if (!message.data[0]) {
             console.error(new Error('Item update check failed'));
         }
     }
 
     async UpdateHandler_checkAllFinished(message) {
+        console.log(message);
         if (!message.data[0]) {
             console.error(new Error('Item update check failed'));
         }
@@ -178,12 +190,14 @@ export default class OcsManagerModule {
     }
 
     UpdateHandler_updateStarted(message) {
+        console.log(message);
         if (!message.data[1]) {
             console.error(new Error('Item update failed'));
         }
     }
 
     async UpdateHandler_updateFinished(message) {
+        console.log(message);
         if (!message.data[1]) {
             console.error(new Error('Item update failed'));
         }
@@ -192,6 +206,7 @@ export default class OcsManagerModule {
     }
 
     UpdateHandler_updateProgress(message) {
+        console.log(message);
         // update component
     }
 
