@@ -103,27 +103,7 @@ export default class WebviewComponent extends BaseComponent {
             }
         });
 
-        /*
-        this._webviewElement.addEventListener('ipc-message', (event) => {
-            switch (event.channel) {
-                //case 'user-profile': {
-                //    break;
-                //}
-                case 'ocsManager_ocsUrl': {
-                    const info = this._detectOcsApiInfo(this._webviewElement.getURL());
-                    this.dispatch('ocsManager_ocsUrl', {
-                        url: event.args[0],
-                        ...info
-                    });
-                    break;
-                }
-                case 'ocsManager_externalUrl': {
-                    this.dispatch('ocsManager_externalUrl', {url: event.args[0]});
-                    break;
-                }
-            }
-        });
-        */
+        //this._webviewElement.addEventListener('ipc-message', (event) => {});
     }
 
     _detectOcsApiInfo(url) {
