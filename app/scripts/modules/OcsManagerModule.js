@@ -20,7 +20,7 @@ export default class OcsManagerModule {
         this.installedItems = {};
         this.updateAvailableItems = {};
 
-        this.updateCheckAfter = 24; // hours
+        this.updateCheckAfter = 86400000; // 1day (ms)
 
         this._setupOcsManagerApi();
     }
@@ -57,7 +57,7 @@ export default class OcsManagerModule {
 
             message = await this.ocsManagerApi.sendSync('ConfigHandler::getUsrConfigApplication', []);
             if (!message.data[0].update_checked_at
-                || (message.data[0].update_checked_at + (1000 * 60 * 60 * this.updateCheckAfter)) < new Date().getTime()
+                || (message.data[0].update_checked_at + this.updateCheckAfter) < new Date().getTime()
             ) {
                 this.ocsManagerApi.send('UpdateHandler::checkAll', []);
             }
