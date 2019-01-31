@@ -88,6 +88,9 @@ export default class WebviewComponent extends BaseComponent {
         });
 
         this._webviewElement.addEventListener('new-window', (event) => {
+            if (event.url.startsWith('http://') || event.url.startsWith('https://')) {
+                this.dispatch('ocsManager_externalUrl', {url: event.url});
+            }
         });
 
         this._webviewElement.addEventListener('will-navigate', (event) => {
