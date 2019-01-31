@@ -4,15 +4,18 @@ export default class OcsManagerModule {
         this.stateManager = stateManager;
         this.ocsManagerApi = ocsManagerApi;
 
+        //const container = this.stateManager.target.contentRoot;
+        //this.collectionComponent = container.querySelector('collection-component');
+
+        this.stateManager.actionHandler
+            .add('ocsmanager-ocsurl', this.ocsurlAction.bind(this))
+            .add('ocsmanager-externalurl', this.externalurlAction.bind(this));
+
         this.installTypes = {};
         this.installedItems = {};
         this.updateAvailableItems = {};
 
         this.updateCheckAfter = 24; // hours
-
-        this.stateManager.actionHandler
-            .add('ocs-url', this.ocsUrlAction.bind(this))
-            .add('external-url', this.externalUrlAction.bind(this));
 
         this._setupOcsManagerApi();
     }
@@ -59,12 +62,12 @@ export default class OcsManagerModule {
 
     //// For stateManager ////
 
-    ocsUrlAction(params) {
+    ocsurlAction(params) {
         this.ocsManagerApi.send('ItemHandler::getItemByOcsUrl', [params.url, params.providerKey, params.contentId]);
         return false;
     }
 
-    externalUrlAction(params) {
+    externalurlAction(params) {
         this.ocsManagerApi.send('SystemHandler::openUrl', [params.url]);
         return false;
     }

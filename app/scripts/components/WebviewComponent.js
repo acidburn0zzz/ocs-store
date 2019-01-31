@@ -93,7 +93,7 @@ export default class WebviewComponent extends BaseComponent {
         this._webviewElement.addEventListener('will-navigate', (event) => {
             if (event.url.startsWith('ocs://') || event.url.startsWith('ocss://')) {
                 const info = this._detectOcsApiInfo(this._webviewElement.getURL());
-                this.dispatch('ocs-url', {
+                this.dispatch('ocsmanager-ocsurl', {
                     url: event.url,
                     ...info
                 });
@@ -108,16 +108,16 @@ export default class WebviewComponent extends BaseComponent {
                 //case 'user-profile': {
                 //    break;
                 //}
-                case 'ocs-url': {
+                case 'ocsmanager-ocsurl': {
                     const info = this._detectOcsApiInfo(this._webviewElement.getURL());
-                    this.dispatch('ocs-url', {
+                    this.dispatch('ocsmanager-ocsurl', {
                         url: event.args[0],
                         ...info
                     });
                     break;
                 }
-                case 'external-url': {
-                    this.dispatch('external-url', {url: event.args[0]});
+                case 'ocsmanager-externalurl': {
+                    this.dispatch('ocsmanager-externalurl', {url: event.args[0]});
                     break;
                 }
             }
