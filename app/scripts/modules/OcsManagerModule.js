@@ -35,7 +35,6 @@ export default class OcsManagerModule {
             .set('ItemHandler::saveFinished', this.ItemHandler_saveFinished.bind(this))
             .set('ItemHandler::installStarted', this.ItemHandler_installStarted.bind(this))
             .set('ItemHandler::installFinished', this.ItemHandler_installFinished.bind(this))
-            //.set('ItemHandler::uninstall', this.ItemHandler_uninstall.bind(this))
             .set('ItemHandler::uninstallStarted', this.ItemHandler_uninstallStarted.bind(this))
             .set('ItemHandler::uninstallFinished', this.ItemHandler_uninstallFinished.bind(this))
             .set('UpdateHandler::checkAllStarted', this.UpdateHandler_checkAllStarted.bind(this))
@@ -148,12 +147,6 @@ export default class OcsManagerModule {
         this.installedItems = message.data[0];
     }
 
-    /*
-    ItemHandler_uninstall(message) {
-        // remove preview pic
-    }
-    */
-
     ItemHandler_uninstallStarted(message) {
         console.log(message);
         if (message.data[0].status !== 'success_uninstallstart') {
@@ -170,6 +163,8 @@ export default class OcsManagerModule {
         this.installedItems = message.data[0];
         message = await this.ocsManagerApi.sendSync('ConfigHandler::getUsrConfigUpdateAvailableItems', []);
         this.updateAvailableItems = message.data[0];
+
+        // remove preview pic
     }
 
     UpdateHandler_checkAllStarted(message) {
