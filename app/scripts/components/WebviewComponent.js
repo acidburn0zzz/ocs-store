@@ -7,7 +7,7 @@ export default class WebviewComponent extends BaseComponent {
     init() {
         this.state = {
             partition: 'persist:opendesktop',
-            preload: './scripts/renderers/webview.js',
+            //preload: './scripts/renderers/webview.js',
             src: ipcRenderer.sendSync('store-application', 'startPage'),
             isDebugMode: ipcRenderer.sendSync('app', 'isDebugMode')
         };
@@ -84,7 +84,7 @@ export default class WebviewComponent extends BaseComponent {
                 this._webviewElement.openDevTools();
             }
 
-            this._webviewElement.send('ipc-message');
+            //this._webviewElement.send('ipc-message');
         });
 
         this._webviewElement.addEventListener('new-window', (event) => {
@@ -106,6 +106,7 @@ export default class WebviewComponent extends BaseComponent {
         this._webviewElement.addEventListener('did-navigate', (event) => {
         });
 
+        /*
         this._webviewElement.addEventListener('ipc-message', (event) => {
             switch (event.channel) {
                 //case 'user-profile': {
@@ -125,6 +126,7 @@ export default class WebviewComponent extends BaseComponent {
                 }
             }
         });
+        */
     }
 
     _detectOcsApiInfo(url) {
