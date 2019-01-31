@@ -1,87 +1,140 @@
-import Handler from '../../libs/chirit/Handler.js';
-import Utility from '../../libs/chirit/Utility.js';
-
 export default class OcsManagerWsApi {
 
     constructor(url) {
         this._url = url;
-        this._webSocket = null;
 
-        this._eventHandler = null;
-        this._funcHandler = null;
+        this._websocket = null;
+        this._funcHandler = new Map();
 
-        this._setupHandlers();
-    }
-
-    get isConnected() {
-        return (this._webSocket && this._webSocket.readyState === 1) ? true : false;
-    }
-
-    get eventHandler() {
-        return this._eventHandler;
+        this._autoReconnect = false;
     }
 
     get funcHandler() {
         return this._funcHandler;
     }
 
-    connect() {
-        this.disconnect();
-        this._webSocket = new WebSocket(this._url);
-        this._setupEventListeners();
+    get isConnected() {
+        return (this._websocket && this._websocket.readyState === 1) ? true : false;
     }
 
-    disconnect() {
-        if (this.isConnected) {
-            this._webSocket.close();
-            this._webSocket = null;
-        }
-    }
+    async connect() {
+        return new Promise((resolve, reject) => {
+            if (!this.isConnected) {
+                this._websocket = new WebSocket(this._url);
+                this._autoReconnect = true;
 
-    send(id, func, data = []) {
-        if (this.isConnected) {
-            id = id || Utility.generateRandomString(24);
-            this._webSocket.send(JSON.stringify({
-                id: id,
-                func: func,
-                data: data
-            }));
-            return id;
-        }
-        return false;
-    }
+                this._websocket.addEventListener('open', () => {
+                    resolve(true);
+                });
 
-    _setupHandlers() {
-        this._eventHandler = new Handler(() => {
-            return {};
-        });
+                this._websocket.addEventListener('message', (event) => {
+                    const message = event.data ? JSON.parse(event.data) : {};
+                    if (message.func && this._funcHandler.has(message.func)) {
+                        const handler = this._funcHandler.get(message.func);
+                        handler(message);
+                    }
+                });
 
-        this._funcHandler = new Handler(() => {
-            return {};
-        });
-    }
+                this._websocket.addEventListener('close', () => {
+                    if (this._autoReconnect) {
+                        setTimeout(() => {
+                            this._websocket = null;
+                            this.connect();
+                        }, 3000);
+                    }
+                });
 
-    _setupEventListeners() {
-        this._webSocket.addEventListener('open', (event) => {
-            this._eventHandler.invoke(event, 'open');
-        });
-
-        this._webSocket.addEventListener('close', (event) => {
-            this._eventHandler.invoke(event, 'close');
-        });
-
-        this._webSocket.addEventListener('message', (event) => {
-            this._eventHandler.invoke(event, 'message');
-
-            const data = event.data ? JSON.parse(event.data) : {};
-            if (data.func) {
-                this._funcHandler.invoke(data, data.func);
+                this._websocket.addEventListener('error', () => {
+                    this._websocket = null;
+                    reject(new Error('WebSocket connection error'));
+                });
+            }
+            else {
+                reject(new Error('WebSocket is already connected'));
             }
         });
+    }
 
-        this._webSocket.addEventListener('error', (event) => {
-            this._eventHandler.invoke(event, 'error');
+    async disconnect() {
+        return new Promise((resolve, reject) => {
+            if (this.isConnected) {
+                this._autoReconnect = false;
+                this._websocket.addEventListener('close', () => {
+                    this._websocket = null;
+                    resolve(true);
+                });
+                this._websocket.close();
+            }
+            else {
+                reject(new Error('WebSocket is not connected'));
+            }
         });
+    }
+
+    async send(func, data = [], id = '') {
+        return new Promise((resolve, reject) => {
+            id = id || this._generateId();
+
+            if (this.isConnected) {
+                this._websocket.send(JSON.stringify({
+                    id: id,
+                    func: func,
+                    data: data
+                }));
+                resolve(id);
+            }
+            else {
+                reject(new Error('WebSocket is not connected'));
+            }
+        });
+    }
+
+    async sendSync(func, data = [], id = '') {
+        return new Promise((resolve, reject) => {
+            id = id || this._generateId();
+
+            let webSocket = new WebSocket(this._url);
+
+            webSocket.addEventListener('open', () => {
+                webSocket.send(JSON.stringify({
+                    id: id,
+                    func: func,
+                    data: data
+                }));
+            });
+
+            webSocket.addEventListener('message', (event) => {
+                const message = event.data ? JSON.parse(event.data) : {};
+                if (message.id && message.id === id) {
+                    webSocket.close();
+                    resolve(message);
+                }
+            });
+
+            webSocket.addEventListener('close', () => {
+                webSocket = null;
+            });
+
+            webSocket.addEventListener('error', () => {
+                webSocket = null;
+                reject(new Error(`WebSocket connection error (id: ${id})`));
+            });
+        });
+    }
+
+    _generateId() {
+        const length = 16;
+
+        const strings = '0123456789'
+            + 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            + 'abcdefghijklmnopqrstuvwxyz';
+        const stringArray = strings.split('');
+
+        let randomString = '';
+        for (let i = 0; i < length; i++) {
+            randomString += stringArray[Math.floor(Math.random() * stringArray.length)];
+        }
+        return randomString;
     }
 
 }
