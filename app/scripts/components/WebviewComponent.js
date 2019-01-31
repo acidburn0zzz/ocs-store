@@ -103,9 +103,6 @@ export default class WebviewComponent extends BaseComponent {
             }
         });
 
-        this._webviewElement.addEventListener('did-navigate', (event) => {
-        });
-
         /*
         this._webviewElement.addEventListener('ipc-message', (event) => {
             switch (event.channel) {
