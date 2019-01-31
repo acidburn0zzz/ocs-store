@@ -4,8 +4,10 @@ export default class OcsManagerModule {
         this.stateManager = stateManager;
         this.ocsManagerApi = ocsManagerApi;
 
-        //const container = this.stateManager.target.contentRoot;
-        //this.collectionComponent = container.querySelector('collection-component');
+        /*
+        this.collectionComponent = this.stateManager.target.contentRoot
+            .querySelector('collection-component');
+        */
 
         this.stateManager.actionHandler
             .add('ocsmanager-ocsurl', this.ocsurlAction.bind(this))

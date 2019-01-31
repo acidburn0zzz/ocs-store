@@ -5,9 +5,10 @@ export default class WebviewModule {
     constructor(stateManager) {
         this.stateManager = stateManager;
 
-        const container = this.stateManager.target.contentRoot;
-        this.webviewComponent = container.querySelector('webview-component');
-        this.toolbarComponent = container.querySelector('toolbar-component');
+        this.webviewComponent = this.stateManager.target.contentRoot
+            .querySelector('webview-component');
+        this.toolbarComponent = this.stateManager.target.contentRoot
+            .querySelector('toolbar-component');
 
         this.stateManager.actionHandler
             .add('webview-loading', this.loadingAction.bind(this))
