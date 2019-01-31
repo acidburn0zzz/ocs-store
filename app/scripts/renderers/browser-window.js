@@ -14,7 +14,7 @@ import OmniboxComponent from '../components/OmniboxComponent.js';
 import DialogComponent from '../components/DialogComponent.js';
 import AboutdialogComponent from '../components/AboutdialogComponent.js';
 
-import OcsManagerWsApi from '../api/OcsManagerWsApi.js';
+import OcsManagerApi from '../api/OcsManagerApi.js';
 
 import OcsManagerModule from '../modules/OcsManagerModule.js';
 import WebviewModule from '../modules/WebviewModule.js';
@@ -25,9 +25,9 @@ RootComponent.define('root-component');
 const stateManager = new Chirit.StateManager('root-component');
 stateManager.target.state = stateManager.state;
 
-const ocsManagerWsApi = new OcsManagerWsApi(ipcRenderer.sendSync('ocs-manager', 'url'));
+const ocsManagerApi = new OcsManagerApi(ipcRenderer.sendSync('ocs-manager', 'url'));
 
-new OcsManagerModule(stateManager, ocsManagerWsApi);
+new OcsManagerModule(stateManager, ocsManagerApi);
 new WebviewModule(stateManager);
 
 PageComponent.define('page-component');

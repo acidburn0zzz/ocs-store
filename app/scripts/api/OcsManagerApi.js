@@ -1,4 +1,4 @@
-export default class OcsManagerWsApi {
+export default class OcsManagerApi {
 
     constructor(url) {
         this._url = url;
