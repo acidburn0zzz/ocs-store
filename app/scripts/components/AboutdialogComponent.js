@@ -31,7 +31,7 @@ export default class AboutdialogComponent extends BaseComponent {
             <p>Version ${this._packageMeta.version}</p>
             <p>${this._packageMeta.description}</p>
             <p>
-            Author: ${this._packageMeta.author}</br>
+            Author: ${this._packageMeta.author}<br>
             License: ${this._packageMeta.license}
             </p>
             <p>
