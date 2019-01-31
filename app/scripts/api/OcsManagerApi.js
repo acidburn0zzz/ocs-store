@@ -59,10 +59,12 @@ export default class OcsManagerApi {
         return new Promise((resolve, reject) => {
             if (this.isConnected) {
                 this._autoReconnect = false;
+
                 this._websocket.addEventListener('close', () => {
                     this._websocket = null;
                     resolve(true);
                 });
+
                 this._websocket.close();
             }
             else {
