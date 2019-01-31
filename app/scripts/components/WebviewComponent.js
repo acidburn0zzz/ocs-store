@@ -65,15 +65,15 @@ export default class WebviewComponent extends BaseComponent {
         this._webviewElement.className = 'flex-auto';
 
         this._webviewElement.addEventListener('did-start-loading', () => {
-            this.dispatch('webview-loading', {isLoading: true});
+            this.dispatch('webview_loading', {isLoading: true});
         });
 
         this._webviewElement.addEventListener('did-stop-loading', () => {
-            this.dispatch('webview-loading', {isLoading: false});
+            this.dispatch('webview_loading', {isLoading: false});
         });
 
         this._webviewElement.addEventListener('dom-ready', () => {
-            this.dispatch('webview-page', {
+            this.dispatch('webview_page', {
                 url: this._webviewElement.getURL(),
                 title: this._webviewElement.getTitle(),
                 canGoBack: this._webviewElement.canGoBack(),
@@ -93,7 +93,7 @@ export default class WebviewComponent extends BaseComponent {
         this._webviewElement.addEventListener('will-navigate', (event) => {
             if (event.url.startsWith('ocs://') || event.url.startsWith('ocss://')) {
                 const info = this._detectOcsApiInfo(this._webviewElement.getURL());
-                this.dispatch('ocsmanager-ocsurl', {
+                this.dispatch('ocsManager_ocsUrl', {
                     url: event.url,
                     ...info
                 });
@@ -108,16 +108,16 @@ export default class WebviewComponent extends BaseComponent {
                 //case 'user-profile': {
                 //    break;
                 //}
-                case 'ocsmanager-ocsurl': {
+                case 'ocsManager_ocsUrl': {
                     const info = this._detectOcsApiInfo(this._webviewElement.getURL());
-                    this.dispatch('ocsmanager-ocsurl', {
+                    this.dispatch('ocsManager_ocsUrl', {
                         url: event.args[0],
                         ...info
                     });
                     break;
                 }
-                case 'ocsmanager-externalurl': {
-                    this.dispatch('ocsmanager-externalurl', {url: event.args[0]});
+                case 'ocsManager_externalUrl': {
+                    this.dispatch('ocsManager_externalUrl', {url: event.args[0]});
                     break;
                 }
             }

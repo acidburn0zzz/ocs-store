@@ -53,7 +53,7 @@ export default class AboutdialogComponent extends BaseComponent {
                 event.preventDefault();
                 const anchorElement = event.target.closest('a');
                 if (anchorElement.getAttribute('target') === 'webview') {
-                    this.dispatch('webview-navigation', {
+                    this.dispatch('webview_navigation', {
                         action: 'load',
                         url: anchorElement.href
                     });

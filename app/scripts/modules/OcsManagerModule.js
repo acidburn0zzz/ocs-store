@@ -10,8 +10,11 @@ export default class OcsManagerModule {
         */
 
         this.stateManager.actionHandler
-            .add('ocsmanager-ocsurl', this.ocsurlAction.bind(this))
-            .add('ocsmanager-externalurl', this.externalurlAction.bind(this));
+            .add('ocsManager_ocsUrl', this.ocsUrlAction.bind(this))
+            .add('ocsManager_externalUrl', this.externalUrlAction.bind(this));
+
+        this.stateManager.viewHandler
+            .add('ocsManager_ocsUrl', this.ocsUrlView.bind(this));
 
         this.installTypes = {};
         this.installedItems = {};
@@ -64,12 +67,15 @@ export default class OcsManagerModule {
 
     //// For stateManager ////
 
-    ocsurlAction(params) {
+    ocsUrlAction(params) {
         this.ocsManagerApi.send('ItemHandler::getItemByOcsUrl', [params.url, params.providerKey, params.contentId]);
         return false;
     }
 
-    externalurlAction(params) {
+    ocsUrlView(state) {
+    }
+
+    externalUrlAction(params) {
         this.ocsManagerApi.send('SystemHandler::openUrl', [params.url]);
         return false;
     }

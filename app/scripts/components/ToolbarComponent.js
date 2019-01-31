@@ -80,7 +80,7 @@ export default class ToolbarComponent extends BaseComponent {
     }
 
     checkWebviewLoadingStatus() {
-        const webviewLoadingState = this.rootState.get('webview-loading');
+        const webviewLoadingState = this.rootState.get('webview_loading');
         if (webviewLoadingState.isLoading) {
             const reloadButton = this.contentRoot
                 .querySelector('navbutton-component[data-type="webview"][data-action="reload"]');
@@ -104,7 +104,7 @@ export default class ToolbarComponent extends BaseComponent {
     }
 
     checkWebviewPageStatus() {
-        const webviewPageState = this.rootState.get('webview-page');
+        const webviewPageState = this.rootState.get('webview_page');
 
         const backButton = this.contentRoot
             .querySelector('navbutton-component[data-type="webview"][data-action="back"]');

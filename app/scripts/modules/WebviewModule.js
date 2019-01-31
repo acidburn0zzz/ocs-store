@@ -11,14 +11,14 @@ export default class WebviewModule {
             .querySelector('toolbar-component');
 
         this.stateManager.actionHandler
-            .add('webview-loading', this.loadingAction.bind(this))
-            .add('webview-page', this.pageAction.bind(this))
-            .add('webview-startpage', this.startpageAction.bind(this))
-            .add('webview-navigation', this.navigationAction.bind(this));
+            .add('webview_loading', this.loadingAction.bind(this))
+            .add('webview_page', this.pageAction.bind(this))
+            .add('webview_startPage', this.startPageAction.bind(this))
+            .add('webview_navigation', this.navigationAction.bind(this));
 
         this.stateManager.viewHandler
-            .add('webview-loading', this.loadingView.bind(this))
-            .add('webview-page', this.pageView.bind(this));
+            .add('webview_loading', this.loadingView.bind(this))
+            .add('webview_page', this.pageView.bind(this));
     }
 
     loadingAction(params) {
@@ -48,7 +48,7 @@ export default class WebviewModule {
             .update();
     }
 
-    startpageAction(params) {
+    startPageAction(params) {
         ipcRenderer.sendSync('store-application', 'startPage', params.url);
         this.webviewComponent.loadUrl(params.url);
         return false;

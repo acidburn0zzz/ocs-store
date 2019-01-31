@@ -79,7 +79,7 @@ export default class MenubuttonComponent extends BaseComponent {
 
             <nav class="widget fade-in" data-menuitems="inactive">
             <ul class="linklist">
-            <li><a href="#" data-action="aboutdialog">About ${this._packageMeta.productName}</a></li>
+            <li><a href="#" data-action="aboutdialog-open">About ${this._packageMeta.productName}</a></li>
             </ul>
             </nav>
 
@@ -101,7 +101,7 @@ export default class MenubuttonComponent extends BaseComponent {
                 this._toggle();
                 const action = event.target.closest('a[data-action]')
                     .getAttribute('data-action');
-                if (action === 'aboutdialog') {
+                if (action === 'aboutdialog-open') {
                     this._createAboutdialog();
                 }
             }

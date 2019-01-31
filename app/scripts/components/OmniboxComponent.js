@@ -11,7 +11,7 @@ export default class OmniboxComponent extends BaseComponent {
     }
 
     render() {
-        const webviewPageState = this.rootState.get('webview-page');
+        const webviewPageState = this.rootState.get('webview_page');
         const url = webviewPageState.url || '';
         const title = webviewPageState.title || '';
         const startPage = ipcRenderer.sendSync('store-application', 'startPage');
@@ -96,7 +96,7 @@ export default class OmniboxComponent extends BaseComponent {
                 white-space: nowrap;
                 text-overflow: ellipsis;
             }
-            div[data-palette] ul li button.button[name="startpage"][value="${startPage}"] {
+            div[data-palette] ul li button.button[name="startPage"][value="${startPage}"] {
                 border-color: var(--color-information);
             }
             div[data-palette="inactive"] {
@@ -127,12 +127,12 @@ export default class OmniboxComponent extends BaseComponent {
             <div class="widget-content">
             <h4 class="icon-home">Choose Startpage</h4>
             <ul class="flex">
-            <li><button class="button width-1of1" name="startpage" value="https://www.opendesktop.org/">opendesktop.org</button></li>
-            <li><button class="button width-1of1" name="startpage" value="https://www.opendesktop.org/s/Gnome">gnome-look.org</button></li>
-            <li><button class="button width-1of1" name="startpage" value="https://store.kde.org/">store.kde.org</button></li>
-            <li><button class="button width-1of1" name="startpage" value="https://www.opendesktop.org/s/XFCE">xfce-look.org</button></li>
-            <li><button class="button width-1of1" name="startpage" value="https://www.opendesktop.org/s/Window-Managers">box-look.org</button></li>
-            <li><button class="button width-1of1" name="startpage" value="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</button></li>
+            <li><button class="button width-1of1" name="startPage" value="https://www.opendesktop.org/">opendesktop.org</button></li>
+            <li><button class="button width-1of1" name="startPage" value="https://www.opendesktop.org/s/Gnome">gnome-look.org</button></li>
+            <li><button class="button width-1of1" name="startPage" value="https://store.kde.org/">store.kde.org</button></li>
+            <li><button class="button width-1of1" name="startPage" value="https://www.opendesktop.org/s/XFCE">xfce-look.org</button></li>
+            <li><button class="button width-1of1" name="startPage" value="https://www.opendesktop.org/s/Window-Managers">box-look.org</button></li>
+            <li><button class="button width-1of1" name="startPage" value="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</button></li>
             </ul>
             </div>
             </div>
@@ -154,15 +154,15 @@ export default class OmniboxComponent extends BaseComponent {
                 event.preventDefault();
                 const anchorElement = event.target.closest('a');
                 if (anchorElement.getAttribute('target') === '_blank') {
-                    this.dispatch('ocsmanager-externalurl', {url: anchorElement.href});
+                    this.dispatch('ocsManager_externalUrl', {url: anchorElement.href});
                 }
                 this._toggle();
             }
             else if (event.target.closest('button')) {
                 event.preventDefault();
                 const buttonElement = event.target.closest('button');
-                if (buttonElement.getAttribute('name') === 'startpage') {
-                    this.dispatch('webview-startpage', {url: buttonElement.value});
+                if (buttonElement.getAttribute('name') === 'startPage') {
+                    this.dispatch('webview_startPage', {url: buttonElement.value});
                 }
                 this._toggle();
             }
