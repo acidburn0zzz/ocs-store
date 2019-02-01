@@ -5,6 +5,8 @@ import BaseComponent from './BaseComponent.js';
 export default class OmniboxComponent extends BaseComponent {
 
     init() {
+        this._packageMeta = ipcRenderer.sendSync('app', 'package');
+
         this._omniboxElement = null;
         this._paletteElement = null;
         this._togglerElement = null;
@@ -13,7 +15,7 @@ export default class OmniboxComponent extends BaseComponent {
     render() {
         const webviewPageState = this.rootState.get('webview_page');
         const url = webviewPageState.url || '';
-        const title = webviewPageState.title || '';
+        const title = webviewPageState.title || `Welcome to ${this._packageMeta.productName}`;
         const startPage = ipcRenderer.sendSync('store-application', 'startPage');
 
         return `

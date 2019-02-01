@@ -41,4 +41,4 @@ OmniboxComponent.define('omnibox-component');
 DialogComponent.define('dialog-component');
 AboutdialogComponent.define('aboutdialog-component');
 
-//stateManager.dispatch('');
+stateManager.dispatch('ocsManager_initial', {});

@@ -10,6 +10,7 @@ export default class OcsManagerModule {
         */
 
         this.stateManager.actionHandler
+            .add('ocsManager_initial', this.initialAction.bind(this))
             .add('ocsManager_ocsUrl', this.ocsUrlAction.bind(this))
             .add('ocsManager_externalUrl', this.externalUrlAction.bind(this));
 
@@ -19,10 +20,6 @@ export default class OcsManagerModule {
 
         this.updateCheckAfter = 86400000; // 1day (ms)
 
-        this._setupOcsManagerApi();
-    }
-
-    async _setupOcsManagerApi() {
         this.ocsManagerApi.callback
             .set('ItemHandler::metadataSetChanged', this.ItemHandler_metadataSetChanged.bind(this))
             .set('ItemHandler::downloadStarted', this.ItemHandler_downloadStarted.bind(this))
@@ -39,7 +36,11 @@ export default class OcsManagerModule {
             .set('UpdateHandler::updateStarted', this.UpdateHandler_updateStarted.bind(this))
             .set('UpdateHandler::updateFinished', this.UpdateHandler_updateFinished.bind(this))
             .set('UpdateHandler::updateProgress', this.UpdateHandler_updateProgress.bind(this));
+    }
 
+    //// For stateManager ////
+
+    async initialAction() {
         if (await this.ocsManagerApi.connect()) {
             let message = null;
 
@@ -59,9 +60,8 @@ export default class OcsManagerModule {
                 this.ocsManagerApi.send('UpdateHandler::checkAll', []);
             }
         }
+        return false;
     }
-
-    //// For stateManager ////
 
     ocsUrlAction(params) {
         this.ocsManagerApi.send(
