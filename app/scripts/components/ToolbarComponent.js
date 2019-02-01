@@ -36,6 +36,23 @@ export default class ToolbarComponent extends BaseComponent {
                 }
             }
 
+            nav[data-toolbar] ul li span[data-downloadbadge] {
+                display: inline-block;
+                z-index: 1;
+                position: relative;
+                top: -32px;
+                left: 18px;
+                padding: 0.3em 0.5em;
+                border-radius: 1em;
+                background-color: var(--color-information);
+                color: #ffffff;
+                font-size: 12px;
+                line-height: 1;
+            }
+            nav[data-toolbar] ul li span[data-downloadbadge="inactive"] {
+                display: none;
+            }
+
             div[data-indicator] {
                 z-index: 1;
                 position: relative;
@@ -70,7 +87,10 @@ export default class ToolbarComponent extends BaseComponent {
             <li><navbutton-component data-type="webview" data-action="forward" title="Forward" disabled></navbutton-component></li>
             <li><navbutton-component data-type="webview" data-action="reload" title="Reload"></navbutton-component></li>
             <li><navbutton-component data-type="webview" data-action="home" title="Startpage"></navbutton-component></li>
-            <li><navbutton-component data-type="collection" data-action="collection" title="Collection"></navbutton-component></li>
+            <li>
+            <navbutton-component data-type="collection" data-action="collection" title="Collection"></navbutton-component><br>
+            <span data-downloadbadge="inactive"></span>
+            </li>
             <li class="flex-auto flex"><omnibox-component></omnibox-component></li>
             <li><menubutton-component></menubutton-component></li>
             </ul>
@@ -82,6 +102,7 @@ export default class ToolbarComponent extends BaseComponent {
 
     checkWebviewLoadingStatus() {
         const webviewLoadingState = this.rootState.get('webview_loading');
+
         if (webviewLoadingState.isLoading) {
             const reloadButton = this.contentRoot
                 .querySelector('navbutton-component[data-type="webview"][data-action="reload"]');
