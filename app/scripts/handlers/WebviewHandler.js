@@ -1,9 +1,8 @@
-const {ipcRenderer} = require('electron');
-
 export default class WebviewHandler {
 
-    constructor(stateManager) {
+    constructor(stateManager, ipcRenderer) {
         this.stateManager = stateManager;
+        this.ipcRenderer = ipcRenderer;
 
         this.webviewComponent = this.stateManager.target.contentRoot
             .querySelector('webview-component');
@@ -23,7 +22,7 @@ export default class WebviewHandler {
 
     loadingAction(params) {
         return {
-            isLoading: params.isLoading || false
+            isLoading: params.isLoading
         };
     }
 
@@ -33,10 +32,10 @@ export default class WebviewHandler {
 
     pageAction(params) {
         return {
-            url: params.url || '',
-            title: params.title || '',
-            canGoBack: params.canGoBack || false,
-            canGoForward: params.canGoForward || false
+            url: params.url,
+            title: params.title,
+            canGoBack: params.canGoBack,
+            canGoForward: params.canGoForward
         };
     }
 
@@ -49,7 +48,7 @@ export default class WebviewHandler {
     }
 
     startPageAction(params) {
-        ipcRenderer.sendSync('store-application', 'startPage', params.url);
+        this.ipcRenderer.sendSync('store-application', 'startPage', params.url);
         this.webviewComponent.loadUrl(params.url);
         return false;
     }
@@ -61,7 +60,7 @@ export default class WebviewHandler {
                 break;
             case 'home':
                 this.webviewComponent.loadUrl(
-                    ipcRenderer.sendSync('store-application', 'startPage')
+                    this.ipcRenderer.sendSync('store-application', 'startPage')
                 );
                 break;
             case 'back':
