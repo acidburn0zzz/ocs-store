@@ -41,6 +41,7 @@ export default class ToolbarComponent extends BaseComponent {
                 position: relative;
                 top: -2px;
                 left: 0;
+                width: 50%;
                 height: 2px;
                 background-color: var(--color-information);
             }
@@ -49,16 +50,16 @@ export default class ToolbarComponent extends BaseComponent {
             }
             div[data-indicator="active"] {
                 animation-name: loading;
-                animation-duration: 2s;
+                animation-duration: 1s;
                 animation-iteration-count: infinite;
                 animation-direction: alternate;
             }
             @keyframes loading {
                 0% {
-                    opacity: 0.3;
+                    left: -40%;
                 }
                 100% {
-                    opacity: 1.0;
+                    left: 90%;
                 }
             }
             </style>
