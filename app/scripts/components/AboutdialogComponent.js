@@ -1,14 +1,10 @@
-const {ipcRenderer} = require('electron');
-
 import BaseComponent from './BaseComponent.js';
 
 export default class AboutdialogComponent extends BaseComponent {
 
-    init() {
-        this._packageMeta = ipcRenderer.sendSync('app', 'package');
-    }
-
     render() {
+        const generalAboutState = this.rootState.get('general_about');
+
         return `
             ${this.sharedStyle}
 
@@ -25,19 +21,19 @@ export default class AboutdialogComponent extends BaseComponent {
             </style>
 
             <dialog-component>
-            <h4 slot="title">About ${this._packageMeta.productName}</h4>
+            <h4 slot="title">About ${generalAboutState.productName}</h4>
             <div slot="content">
-            <h4 class="icon-ocs-store">${this._packageMeta.productName}</h4>
-            <p>Version ${this._packageMeta.version}</p>
-            <p>${this._packageMeta.description}</p>
+            <h4 class="icon-ocs-store">${generalAboutState.productName}</h4>
+            <p>Version ${generalAboutState.version}</p>
+            <p>${generalAboutState.description}</p>
             <p>
-            Author: ${this._packageMeta.author}<br>
-            License: ${this._packageMeta.license}
+            Author: ${generalAboutState.author}<br>
+            License: ${generalAboutState.license}
             </p>
             <p>
-            Website: <a href="${this._packageMeta.homepage}" target="webview">${this._packageMeta.homepage}</a><br>
-            Project page: <a href="${this._packageMeta.repository}" target="webview">${this._packageMeta.repository}</a><br>
-            Report a bug: <a href="${this._packageMeta.bugs}" target="webview">${this._packageMeta.bugs}</a>
+            Website: <a href="${generalAboutState.homepage}">${generalAboutState.homepage}</a><br>
+            Project page: <a href="${generalAboutState.repository}">${generalAboutState.repository}</a><br>
+            Report a bug: <a href="${generalAboutState.bugs}">${generalAboutState.bugs}</a>
             </p>
             </div>
             <button slot="control" class="button" data-action="close">OK</button>
@@ -52,13 +48,11 @@ export default class AboutdialogComponent extends BaseComponent {
             if (event.target.closest('a')) {
                 event.preventDefault();
                 const anchorElement = event.target.closest('a');
-                if (anchorElement.getAttribute('target') === 'webview') {
-                    this.dispatch('webview_navigation', {
-                        action: 'load',
-                        url: anchorElement.href
-                    });
-                    dialogComponent.close();
-                }
+                this.dispatch('webview_navigation', {
+                    action: 'load',
+                    url: anchorElement.href
+                });
+                dialogComponent.close();
             }
         });
 

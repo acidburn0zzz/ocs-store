@@ -1,12 +1,8 @@
-const {ipcRenderer} = require('electron');
-
 import BaseComponent from './BaseComponent.js';
 
 export default class MenubuttonComponent extends BaseComponent {
 
     init() {
-        this._packageMeta = ipcRenderer.sendSync('app', 'package');
-
         this._menubuttonElement = null;
         this._menuitemsElement = null;
         this._togglerElement = null;
@@ -79,7 +75,7 @@ export default class MenubuttonComponent extends BaseComponent {
 
             <nav class="widget fade-in" data-menuitems="inactive">
             <ul class="linklist">
-            <li><a href="#" data-action="aboutdialog-open">About ${this._packageMeta.productName}</a></li>
+            <li><a href="#" data-action="about">About This App</a></li>
             </ul>
             </nav>
 
@@ -96,13 +92,13 @@ export default class MenubuttonComponent extends BaseComponent {
         this._togglerElement.addEventListener('click', this._toggle.bind(this), false);
 
         this._menuitemsElement.addEventListener('click', (event) => {
-            if (event.target.closest('a[data-action]')) {
+            if (event.target.closest('a')) {
                 event.preventDefault();
                 this._toggle();
                 const action = event.target.closest('a[data-action]')
                     .getAttribute('data-action');
-                if (action === 'aboutdialog-open') {
-                    this._createAboutdialog();
+                if (action === 'about') {
+                    this.dispatch('general_about', {});
                 }
             }
         }, false);
@@ -121,11 +117,6 @@ export default class MenubuttonComponent extends BaseComponent {
             'data-toggler',
             (this._togglerElement.getAttribute('data-toggler') === 'active') ? 'inactive' : 'active'
         );
-    }
-
-    _createAboutdialog() {
-        this.rootComponent.contentRoot
-            .appendChild(document.createElement('aboutdialog-component'));
     }
 
 }
