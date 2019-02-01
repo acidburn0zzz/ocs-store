@@ -40,7 +40,7 @@ h6 {
 }
 
 :disabled {
-    opacity: 0.5;
+    opacity: 0.4;
 }
 
 .fade-in,

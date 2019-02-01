@@ -47,9 +47,6 @@ export default class OmniboxComponent extends BaseComponent {
                 border: 0;
                 background-color: var(--color-active);
             }
-            div[data-omnibox="inactive"] button.button {
-                background-color: var(--color-active);
-            }
 
             div[data-palette] {
                 z-index: 1000;
