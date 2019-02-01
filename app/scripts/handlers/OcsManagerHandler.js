@@ -8,11 +8,17 @@ export default class OcsManagerHandler {
         this.collectionComponent = this.stateManager.target.contentRoot
             .querySelector('collection-component');
         */
+        this.toolbarComponent = this.stateManager.target.contentRoot
+            .querySelector('toolbar-component');
 
         this.stateManager.actionHandler
             .add('ocsManager_initial', this.initialAction.bind(this))
             .add('ocsManager_ocsUrl', this.ocsUrlAction.bind(this))
-            .add('ocsManager_externalUrl', this.externalUrlAction.bind(this));
+            .add('ocsManager_externalUrl', this.externalUrlAction.bind(this))
+            .add('ocsManager_downloading', this.downloadingAction.bind(this));
+
+        this.stateManager.viewHandler
+            .add('ocsManager_downloading', this.downloadingView.bind(this));
 
         this.installTypes = {};
         this.installedItems = {};
@@ -76,12 +82,23 @@ export default class OcsManagerHandler {
         return false;
     }
 
+    async downloadingAction() {
+        const message = await this.ocsManagerApi.sendSync('ItemHandler::metadataSet', []);
+        const metadataSet = message.data[0];
+        return {
+            downloading: Object.keys(metadataSet).length,
+            metadataSet: metadataSet
+        };
+    }
+
+    downloadingView() {
+        this.toolbarComponent.checkOcsManagerDownloadingStatus();
+    }
+
     //// For ocsManagerApi ////
 
-    async ItemHandler_metadataSetChanged(message) {
-        console.log(message);
-        message = await this.ocsManagerApi.sendSync('ItemHandler::metadataSet', []);
-        console.log(message.data[0]);
+    ItemHandler_metadataSetChanged() {
+        this.stateManager.dispatch('ocsManager_downloading', {});
     }
 
     ItemHandler_downloadStarted(message) {

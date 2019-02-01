@@ -36,7 +36,7 @@ export default class ToolbarComponent extends BaseComponent {
                 }
             }
 
-            nav[data-toolbar] ul li span[data-downloadbadge] {
+            nav[data-toolbar] ul li span[data-downloadingbadge] {
                 display: inline-block;
                 z-index: 1;
                 position: relative;
@@ -49,7 +49,7 @@ export default class ToolbarComponent extends BaseComponent {
                 font-size: 12px;
                 line-height: 1;
             }
-            nav[data-toolbar] ul li span[data-downloadbadge="inactive"] {
+            nav[data-toolbar] ul li span[data-downloadingbadge="inactive"] {
                 display: none;
             }
 
@@ -89,7 +89,7 @@ export default class ToolbarComponent extends BaseComponent {
             <li><navbutton-component data-type="webview" data-action="home" title="Startpage"></navbutton-component></li>
             <li>
             <navbutton-component data-type="collection" data-action="collection" title="Collection"></navbutton-component><br>
-            <span data-downloadbadge="inactive"></span>
+            <span data-downloadingbadge="inactive">0</span>
             </li>
             <li class="flex-auto flex"><omnibox-component></omnibox-component></li>
             <li><menubutton-component></menubutton-component></li>
@@ -103,25 +103,25 @@ export default class ToolbarComponent extends BaseComponent {
     checkWebviewLoadingStatus() {
         const webviewLoadingState = this.rootState.get('webview_loading');
 
+        const indicator = this.contentRoot.querySelector('div[data-indicator]');
+
         if (webviewLoadingState.isLoading) {
+            indicator.setAttribute('data-indicator', 'active');
+
             const reloadButton = this.contentRoot
                 .querySelector('navbutton-component[data-type="webview"][data-action="reload"]');
             if (reloadButton) {
                 reloadButton.setAttribute('data-action', 'stop');
             }
-
-            this.contentRoot.querySelector('div[data-indicator]')
-                .setAttribute('data-indicator', 'active');
         }
         else {
+            indicator.setAttribute('data-indicator', 'inactive');
+
             const stopButton = this.contentRoot
                 .querySelector('navbutton-component[data-type="webview"][data-action="stop"]');
             if (stopButton) {
                 stopButton.setAttribute('data-action', 'reload');
             }
-
-            this.contentRoot.querySelector('div[data-indicator]')
-                .setAttribute('data-indicator', 'inactive');
         }
     }
 
@@ -144,6 +144,21 @@ export default class ToolbarComponent extends BaseComponent {
         }
         else {
             forwardButton.setAttribute('disabled', 'disabled');
+        }
+    }
+
+    checkOcsManagerDownloadingStatus() {
+        const ocsManagerDownloadingState = this.rootState.get('ocsManager_downloading');
+
+        const downloadingBadget = this.contentRoot
+            .querySelector('span[data-downloadingbadge]');
+        if (ocsManagerDownloadingState.downloading) {
+            downloadingBadget.textContent = '' + ocsManagerDownloadingState.downloading;
+            downloadingBadget.setAttribute('data-downloadingbadge', 'active');
+        }
+        else {
+            downloadingBadget.textContent = '0';
+            downloadingBadget.setAttribute('data-downloadingbadge', 'inactive');
         }
     }
 
