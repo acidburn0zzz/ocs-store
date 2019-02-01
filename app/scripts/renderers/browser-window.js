@@ -16,8 +16,8 @@ import AboutdialogComponent from '../components/AboutdialogComponent.js';
 
 import OcsManagerApi from '../api/OcsManagerApi.js';
 
-import OcsManagerModule from '../modules/OcsManagerModule.js';
-import WebviewModule from '../modules/WebviewModule.js';
+import OcsManagerHandler from '../handlers/OcsManagerHandler.js';
+import WebviewHandler from '../handlers/WebviewHandler.js';
 
 document.title = ipcRenderer.sendSync('app', 'package').productName;
 
@@ -27,8 +27,8 @@ stateManager.target.state = stateManager.state;
 
 const ocsManagerApi = new OcsManagerApi(ipcRenderer.sendSync('ocs-manager', 'url'));
 
-new OcsManagerModule(stateManager, ocsManagerApi);
-new WebviewModule(stateManager);
+new OcsManagerHandler(stateManager, ocsManagerApi);
+new WebviewHandler(stateManager);
 
 PageComponent.define('page-component');
 ToolbarComponent.define('toolbar-component');

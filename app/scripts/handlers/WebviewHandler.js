@@ -1,6 +1,6 @@
 const {ipcRenderer} = require('electron');
 
-export default class WebviewModule {
+export default class WebviewHandler {
 
     constructor(stateManager) {
         this.stateManager = stateManager;

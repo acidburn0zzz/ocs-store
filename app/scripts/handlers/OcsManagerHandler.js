@@ -1,4 +1,4 @@
-export default class OcsManagerModule {
+export default class OcsManagerHandler {
 
     constructor(stateManager, ocsManagerApi) {
         this.stateManager = stateManager;
