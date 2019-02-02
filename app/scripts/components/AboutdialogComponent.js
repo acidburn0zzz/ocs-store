@@ -20,8 +20,7 @@ export default class AboutdialogComponent extends BaseComponent {
             }
             </style>
 
-            <dialog-component>
-            <h4 slot="title">About ${generalAboutState.productName}</h4>
+            <dialog-component data-autoclose>
             <div slot="content">
             <h4 class="icon-ocs-store">${generalAboutState.productName}</h4>
             <p>Version ${generalAboutState.version}</p>
@@ -36,7 +35,6 @@ export default class AboutdialogComponent extends BaseComponent {
             Report a bug: <a href="${generalAboutState.bugs}">${generalAboutState.bugs}</a>
             </p>
             </div>
-            <button slot="control" class="button" data-action="close">OK</button>
             </dialog-component>
         `;
     }

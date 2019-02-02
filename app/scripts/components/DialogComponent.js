@@ -2,7 +2,15 @@ import BaseComponent from './BaseComponent.js';
 
 export default class DialogComponent extends BaseComponent {
 
+    static get componentObservedAttributes() {
+        return ['data-autoclose', 'data-header', 'data-footer'];
+    }
+
     render() {
+        const close = this.hasAttribute('data-autoclose') ? 'close' : '';
+        const header = this.hasAttribute('data-header') ? 'active' : 'inactive';
+        const footer = this.hasAttribute('data-footer') ? 'active' : 'inactive';
+
         return `
             ${this.sharedStyle}
 
@@ -17,31 +25,32 @@ export default class DialogComponent extends BaseComponent {
                 align-items: center;
                 justify-content: center;
             }
-            div[data-overlay] div.widget {
+            div.widget {
                 width: 500px;
                 background-color: var(--color-content);
                 box-shadow: 0 10px 30px var(--color-shadow);
             }
-            div[data-overlay] div.widget-header {
+            div.widget div[data-header] {
                 align-items: center;
             }
-            div[data-overlay] div.widget-footer {
-                align-items: center;
-                background-color: var(--color-widget);
+            div.widget div[data-header="inactive"] {
+                display: none;
+            }
+            div.widget div[data-footer="inactive"] {
+                display: none;
             }
             </style>
 
-            <div class="flex" data-overlay>
+            <div class="flex" data-overlay data-action="${close}">
 
             <div class="widget fade-in">
-            <div class="widget-header flex">
-            <div class="flex-auto"><slot name="title"></slot></div>
+            <div class="widget-header flex" data-header="${header}">
+            <div class="flex-auto"><slot name="header"></slot></div>
             <div><button-component data-action="close" data-icon="close"></button-component></div>
             </div>
             <div class="widget-content"><slot name="content"></slot></div>
-            <div class="widget-footer flex">
-            <div class="flex-auto"></div>
-            <div><slot name="control"></slot></div>
+            <div class="widget-footer" data-footer="${footer}">
+            <slot name="footer"></slot>
             </div>
             </div>
 
@@ -50,8 +59,8 @@ export default class DialogComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
-        const widgetElement = this.contentRoot.querySelector('div[data-overlay] div.widget');
-        widgetElement.addEventListener('click', (event) => {
+        const overlayElement = this.contentRoot.querySelector('div[data-overlay]');
+        overlayElement.addEventListener('click', (event) => {
             if (event.target.closest('[data-action="close"]')) {
                 this.close();
             }
