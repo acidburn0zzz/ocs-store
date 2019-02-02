@@ -4,11 +4,13 @@ export default class WebviewHandler {
         this.stateManager = stateManager;
         this.ipcRenderer = ipcRenderer;
 
+        this.startPage = this.ipcRenderer.sendSync('store-application', 'startPage');
+
         this.webviewComponent = this.stateManager.target.contentRoot
             .querySelector('webview-component');
         this.webviewComponent.setAttribute('data-partition', 'persist:opendesktop');
         this.webviewComponent.setAttribute('data-preload', './scripts/renderers/webview.js');
-        this.webviewComponent.setAttribute('data-src', this.ipcRenderer.sendSync('store-application', 'startPage'));
+        this.webviewComponent.setAttribute('data-src', this.startPage);
         this.webviewComponent.setAttribute('data-debug', '');
 
         this.toolbarComponent = this.stateManager.target.contentRoot
@@ -40,7 +42,8 @@ export default class WebviewHandler {
             url: params.url,
             title: params.title,
             canGoBack: params.canGoBack,
-            canGoForward: params.canGoForward
+            canGoForward: params.canGoForward,
+            startPage: this.startPage
         };
     }
 
@@ -53,8 +56,9 @@ export default class WebviewHandler {
     }
 
     startPageAction(params) {
-        this.ipcRenderer.sendSync('store-application', 'startPage', params.url);
-        this.webviewComponent.loadUrl(params.url);
+        this.startPage = params.url;
+        this.ipcRenderer.sendSync('store-application', 'startPage', this.startPage);
+        this.webviewComponent.loadUrl(this.startPage);
         return false;
     }
 
@@ -64,9 +68,7 @@ export default class WebviewHandler {
                 this.webviewComponent.loadUrl(params.url);
                 break;
             case 'home':
-                this.webviewComponent.loadUrl(
-                    this.ipcRenderer.sendSync('store-application', 'startPage')
-                );
+                this.webviewComponent.loadUrl(this.startPage);
                 break;
             case 'back':
                 this.webviewComponent.goBack();
