@@ -1,17 +1,12 @@
-const {ipcRenderer} = require('electron');
-
 import BaseComponent from './BaseComponent.js';
 
 export default class WebviewComponent extends BaseComponent {
 
-    init() {
-        this.state = {
-            partition: 'persist:opendesktop',
-            //preload: './scripts/renderers/webview.js',
-            src: ipcRenderer.sendSync('store-application', 'startPage'),
-            isDebugMode: ipcRenderer.sendSync('app', 'isDebugMode')
-        };
+    static get componentObservedAttributes() {
+        return ['data-partition', 'data-preload', 'data-src', 'data-debug'];
+    }
 
+    init() {
         this._webviewElement = null;
     }
 
@@ -59,9 +54,9 @@ export default class WebviewComponent extends BaseComponent {
     _createWebviewElement() {
         this._webviewElement = document.createElement('webview');
 
-        this._webviewElement.setAttribute('partition', this.state.partition);
-        this._webviewElement.setAttribute('preload', this.state.preload);
-        this._webviewElement.setAttribute('src', this.state.src);
+        this._webviewElement.setAttribute('partition', this.getAttribute('data-partition'));
+        this._webviewElement.setAttribute('preload', this.getAttribute('data-preload'));
+        this._webviewElement.setAttribute('src', this.getAttribute('data-src'));
         this._webviewElement.className = 'flex-auto';
 
         this._webviewElement.addEventListener('did-start-loading', () => {
@@ -80,7 +75,7 @@ export default class WebviewComponent extends BaseComponent {
                 canGoForward: this._webviewElement.canGoForward()
             });
 
-            if (this.state.isDebugMode) {
+            if (this.hasAttribute('data-debug')) {
                 this._webviewElement.openDevTools();
             }
 
