@@ -11,6 +11,10 @@ export default class DialogComponent extends BaseComponent {
         ];
     }
 
+    init() {
+        this._containerElement = null;
+    }
+
     render() {
         const minWidth = this.getAttribute('data-min-width') ? this.getAttribute('data-min-width') : 'auto';
         const maxWidth = this.getAttribute('data-max-width') ? this.getAttribute('data-max-width') : 'auto';
@@ -18,7 +22,7 @@ export default class DialogComponent extends BaseComponent {
         const maxHeight = this.getAttribute('data-max-height') ? this.getAttribute('data-max-height') : 'auto';
         const header = this.hasAttribute('data-header') ? 'active' : 'inactive';
         const footer = this.hasAttribute('data-footer') ? 'active' : 'inactive';
-        const close = this.hasAttribute('data-autoclose') ? 'close' : '';
+        const autoclose = this.hasAttribute('data-autoclose') ? 'autoclose' : '';
 
         return `
             ${this.sharedStyle}
@@ -37,7 +41,8 @@ export default class DialogComponent extends BaseComponent {
             div[data-container="inactive"] {
                 display: none;
             }
-            div.widget {
+
+            div[data-dialog] {
                 min-width: ${minWidth};
                 max-width: ${maxWidth};
                 min-height: ${minHeight};
@@ -45,20 +50,20 @@ export default class DialogComponent extends BaseComponent {
                 background-color: var(--color-content);
                 box-shadow: 0 10px 30px var(--color-shadow);
             }
-            div.widget div[data-header] {
+            div[data-dialog] div[data-header] {
                 align-items: center;
             }
-            div.widget div[data-header="inactive"] {
+            div[data-dialog] div[data-header="inactive"] {
                 display: none;
             }
-            div.widget div[data-footer="inactive"] {
+            div[data-dialog] div[data-footer="inactive"] {
                 display: none;
             }
             </style>
 
-            <div class="flex" data-container="inactive" data-action="${close}">
+            <div class="flex" data-container="inactive" data-action="${autoclose}">
 
-            <div class="widget flex-column fade-in">
+            <div class="widget flex-column fade-in" data-dialog>
             <div class="widget-header flex" data-header="${header}">
             <div class="flex-auto"><slot name="header"></slot></div>
             <div><button-component data-icon="close" data-action="close"></button-component></div>
@@ -72,31 +77,25 @@ export default class DialogComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
-        const containerElement = this.contentRoot.querySelector('div[data-container]');
-        containerElement.addEventListener('click', (event) => {
-            if (event.target.closest('[data-action="close"]')) {
+        this._containerElement = this.contentRoot.querySelector('div[data-container]');
+
+        this._containerElement.addEventListener('click', (event) => {
+            if (event.target.getAttribute('data-action') === 'autoclose') {
                 this.close();
             }
-        });
-
-        const widgetElement = this.contentRoot.querySelector('div.widget');
-        widgetElement.addEventListener('click', (event) => {
-            if (event.target.closest('[data-action="close"]')) {
-                event.stopPropagation();
+            else if (event.target.closest('[data-action="close"]')) {
                 this.close();
             }
         });
     }
 
     open() {
-        this.contentRoot.querySelector('div[data-container]')
-            .setAttribute('data-container', 'active');
+        this._containerElement.setAttribute('data-container', 'active');
         this.dispatch('dialog-open', {});
     }
 
     close() {
-        this.contentRoot.querySelector('div[data-container]')
-            .setAttribute('data-container', 'inactive');
+        this._containerElement.setAttribute('data-container', 'inactive');
         this.dispatch('dialog-close', {});
     }
 

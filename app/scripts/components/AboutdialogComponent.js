@@ -3,7 +3,7 @@ import BaseComponent from './BaseComponent.js';
 export default class AboutdialogComponent extends BaseComponent {
 
     init() {
-        this.dialogComponent = null;
+        this._dialogComponent = null;
     }
 
     render() {
@@ -53,9 +53,9 @@ export default class AboutdialogComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
-        this.dialogComponent = this.contentRoot.querySelector('dialog-component');
+        this._dialogComponent = this.contentRoot.querySelector('dialog-component');
 
-        this.dialogComponent.addEventListener('click', (event) => {
+        this._dialogComponent.addEventListener('click', (event) => {
             if (event.target.closest('a')) {
                 event.preventDefault();
                 const anchorElement = event.target.closest('a');
@@ -69,11 +69,11 @@ export default class AboutdialogComponent extends BaseComponent {
     }
 
     open() {
-        this.dialogComponent.open();
+        this._dialogComponent.open();
     }
 
     close() {
-        this.dialogComponent.close();
+        this._dialogComponent.close();
     }
 
 }
