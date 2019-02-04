@@ -20,6 +20,7 @@ import MenubuttonComponent from '../components/MenubuttonComponent.js';
 import OmniboxComponent from '../components/OmniboxComponent.js';
 import DialogComponent from '../components/DialogComponent.js';
 import AboutdialogComponent from '../components/AboutdialogComponent.js';
+import CollectiondialogComponent from '../components/CollectiondialogComponent.js';
 
 RootComponent.define('root-component');
 const stateManager = new Chirit.StateManager('root-component');
@@ -42,5 +43,6 @@ MenubuttonComponent.define('menubutton-component');
 OmniboxComponent.define('omnibox-component');
 DialogComponent.define('dialog-component');
 AboutdialogComponent.define('aboutdialog-component');
+CollectiondialogComponent.define('collectiondialog-component');
 
 stateManager.dispatch('ocsManager_initial', {});
