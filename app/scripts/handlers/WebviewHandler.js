@@ -7,14 +7,14 @@ export default class WebviewHandler {
         this.startPage = this.ipcRenderer.sendSync('store-application', 'startPage');
 
         this.webviewComponent = this.stateManager.target.contentRoot
-            .querySelector('webview-component');
+            .querySelector('#browser webview-component');
         this.webviewComponent.setAttribute('data-partition', 'persist:opendesktop');
         this.webviewComponent.setAttribute('data-preload', './scripts/renderers/webview.js');
         this.webviewComponent.setAttribute('data-src', this.startPage);
         this.webviewComponent.setAttribute('data-debug', '');
 
         this.toolbarComponent = this.stateManager.target.contentRoot
-            .querySelector('toolbar-component');
+            .querySelector('#browser toolbar-component');
 
         this.stateManager.actionHandler
             .add('webview_loading', this.loadingAction.bind(this))

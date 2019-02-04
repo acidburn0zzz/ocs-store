@@ -4,12 +4,8 @@ export default class OcsManagerHandler {
         this.stateManager = stateManager;
         this.ocsManagerApi = ocsManagerApi;
 
-        /*
-        this.collectionComponent = this.stateManager.target.contentRoot
-            .querySelector('collection-component');
-        */
         this.toolbarComponent = this.stateManager.target.contentRoot
-            .querySelector('toolbar-component');
+            .querySelector('#browser toolbar-component');
 
         this.stateManager.actionHandler
             .add('ocsManager_initial', this.initialAction.bind(this))
