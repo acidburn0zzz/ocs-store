@@ -8,6 +8,8 @@ export default class GeneralHandler {
 
         document.title = this.packageMeta.productName;
 
+        this.aboutdialogComponent = null;
+
         this.stateManager.actionHandler
             .add('general_about', this.aboutAction.bind(this));
 
@@ -30,8 +32,11 @@ export default class GeneralHandler {
     }
 
     aboutView() {
-        this.stateManager.target.contentRoot
-            .appendChild(document.createElement('aboutdialog-component'));
+        if (!this.aboutdialogComponent) {
+            this.aboutdialogComponent = document.createElement('aboutdialog-component');
+            this.stateManager.target.contentRoot.appendChild(this.aboutdialogComponent);
+        }
+        this.aboutdialogComponent.open();
     }
 
 }

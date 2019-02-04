@@ -2,8 +2,20 @@ import BaseComponent from './BaseComponent.js';
 
 export default class AboutdialogComponent extends BaseComponent {
 
+    init() {
+        this.dialogComponent = null;
+    }
+
     render() {
         const generalAboutState = this.rootState.get('general_about');
+        const productName = generalAboutState.productName || '';
+        const version = generalAboutState.version || '';
+        const description = generalAboutState.description || '';
+        const author = generalAboutState.author || '';
+        const license = generalAboutState.license || '';
+        const homepage = generalAboutState.homepage || '';
+        const repository = generalAboutState.repository || '';
+        const bugs = generalAboutState.bugs || '';
 
         return `
             ${this.sharedStyle}
@@ -20,20 +32,20 @@ export default class AboutdialogComponent extends BaseComponent {
             }
             </style>
 
-            <dialog-component data-width="500px" data-autoclose data-header>
+            <dialog-component data-min-width="500px" data-max-width="500px" data-header data-autoclose>
             <h3 slot="header">About This App</h3>
             <div slot="content">
-            <h4 class="icon-ocs-store">${generalAboutState.productName}</h4>
-            <p>Version ${generalAboutState.version}</p>
-            <p>${generalAboutState.description}</p>
+            <h4 class="icon-ocs-store">${productName}</h4>
+            <p>Version ${version}</p>
+            <p>${description}</p>
             <p>
-            Author: ${generalAboutState.author}<br>
-            License: ${generalAboutState.license}
+            Author: ${author}<br>
+            License: ${license}
             </p>
             <p>
-            Website: <a href="${generalAboutState.homepage}">${generalAboutState.homepage}</a><br>
-            Project page: <a href="${generalAboutState.repository}">${generalAboutState.repository}</a><br>
-            Report a bug: <a href="${generalAboutState.bugs}">${generalAboutState.bugs}</a>
+            Website: <a href="${homepage}">${homepage}</a><br>
+            Project page: <a href="${repository}">${repository}</a><br>
+            Report a bug: <a href="${bugs}">${bugs}</a>
             </p>
             </div>
             </dialog-component>
@@ -41,9 +53,9 @@ export default class AboutdialogComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
-        const dialogComponent = this.contentRoot.querySelector('dialog-component');
+        this.dialogComponent = this.contentRoot.querySelector('dialog-component');
 
-        dialogComponent.addEventListener('click', (event) => {
+        this.dialogComponent.addEventListener('click', (event) => {
             if (event.target.closest('a')) {
                 event.preventDefault();
                 const anchorElement = event.target.closest('a');
@@ -51,13 +63,17 @@ export default class AboutdialogComponent extends BaseComponent {
                     action: 'load',
                     url: anchorElement.href
                 });
-                dialogComponent.close();
+                this.close();
             }
         });
+    }
 
-        dialogComponent.addEventListener('dialog-close', () => {
-            this.parentNode.removeChild(this);
-        });
+    open() {
+        this.dialogComponent.open();
+    }
+
+    close() {
+        this.dialogComponent.close();
     }
 
 }

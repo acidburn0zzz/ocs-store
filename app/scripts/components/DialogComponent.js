@@ -3,21 +3,28 @@ import BaseComponent from './BaseComponent.js';
 export default class DialogComponent extends BaseComponent {
 
     static get componentObservedAttributes() {
-        return ['data-width', 'data-height', 'data-autoclose', 'data-header', 'data-footer'];
+        return [
+            'data-min-width', 'data-max-width',
+            'data-min-height', 'data-max-height',
+            'data-header', 'data-footer',
+            'data-autoclose'
+        ];
     }
 
     render() {
-        const width = this.getAttribute('data-width') ? this.getAttribute('data-width') : 'auto';
-        const height = this.getAttribute('data-height') ? this.getAttribute('data-height') : 'auto';
-        const close = this.hasAttribute('data-autoclose') ? 'close' : '';
+        const minWidth = this.getAttribute('data-min-width') ? this.getAttribute('data-min-width') : 'auto';
+        const maxWidth = this.getAttribute('data-max-width') ? this.getAttribute('data-max-width') : 'auto';
+        const minHeight = this.getAttribute('data-min-height') ? this.getAttribute('data-min-height') : 'auto';
+        const maxHeight = this.getAttribute('data-max-height') ? this.getAttribute('data-max-height') : 'auto';
         const header = this.hasAttribute('data-header') ? 'active' : 'inactive';
         const footer = this.hasAttribute('data-footer') ? 'active' : 'inactive';
+        const close = this.hasAttribute('data-autoclose') ? 'close' : '';
 
         return `
             ${this.sharedStyle}
 
             <style>
-            div[data-overlay] {
+            div[data-container] {
                 z-index: 1000;
                 position: absolute;
                 top: 0;
@@ -27,14 +34,16 @@ export default class DialogComponent extends BaseComponent {
                 align-items: center;
                 justify-content: center;
             }
+            div[data-container="inactive"] {
+                display: none;
+            }
             div.widget {
-                width: ${width};
-                height: ${height};
+                min-width: ${minWidth};
+                max-width: ${maxWidth};
+                min-height: ${minHeight};
+                max-height: ${maxHeight};
                 background-color: var(--color-content);
                 box-shadow: 0 10px 30px var(--color-shadow);
-            }
-            div.widget div[data-content] {
-                overflow: auto;
             }
             div.widget div[data-header] {
                 align-items: center;
@@ -47,17 +56,15 @@ export default class DialogComponent extends BaseComponent {
             }
             </style>
 
-            <div class="flex" data-overlay data-action="${close}">
+            <div class="flex" data-container="inactive" data-action="${close}">
 
             <div class="widget flex-column fade-in">
             <div class="widget-header flex" data-header="${header}">
             <div class="flex-auto"><slot name="header"></slot></div>
-            <div><button-component data-action="close" data-icon="close"></button-component></div>
+            <div><button-component data-icon="close" data-action="close"></button-component></div>
             </div>
             <div class="widget-content flex-auto" data-content><slot name="content"></slot></div>
-            <div class="widget-footer" data-footer="${footer}">
-            <slot name="footer"></slot>
-            </div>
+            <div class="widget-footer" data-footer="${footer}"><slot name="footer"></slot></div>
             </div>
 
             </div>
@@ -65,24 +72,32 @@ export default class DialogComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
-        const overlayElement = this.contentRoot.querySelector('div[data-overlay]');
-        overlayElement.addEventListener('click', (event) => {
+        const containerElement = this.contentRoot.querySelector('div[data-container]');
+        containerElement.addEventListener('click', (event) => {
             if (event.target.closest('[data-action="close"]')) {
+                this.close();
+            }
+        });
+
+        const widgetElement = this.contentRoot.querySelector('div.widget');
+        widgetElement.addEventListener('click', (event) => {
+            if (event.target.closest('[data-action="close"]')) {
+                event.stopPropagation();
                 this.close();
             }
         });
     }
 
-    componentConnectedCallback() {
+    open() {
+        this.contentRoot.querySelector('div[data-container]')
+            .setAttribute('data-container', 'active');
         this.dispatch('dialog-open', {});
     }
 
-    componentDisconnectedCallback() {
-        this.dispatch('dialog-close', {});
-    }
-
     close() {
-        this.parentNode.removeChild(this);
+        this.contentRoot.querySelector('div[data-container]')
+            .setAttribute('data-container', 'inactive');
+        this.dispatch('dialog-close', {});
     }
 
 }
