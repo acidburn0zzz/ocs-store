@@ -20,7 +20,8 @@ export default class AboutdialogComponent extends BaseComponent {
             }
             </style>
 
-            <dialog-component data-autoclose>
+            <dialog-component data-width="500px" data-autoclose data-header>
+            <h3 slot="header">About This App</h3>
             <div slot="content">
             <h4 class="icon-ocs-store">${generalAboutState.productName}</h4>
             <p>Version ${generalAboutState.version}</p>

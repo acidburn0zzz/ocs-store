@@ -3,10 +3,12 @@ import BaseComponent from './BaseComponent.js';
 export default class DialogComponent extends BaseComponent {
 
     static get componentObservedAttributes() {
-        return ['data-autoclose', 'data-header', 'data-footer'];
+        return ['data-width', 'data-height', 'data-autoclose', 'data-header', 'data-footer'];
     }
 
     render() {
+        const width = this.getAttribute('data-width') ? this.getAttribute('data-width') : 'auto';
+        const height = this.getAttribute('data-height') ? this.getAttribute('data-height') : 'auto';
         const close = this.hasAttribute('data-autoclose') ? 'close' : '';
         const header = this.hasAttribute('data-header') ? 'active' : 'inactive';
         const footer = this.hasAttribute('data-footer') ? 'active' : 'inactive';
@@ -26,9 +28,13 @@ export default class DialogComponent extends BaseComponent {
                 justify-content: center;
             }
             div.widget {
-                width: 500px;
+                width: ${width};
+                height: ${height};
                 background-color: var(--color-content);
                 box-shadow: 0 10px 30px var(--color-shadow);
+            }
+            div.widget div[data-content] {
+                overflow: auto;
             }
             div.widget div[data-header] {
                 align-items: center;
@@ -43,12 +49,12 @@ export default class DialogComponent extends BaseComponent {
 
             <div class="flex" data-overlay data-action="${close}">
 
-            <div class="widget fade-in">
+            <div class="widget flex-column fade-in">
             <div class="widget-header flex" data-header="${header}">
             <div class="flex-auto"><slot name="header"></slot></div>
             <div><button-component data-action="close" data-icon="close"></button-component></div>
             </div>
-            <div class="widget-content"><slot name="content"></slot></div>
+            <div class="widget-content flex-auto" data-content><slot name="content"></slot></div>
             <div class="widget-footer" data-footer="${footer}">
             <slot name="footer"></slot>
             </div>
