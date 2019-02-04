@@ -13,7 +13,7 @@ export default class CollectiondialogComponent extends BaseComponent {
             <style>
             </style>
 
-            <dialog-component data-min-width="500px" data-max-width="720px" data-header data-autoclose>
+            <dialog-component data-min-width="80%" data-max-width="1000px" data-min-height="80%" data-max-height="800px" data-header data-autoclose>
             <h3 slot="header">My Collection</h3>
             <div slot="content"></div>
             </dialog-component>

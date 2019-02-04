@@ -15,6 +15,8 @@ export default class RootComponent extends BaseComponent {
             </page-component>
 
             </pageswitcher-component>
+
+            <collectiondialog-component></collectiondialog-component>
         `;
     }
 

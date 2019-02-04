@@ -4,6 +4,9 @@ export default class OcsManagerHandler {
         this.stateManager = stateManager;
         this.ocsManagerApi = ocsManagerApi;
 
+        this.collectiondialogComponent = this.stateManager.target.contentRoot
+            .querySelector('collectiondialog-component');
+
         this.toolbarComponent = this.stateManager.target.contentRoot
             .querySelector('#browser toolbar-component');
 
@@ -11,7 +14,8 @@ export default class OcsManagerHandler {
             .add('ocsManager_initial', this.initialAction.bind(this))
             .add('ocsManager_ocsUrl', this.ocsUrlAction.bind(this))
             .add('ocsManager_externalUrl', this.externalUrlAction.bind(this))
-            .add('ocsManager_downloading', this.downloadingAction.bind(this));
+            .add('ocsManager_downloading', this.downloadingAction.bind(this))
+            .add('ocsManager_navigation', this.navigationAction.bind(this));
 
         this.stateManager.viewHandler
             .add('ocsManager_downloading', this.downloadingView.bind(this));
@@ -89,6 +93,15 @@ export default class OcsManagerHandler {
 
     downloadingView() {
         this.toolbarComponent.checkOcsManagerDownloadingStatus();
+    }
+
+    navigationAction(params) {
+        switch (params.action) {
+            case 'collection':
+                this.collectiondialogComponent.open();
+                break;
+        }
+        return false;
     }
 
     //// For ocsManagerApi ////
