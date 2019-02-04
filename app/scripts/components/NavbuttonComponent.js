@@ -33,7 +33,7 @@ export default class NavbuttonComponent extends BaseComponent {
             const buttonComponent = this.contentRoot.querySelector('button-component');
             buttonComponent.addEventListener('click', () => {
                 this.dispatch(
-                    `${this.getAttribute('data-type')}_navigation`,
+                    this.getAttribute('data-type'),
                     {action: this.getAttribute('data-action')}
                 );
             }, false);
