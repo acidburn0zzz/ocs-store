@@ -6,11 +6,15 @@ export default class RootComponent extends BaseComponent {
         return `
             ${this.sharedStyle}
 
-            <page-component class="flex-auto flex-column">
+            <pageswitcher-component class="flex-auto flex-column">
+
+            <page-component id="browser" slot="page" class="flex-auto flex-column">
             <toolbar-component slot="header"></toolbar-component>
             <webview-component slot="content" class="flex-auto flex-column"></webview-component>
             <statusbar-component slot="footer"></statusbar-component>
             </page-component>
+
+            </pageswitcher-component>
         `;
     }
 

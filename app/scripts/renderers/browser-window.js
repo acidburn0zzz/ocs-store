@@ -9,6 +9,7 @@ import OcsManagerHandler from '../handlers/OcsManagerHandler.js';
 import OcsManagerApi from '../api/OcsManagerApi.js';
 
 import RootComponent from '../components/RootComponent.js';
+import PageswitcherComponent from '../components/PageswitcherComponent.js';
 import PageComponent from '../components/PageComponent.js';
 import ToolbarComponent from '../components/ToolbarComponent.js';
 import StatusbarComponent from '../components/StatusbarComponent.js';
@@ -30,6 +31,7 @@ new GeneralHandler(stateManager, ipcRenderer);
 new WebviewHandler(stateManager, ipcRenderer);
 new OcsManagerHandler(stateManager, ocsManagerApi);
 
+PageswitcherComponent.define('pageswitcher-component');
 PageComponent.define('page-component');
 ToolbarComponent.define('toolbar-component');
 StatusbarComponent.define('statusbar-component');
