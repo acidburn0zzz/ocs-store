@@ -2,7 +2,7 @@
  * Chirit
  *
  * @author      Akira Ohgaki <akiraohgaki@gmail.com>
- * @copyright   Akira Ohgaki
+ * @copyright   2018, Akira Ohgaki
  * @license     https://opensource.org/licenses/BSD-2-Clause
  * @link        https://github.com/akiraohgaki/chirit
  */

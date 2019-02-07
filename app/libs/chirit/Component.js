@@ -2,7 +2,7 @@
  * Chirit
  *
  * @author      Akira Ohgaki <akiraohgaki@gmail.com>
- * @copyright   Akira Ohgaki
+ * @copyright   2018, Akira Ohgaki
  * @license     https://opensource.org/licenses/BSD-2-Clause
  * @link        https://github.com/akiraohgaki/chirit
  */
@@ -13,13 +13,13 @@ export default class Component extends HTMLElement {
         window.customElements.define(name, this, options);
     }
 
-    // Subclass should use init*() instead of constructor()
     constructor() {
         super();
 
-        this._state = null;
+        this._state = {};
         this._shadowRoot = null;
         this._template = null;
+
         this._updateCount = 0;
 
         this.initShadow();
@@ -27,16 +27,59 @@ export default class Component extends HTMLElement {
         this.init();
     }
 
+    set state(state) {
+        this.setState(state);
+    }
+
+    get state() {
+        return this.getState();
+    }
+
     get contentRoot() {
         return this._shadowRoot || this.shadowRoot || this;
     }
 
-    set state(state) {
-        this._state = state;
+    initShadow() {
+        this.enableShadow();
     }
 
-    get state() {
+    initTemplate() {
+        this.importTemplate(document.createElement('template'));
+    }
+
+    setState(state) {
+        if (typeof state !== 'object' || state === null) {
+            throw new TypeError(`"${state}" is not an object`);
+        }
+
+        const oldState = Object.assign({}, this._state);
+        this._state = state;
+        const newState = Object.assign({}, this._state);
+
+        this._stateChangedCallback(oldState, newState);
+    }
+
+    getState() {
         return this._state;
+    }
+
+    setContent(content) {
+        // "content" should be Node object or string
+        if (typeof content === 'string') {
+            const template = document.createElement('template');
+            template.innerHTML = content;
+            content = template.content;
+        }
+
+        const oldContent = this.exportTemplate().content;
+        this._template.content.textContent = null;
+        this._template.content.appendChild(content);
+        const newContent = this.exportTemplate().content;
+
+        this.contentRoot.textContent = null;
+        this.contentRoot.appendChild(newContent.cloneNode(true));
+
+        this._contentChangedCallback(oldContent, newContent);
     }
 
     enableShadow(options = {}) {
@@ -50,7 +93,6 @@ export default class Component extends HTMLElement {
         if (!(template instanceof HTMLTemplateElement)) {
             throw new TypeError(`"${template}" is not a HTMLTemplateElement`);
         }
-
         this._template = template.cloneNode(true);
     }
 
@@ -58,43 +100,41 @@ export default class Component extends HTMLElement {
         return this._template.cloneNode(true);
     }
 
-    update(state) {
-        if (state !== undefined) {
-            this._state = state;
-        }
-
-        const content = this.render();
-        if (content !== undefined) {
-            this._template.innerHTML = content;
-        }
-        this.contentRoot.textContent = null;
-        this.contentRoot.appendChild(this._template.content.cloneNode(true));
-
-        this._updateCount++;
-        this.componentUpdatedCallback();
-    }
-
-    dispatch(type, detail = null) {
+    dispatch(type, data = {}) {
         this.dispatchEvent(new CustomEvent(type, {
-            detail: detail,
+            detail: data,
             bubbles: true,
             composed: true
         }));
     }
 
-    initShadow() {
-        this.enableShadow();
+    update(state) {
+        if (state !== undefined) {
+            this.setState(state);
+        }
+        else {
+            this._update();
+        }
     }
 
-    initTemplate() {
-        this.importTemplate(document.createElement('template'));
+    _update() {
+        let content = this.render();
+        if (typeof content !== 'string' && !content) {
+            content = this.exportTemplate().content;
+        }
+
+        this.setContent(content);
+
+        this._updatedCallback();
     }
+
+    // Abstract methods
 
     init() {}
 
     render() {}
 
-    componentUpdatedCallback() {}
+    // Lifecycle methods
 
     static get componentObservedAttributes() {
         return [];
@@ -108,38 +148,62 @@ export default class Component extends HTMLElement {
 
     componentAdoptedCallback() {}
 
-    // Subclass should use componentObservedAttributes instead of observedAttributes
+    componentStateChangedCallback() {}
+
+    componentContentChangedCallback() {}
+
+    componentUpdatedCallback() {}
+
+    // Lifecycle methods in parent class
+
     static get observedAttributes() {
         return this.componentObservedAttributes;
     }
 
-    // Subclass should use componentAttributeChangedCallback() instead of attributeChangedCallback()
     attributeChangedCallback(attributeName, oldValue, newValue, namespace) {
-        if (this._updateCount && oldValue !== newValue) {
-            this.update();
-        }
         this.componentAttributeChangedCallback(attributeName, oldValue, newValue, namespace);
-    }
-
-    // Subclass should use componentConnectedCallback() instead of connectedCallback()
-    connectedCallback() {
-        if (!this._updateCount) {
-            this.update();
+        if (this._updateCount && oldValue !== newValue) {
+            this._update();
         }
-        this.componentConnectedCallback();
     }
 
-    // Subclass should use componentDisconnectedCallback() instead of disconnectedCallback()
+    connectedCallback() {
+        this.componentConnectedCallback();
+        if (!this._updateCount) {
+            this._update();
+        }
+    }
+
     disconnectedCallback() {
         this.componentDisconnectedCallback();
     }
 
-    // Subclass should use componentAdoptedCallback() instead of adoptedCallback()
     adoptedCallback(oldDocument, newDocument) {
-        if (!this._updateCount) {
-            this.update();
-        }
         this.componentAdoptedCallback(oldDocument, newDocument);
+        if (!this._updateCount) {
+            this._update();
+        }
+    }
+
+    // Additional lifecycle methods
+
+    _stateChangedCallback(oldState, newState) {
+        this.componentStateChangedCallback(oldState, newState);
+        //if (this._updateCount && JSON.stringify(oldState) !== JSON.stringify(newState)) {
+        //    this.update();
+        //}
+        if (this._updateCount) {
+            this._update();
+        }
+    }
+
+    _contentChangedCallback(oldContent, newContent) {
+        this.componentContentChangedCallback(oldContent, newContent);
+    }
+
+    _updatedCallback() {
+        this._updateCount++;
+        this.componentUpdatedCallback();
     }
 
 }

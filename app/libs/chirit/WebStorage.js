@@ -2,7 +2,7 @@
  * Chirit
  *
  * @author      Akira Ohgaki <akiraohgaki@gmail.com>
- * @copyright   Akira Ohgaki
+ * @copyright   2018, Akira Ohgaki
  * @license     https://opensource.org/licenses/BSD-2-Clause
  * @link        https://github.com/akiraohgaki/chirit
  */
@@ -10,7 +10,11 @@
 export default class WebStorage {
 
     constructor(type = 'local', prefix = '') {
-        switch (type) {
+        this._type = type;
+        this._prefix = prefix;
+        this._storage = null;
+
+        switch (this._type) {
             case 'local':
                 this._storage = window.localStorage;
                 break;
@@ -20,8 +24,6 @@ export default class WebStorage {
             default:
                 throw new Error('Storage type must be "local" or "session"');
         }
-        this._type = type;
-        this._prefix = prefix;
     }
 
     get type() {

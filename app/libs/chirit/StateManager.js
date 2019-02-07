@@ -2,7 +2,7 @@
  * Chirit
  *
  * @author      Akira Ohgaki <akiraohgaki@gmail.com>
- * @copyright   Akira Ohgaki
+ * @copyright   2018, Akira Ohgaki
  * @license     https://opensource.org/licenses/BSD-2-Clause
  * @link        https://github.com/akiraohgaki/chirit
  */
@@ -18,15 +18,15 @@ export default class StateManager {
         }
 
         this._target = target || document;
-        this._eventListener = this._eventListener.bind(this);
         this._state = new Map();
+        this._eventListener = this._eventListener.bind(this);
 
         this._eventHandler = null;
         this._actionHandler = null;
         this._stateHandler = null;
         this._viewHandler = null;
 
-        this._setupHandlers();
+        this._initHandlers();
     }
 
     get target() {
@@ -53,8 +53,8 @@ export default class StateManager {
         return this._viewHandler;
     }
 
-    dispatch(type, params = {}) {
-        this._target.dispatchEvent(new CustomEvent(type, {detail: params}));
+    dispatch(type, data = {}) {
+        this._target.dispatchEvent(new CustomEvent(type, {detail: data}));
     }
 
     _eventListener(event) {
@@ -63,18 +63,18 @@ export default class StateManager {
         this._invokeHandlers(event.detail, event.type);
     }
 
-    _setupHandlers() {
-        this._eventHandler = new Handler((params) => {
-            return params;
+    _initHandlers() {
+        this._eventHandler = new Handler((data) => {
+            return data;
         });
 
         this._actionHandler = new Handler(() => {
             return {};
         });
 
-        this._stateHandler = new Handler((state, type) => {
-            this._state.set(type, state);
-            return state;
+        this._stateHandler = new Handler((data, type) => {
+            this._state.set(type, data);
+            return data;
         });
 
         this._viewHandler = new Handler(() => {
@@ -116,22 +116,22 @@ export default class StateManager {
         this._viewHandler.afterRemoveCallback = afterRemoveCallback;
     }
 
-    async _invokeHandlers(params, type) {
+    async _invokeHandlers(data, type) {
         try {
-            const passedParams = await this._eventHandler.invoke(params, type);
-            if (!passedParams) {
+            const eventRusult = await this._eventHandler.invoke(data, type);
+            if (!eventRusult) {
                 return;
             }
-            const state = await this._actionHandler.invoke(passedParams, type);
-            if (!state) {
+            const actionResult = await this._actionHandler.invoke(eventRusult, type);
+            if (!actionResult) {
                 return;
             }
-            const passedState = await this._stateHandler.invoke(state, type);
-            if (!passedState) {
+            const stateResult = await this._stateHandler.invoke(actionResult, type);
+            if (!stateResult) {
                 return;
             }
-            //const data = await this._viewHandler.invoke(passedState, type);
-            this._viewHandler.invoke(passedState, type);
+            //const viewResult = await this._viewHandler.invoke(stateResult, type);
+            this._viewHandler.invoke(stateResult, type);
         }
         catch (error) {
             console.error(error);
