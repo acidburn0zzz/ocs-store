@@ -6,8 +6,6 @@ export default class GeneralHandler {
 
         this.appPackage = this.ipcRenderer.sendSync('app', 'package');
 
-        document.title = this.appPackage.productName;
-
         this.aboutdialogComponent = null;
 
         this.stateManager.actionHandler
