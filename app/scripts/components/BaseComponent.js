@@ -2,14 +2,6 @@ import Chirit from '../../libs/chirit/Chirit.js';
 
 export default class BaseComponent extends Chirit.Component {
 
-    get rootComponent() {
-        return document.querySelector('root-component');
-    }
-
-    get rootState() {
-        return document.querySelector('root-component').state;
-    }
-
     get sharedStyle() {
         return `
             <link href="libs/chirit/css/alt.css" rel="stylesheet">
@@ -17,6 +9,10 @@ export default class BaseComponent extends Chirit.Component {
             <link href="images/icon.css" rel="stylesheet">
             <link href="styles/component.css" rel="stylesheet">
         `;
+    }
+
+    getStateManager() {
+        return document.querySelector('root-component').stateManager;
     }
 
 }

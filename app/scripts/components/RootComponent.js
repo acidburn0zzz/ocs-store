@@ -1,6 +1,26 @@
+const {ipcRenderer} = require('electron');
+
+import Chirit from '../../libs/chirit/Chirit.js';
+
+import OcsManagerApi from '../api/OcsManagerApi.js';
+
+import GeneralHandler from '../handlers/GeneralHandler.js';
+import WebviewHandler from '../handlers/WebviewHandler.js';
+import OcsManagerHandler from '../handlers/OcsManagerHandler.js';
+
 import BaseComponent from './BaseComponent.js';
 
 export default class RootComponent extends BaseComponent {
+
+    init() {
+        this.stateManager = new Chirit.StateManager(this);
+
+        const ocsManagerApi = new OcsManagerApi(ipcRenderer.sendSync('ocs-manager', 'url'));
+
+        new GeneralHandler(this.stateManager, ipcRenderer);
+        new WebviewHandler(this.stateManager, ipcRenderer);
+        new OcsManagerHandler(this.stateManager, ocsManagerApi);
+    }
 
     render() {
         return `
@@ -18,6 +38,10 @@ export default class RootComponent extends BaseComponent {
 
             <collectiondialog-component></collectiondialog-component>
         `;
+    }
+
+    componentUpdatedCallback() {
+        this.stateManager.dispatch('ocsManager_initial', {});
     }
 
 }
