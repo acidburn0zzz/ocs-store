@@ -9,7 +9,7 @@ export default class OmniboxComponent extends BaseComponent {
     }
 
     render() {
-        const webviewPageState = this.rootState.get('webview_page');
+        const webviewPageState = this.getStateManager().state.get('webview_page');
         const url = webviewPageState.url || '';
         const title = webviewPageState.title || '';
         const startPage = webviewPageState.startPage || '';

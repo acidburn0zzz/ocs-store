@@ -7,7 +7,7 @@ export default class AboutdialogComponent extends BaseComponent {
     }
 
     render() {
-        const generalAboutState = this.rootState.get('general_about');
+        const generalAboutState = this.getStateManager().state.get('general_about');
         const productName = generalAboutState.productName || '';
         const version = generalAboutState.version || '';
         const description = generalAboutState.description || '';

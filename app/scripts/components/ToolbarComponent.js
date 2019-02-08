@@ -101,7 +101,7 @@ export default class ToolbarComponent extends BaseComponent {
     }
 
     checkWebviewLoadingStatus() {
-        const webviewLoadingState = this.rootState.get('webview_loading');
+        const webviewLoadingState = this.getStateManager().state.get('webview_loading');
 
         const indicator = this.contentRoot.querySelector('div[data-indicator]');
 
@@ -126,7 +126,7 @@ export default class ToolbarComponent extends BaseComponent {
     }
 
     checkWebviewPageStatus() {
-        const webviewPageState = this.rootState.get('webview_page');
+        const webviewPageState = this.getStateManager().state.get('webview_page');
 
         const backButton = this.contentRoot
             .querySelector('navbutton-component[data-type="webview_navigation"][data-action="back"]');
@@ -148,7 +148,7 @@ export default class ToolbarComponent extends BaseComponent {
     }
 
     checkOcsManagerDownloadingStatus() {
-        const ocsManagerDownloadingState = this.rootState.get('ocsManager_downloading');
+        const ocsManagerDownloadingState = this.getStateManager().state.get('ocsManager_downloading');
 
         const downloadingBadget = this.contentRoot
             .querySelector('span[data-downloadingbadge]');
