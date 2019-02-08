@@ -1,8 +1,8 @@
 import RootComponent from './RootComponent.js';
 RootComponent.define('root-component');
 
-import PageswitcherComponent from './PageswitcherComponent.js';
-PageswitcherComponent.define('pageswitcher-component');
+import SwitchviewComponent from './SwitchviewComponent.js';
+SwitchviewComponent.define('switchview-component');
 
 import PageComponent from './PageComponent.js';
 PageComponent.define('page-component');

@@ -28,7 +28,7 @@ export default class RootComponent extends BaseComponent {
         return `
             ${this.sharedStyle}
 
-            <pageswitcher-component class="flex-auto flex-column">
+            <switchview-component class="flex-auto flex-column">
 
             <page-component id="browser" slot="page" class="flex-auto flex-column">
             <toolbar-component slot="header"></toolbar-component>
@@ -36,7 +36,7 @@ export default class RootComponent extends BaseComponent {
             <statusbar-component slot="footer"></statusbar-component>
             </page-component>
 
-            </pageswitcher-component>
+            </switchview-component>
 
             <collectiondialog-component></collectiondialog-component>
 
