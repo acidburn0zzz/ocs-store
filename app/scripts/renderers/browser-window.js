@@ -1,1 +1,1 @@
-import '../components/index.js';
+import components from '../components/index.js';
