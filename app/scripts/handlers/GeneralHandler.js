@@ -4,9 +4,9 @@ export default class GeneralHandler {
         this.stateManager = stateManager;
         this.ipcRenderer = ipcRenderer;
 
-        this.packageMeta = this.ipcRenderer.sendSync('app', 'package');
+        this.appPackage = this.ipcRenderer.sendSync('app', 'package');
 
-        document.title = this.packageMeta.productName;
+        document.title = this.appPackage.productName;
 
         this.aboutdialogComponent = null;
 
@@ -19,15 +19,15 @@ export default class GeneralHandler {
 
     aboutAction() {
         return {
-            name: this.packageMeta.name,
-            productName: this.packageMeta.productName,
-            version: this.packageMeta.version,
-            description: this.packageMeta.description,
-            author: this.packageMeta.author,
-            license: this.packageMeta.license,
-            homepage: this.packageMeta.homepage,
-            repository: this.packageMeta.repository,
-            bugs: this.packageMeta.bugs
+            name: this.appPackage.name,
+            productName: this.appPackage.productName,
+            version: this.appPackage.version,
+            description: this.appPackage.description,
+            author: this.appPackage.author,
+            license: this.appPackage.license,
+            homepage: this.appPackage.homepage,
+            repository: this.appPackage.repository,
+            bugs: this.appPackage.bugs
         };
     }
 
