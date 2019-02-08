@@ -1,4 +1,4 @@
-export default class GeneralHandler {
+export default class GeneralTypeHandler {
 
     constructor(stateManager, ipcRenderer) {
         this._stateManager = stateManager;

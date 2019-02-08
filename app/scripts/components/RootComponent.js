@@ -4,9 +4,9 @@ import Chirit from '../../libs/chirit/Chirit.js';
 
 import OcsManagerApi from '../api/OcsManagerApi.js';
 
-import GeneralHandler from '../handlers/GeneralHandler.js';
-import WebviewHandler from '../handlers/WebviewHandler.js';
-import OcsManagerHandler from '../handlers/OcsManagerHandler.js';
+import GeneralTypeHandler from '../handlers/GeneralTypeHandler.js';
+import WebviewTypeHandler from '../handlers/WebviewTypeHandler.js';
+import OcsManagerTypeHandler from '../handlers/OcsManagerTypeHandler.js';
 
 import BaseComponent from './BaseComponent.js';
 
@@ -19,9 +19,9 @@ export default class RootComponent extends BaseComponent {
 
         const ocsManagerApi = new OcsManagerApi(ipcRenderer.sendSync('ocs-manager', 'url'));
 
-        new GeneralHandler(this._stateManager, ipcRenderer);
-        new WebviewHandler(this._stateManager, ipcRenderer);
-        new OcsManagerHandler(this._stateManager, ocsManagerApi);
+        new GeneralTypeHandler(this._stateManager, ipcRenderer);
+        new WebviewTypeHandler(this._stateManager, ipcRenderer);
+        new OcsManagerTypeHandler(this._stateManager, ocsManagerApi);
     }
 
     render() {
@@ -30,7 +30,7 @@ export default class RootComponent extends BaseComponent {
 
             <switchview-component class="flex-auto flex-column">
 
-            <page-component id="browser" slot="page" class="flex-auto flex-column">
+            <page-component id="browser" slot="current" class="flex-auto flex-column">
             <toolbar-component slot="header"></toolbar-component>
             <webview-component slot="content" class="flex-auto flex-column"></webview-component>
             <statusbar-component slot="footer"></statusbar-component>
@@ -45,7 +45,7 @@ export default class RootComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
-        this._stateManager.dispatch('ocsManager_initial', {});
+        this.dispatch('ocsManager_initial', {});
     }
 
     getStateManager() {
