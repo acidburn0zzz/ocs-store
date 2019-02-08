@@ -30,8 +30,8 @@ export default class OcsManagerApi {
                 this._websocket.addEventListener('message', (event) => {
                     const message = event.data ? JSON.parse(event.data) : {};
                     if (message.func && this._callback.has(message.func)) {
-                        const handler = this._callback.get(message.func);
-                        handler(message);
+                        const callback = this._callback.get(message.func);
+                        callback(message);
                     }
                 });
 
