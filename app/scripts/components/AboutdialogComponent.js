@@ -16,15 +16,15 @@ export default class AboutdialogComponent extends BaseComponent {
 
         this._dialogComponent = null;
 
-        this._openDialog = this._openDialog.bind(this);
+        this._viewHandler_general_about = this._viewHandler_general_about.bind(this);
     }
 
     componentConnectedCallback() {
-        this.getStateManager().viewHandler.add('general_about', this._openDialog);
+        this.getStateManager().viewHandler.add('general_about', this._viewHandler_general_about);
     }
 
     componentDisconnectedCallback() {
-        this.getStateManager().viewHandler.remove('general_about', this._openDialog);
+        this.getStateManager().viewHandler.remove('general_about', this._viewHandler_general_about);
     }
 
     render() {
@@ -87,7 +87,7 @@ export default class AboutdialogComponent extends BaseComponent {
         this._dialogComponent.close();
     }
 
-    _openDialog(state) {
+    _viewHandler_general_about(state) {
         this.update(Object.assign(this.state, state));
         this.open();
     }
