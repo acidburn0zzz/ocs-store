@@ -5,16 +5,19 @@ export default class ToolbarComponent extends BaseComponent {
     init() {
         this._viewHandler_webview_loading = this._viewHandler_webview_loading.bind(this);
         this._viewHandler_webview_page = this._viewHandler_webview_page.bind(this);
+        this._viewHandler_ocsManager_downloading = this._viewHandler_ocsManager_downloading.bind(this);
     }
 
     componentConnectedCallback() {
         this.getStateManager().viewHandler.add('webview_loading', this._viewHandler_webview_loading);
         this.getStateManager().viewHandler.add('webview_page', this._viewHandler_webview_page);
+        this.getStateManager().viewHandler.add('ocsManager_downloading', this._viewHandler_ocsManager_downloading);
     }
 
     componentDisconnectedCallback() {
         this.getStateManager().viewHandler.remove('webview_loading', this._viewHandler_webview_loading);
         this.getStateManager().viewHandler.remove('webview_page', this._viewHandler_webview_page);
+        this.getStateManager().viewHandler.remove('ocsManager_downloading', this._viewHandler_ocsManager_downloading);
     }
 
     render() {
@@ -158,13 +161,11 @@ export default class ToolbarComponent extends BaseComponent {
         }
     }
 
-    checkOcsManagerDownloadingStatus() {
-        const ocsManagerDownloadingState = this.getStateManager().state.get('ocsManager_downloading');
-
+    _viewHandler_ocsManager_downloading(state) {
         const downloadingBadget = this.contentRoot
             .querySelector('span[data-downloadingbadge]');
-        if (ocsManagerDownloadingState.downloading) {
-            downloadingBadget.textContent = '' + ocsManagerDownloadingState.downloading;
+        if (state.downloading) {
+            downloadingBadget.textContent = '' + state.downloading;
             downloadingBadget.setAttribute('data-downloadingbadge', 'active');
         }
         else {

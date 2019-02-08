@@ -1,32 +1,29 @@
 export default class OcsManagerHandler {
 
     constructor(stateManager, ocsManagerApi) {
-        this.stateManager = stateManager;
-        this.ocsManagerApi = ocsManagerApi;
+        this._stateManager = stateManager;
+        this._ocsManagerApi = ocsManagerApi;
 
-        this.collectiondialogComponent = this.stateManager.target.contentRoot
+        this._collectiondialogComponent = this._stateManager.target.contentRoot
             .querySelector('collectiondialog-component');
 
-        this.toolbarComponent = this.stateManager.target.contentRoot
+        this._toolbarComponent = this._stateManager.target.contentRoot
             .querySelector('#browser toolbar-component');
 
-        this.stateManager.actionHandler
+        this._stateManager.actionHandler
             .add('ocsManager_initial', this.initialAction.bind(this))
             .add('ocsManager_ocsUrl', this.ocsUrlAction.bind(this))
             .add('ocsManager_externalUrl', this.externalUrlAction.bind(this))
             .add('ocsManager_downloading', this.downloadingAction.bind(this))
             .add('ocsManager_navigation', this.navigationAction.bind(this));
 
-        this.stateManager.viewHandler
-            .add('ocsManager_downloading', this.downloadingView.bind(this));
+        this._installTypes = {};
+        this._installedItems = {};
+        this._updateAvailableItems = {};
 
-        this.installTypes = {};
-        this.installedItems = {};
-        this.updateAvailableItems = {};
+        this._updateCheckAfter = 86400000; // 1day (ms)
 
-        this.updateCheckAfter = 86400000; // 1day (ms)
-
-        this.ocsManagerApi.callback
+        this._ocsManagerApi.callback
             .set('ItemHandler::metadataSetChanged', this.ItemHandler_metadataSetChanged.bind(this))
             .set('ItemHandler::downloadStarted', this.ItemHandler_downloadStarted.bind(this))
             .set('ItemHandler::downloadFinished', this.ItemHandler_downloadFinished.bind(this))
@@ -47,30 +44,30 @@ export default class OcsManagerHandler {
     //// For stateManager ////
 
     async initialAction() {
-        if (await this.ocsManagerApi.connect()) {
+        if (await this._ocsManagerApi.connect()) {
             let message = null;
 
-            message = await this.ocsManagerApi.sendSync('ConfigHandler::getAppConfigInstallTypes', []);
-            this.installTypes = message.data[0];
+            message = await this._ocsManagerApi.sendSync('ConfigHandler::getAppConfigInstallTypes', []);
+            this._installTypes = message.data[0];
 
-            message = await this.ocsManagerApi.sendSync('ConfigHandler::getUsrConfigInstalledItems', []);
-            this.installedItems = message.data[0];
+            message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigInstalledItems', []);
+            this._installedItems = message.data[0];
 
-            message = await this.ocsManagerApi.sendSync('ConfigHandler::getUsrConfigUpdateAvailableItems', []);
-            this.updateAvailableItems = message.data[0];
+            message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigUpdateAvailableItems', []);
+            this._updateAvailableItems = message.data[0];
 
-            message = await this.ocsManagerApi.sendSync('ConfigHandler::getUsrConfigApplication', []);
+            message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigApplication', []);
             if (!message.data[0].update_checked_at
-                || (message.data[0].update_checked_at + this.updateCheckAfter) < new Date().getTime()
+                || (message.data[0].update_checked_at + this._updateCheckAfter) < new Date().getTime()
             ) {
-                this.ocsManagerApi.send('UpdateHandler::checkAll', []);
+                this._ocsManagerApi.send('UpdateHandler::checkAll', []);
             }
         }
         return false;
     }
 
     ocsUrlAction(params) {
-        this.ocsManagerApi.send(
+        this._ocsManagerApi.send(
             'ItemHandler::getItemByOcsUrl',
             [params.url, params.providerKey, params.contentId]
         );
@@ -78,12 +75,12 @@ export default class OcsManagerHandler {
     }
 
     externalUrlAction(params) {
-        this.ocsManagerApi.send('SystemHandler::openUrl', [params.url]);
+        this._ocsManagerApi.send('SystemHandler::openUrl', [params.url]);
         return false;
     }
 
     async downloadingAction() {
-        const message = await this.ocsManagerApi.sendSync('ItemHandler::metadataSet', []);
+        const message = await this._ocsManagerApi.sendSync('ItemHandler::metadataSet', []);
         const metadataSet = message.data[0];
         return {
             downloading: Object.keys(metadataSet).length,
@@ -91,14 +88,10 @@ export default class OcsManagerHandler {
         };
     }
 
-    downloadingView() {
-        this.toolbarComponent.checkOcsManagerDownloadingStatus();
-    }
-
     navigationAction(params) {
         switch (params.action) {
             case 'collection':
-                this.collectiondialogComponent.open();
+                this._collectiondialogComponent.open();
                 break;
         }
         return false;
@@ -107,7 +100,7 @@ export default class OcsManagerHandler {
     //// For ocsManagerApi ////
 
     ItemHandler_metadataSetChanged() {
-        this.stateManager.dispatch('ocsManager_downloading', {});
+        this._stateManager.dispatch('ocsManager_downloading', {});
     }
 
     ItemHandler_downloadStarted(message) {
@@ -166,8 +159,8 @@ export default class OcsManagerHandler {
 
         // update component
 
-        message = await this.ocsManagerApi.sendSync('ConfigHandler::getUsrConfigInstalledItems', []);
-        this.installedItems = message.data[0];
+        message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigInstalledItems', []);
+        this._installedItems = message.data[0];
     }
 
     ItemHandler_uninstallStarted(message) {
@@ -182,10 +175,10 @@ export default class OcsManagerHandler {
         if (message.data[0].status !== 'success_uninstall') {
             console.error(new Error(message.data[0].message));
         }
-        message = await this.ocsManagerApi.sendSync('ConfigHandler::getUsrConfigInstalledItems', []);
-        this.installedItems = message.data[0];
-        message = await this.ocsManagerApi.sendSync('ConfigHandler::getUsrConfigUpdateAvailableItems', []);
-        this.updateAvailableItems = message.data[0];
+        message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigInstalledItems', []);
+        this._installedItems = message.data[0];
+        message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigUpdateAvailableItems', []);
+        this._updateAvailableItems = message.data[0];
 
         // remove preview pic
     }
@@ -202,8 +195,8 @@ export default class OcsManagerHandler {
         if (!message.data[0]) {
             console.error(new Error('Item update check failed'));
         }
-        message = await this.ocsManagerApi.sendSync('ConfigHandler::getUsrConfigUpdateAvailableItems', []);
-        this.updateAvailableItems = message.data[0];
+        message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigUpdateAvailableItems', []);
+        this._updateAvailableItems = message.data[0];
         // update component
     }
 
@@ -219,8 +212,8 @@ export default class OcsManagerHandler {
         if (!message.data[1]) {
             console.error(new Error('Item update failed'));
         }
-        message = await this.ocsManagerApi.sendSync('ConfigHandler::getUsrConfigUpdateAvailableItems', []);
-        this.updateAvailableItems = message.data[0];
+        message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigUpdateAvailableItems', []);
+        this._updateAvailableItems = message.data[0];
     }
 
     UpdateHandler_updateProgress(message) {
