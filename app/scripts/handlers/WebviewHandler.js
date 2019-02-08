@@ -1,89 +1,69 @@
 export default class WebviewHandler {
 
     constructor(stateManager, ipcRenderer) {
-        this.stateManager = stateManager;
-        this.ipcRenderer = ipcRenderer;
+        this._stateManager = stateManager;
+        this._ipcRenderer = ipcRenderer;
 
-        this.startPage = this.ipcRenderer.sendSync('store-application', 'startPage');
+        this._startPage = this._ipcRenderer.sendSync('store-application', 'startPage');
 
-        this.webviewComponent = this.stateManager.target.contentRoot
-            .querySelector('#browser webview-component');
-        this.webviewComponent.setAttribute('data-partition', 'persist:opendesktop');
-        this.webviewComponent.setAttribute('data-preload', './scripts/renderers/webview.js');
-        this.webviewComponent.setAttribute('data-src', this.startPage);
-        this.webviewComponent.setAttribute('data-debug', '');
+        this._webviewComponent = null;
 
-        this.toolbarComponent = this.stateManager.target.contentRoot
-            .querySelector('#browser toolbar-component');
-
-        this.stateManager.actionHandler
-            .add('webview_loading', this.loadingAction.bind(this))
-            .add('webview_page', this.pageAction.bind(this))
-            .add('webview_startPage', this.startPageAction.bind(this))
-            .add('webview_navigation', this.navigationAction.bind(this));
-
-        this.stateManager.viewHandler
-            .add('webview_loading', this.loadingView.bind(this))
-            .add('webview_page', this.pageView.bind(this));
+        this._subscribe();
     }
 
-    loadingAction(params) {
-        return {
-            isLoading: params.isLoading
-        };
-    }
-
-    loadingView() {
-        this.toolbarComponent.checkWebviewLoadingStatus();
-    }
-
-    pageAction(params) {
-        return {
-            url: params.url,
-            title: params.title,
-            canGoBack: params.canGoBack,
-            canGoForward: params.canGoForward,
-            startPage: this.startPage
-        };
-    }
-
-    pageView() {
-        this.toolbarComponent.checkWebviewPageStatus();
-
-        this.toolbarComponent.contentRoot
-            .querySelector('omnibox-component')
-            .update();
-    }
-
-    startPageAction(params) {
-        this.startPage = params.url;
-        this.ipcRenderer.sendSync('store-application', 'startPage', this.startPage);
-        this.webviewComponent.loadUrl(this.startPage);
-        return false;
-    }
-
-    navigationAction(params) {
-        switch (params.action) {
-            case 'load':
-                this.webviewComponent.loadUrl(params.url);
-                break;
-            case 'home':
-                this.webviewComponent.loadUrl(this.startPage);
-                break;
-            case 'back':
-                this.webviewComponent.goBack();
-                break;
-            case 'forward':
-                this.webviewComponent.goForward();
-                break;
-            case 'reload':
-                this.webviewComponent.reload();
-                break;
-            case 'stop':
-                this.webviewComponent.stop();
-                break;
-        }
-        return false;
+    _subscribe() {
+        this._stateManager.actionHandler
+            .add('webview_activate', (params) => {
+                this._webviewComponent = params.webviewComponent;
+                return {
+                    src: this._startPage,
+                    isActivated: true,
+                    isDebugMode: this._ipcRenderer.sendSync('app', 'isDebugMode')
+                };
+            })
+            .add('webview_loading', (params) => {
+                return {
+                    isLoading: params.isLoading
+                };
+            })
+            .add('webview_page', (params) => {
+                return {
+                    url: params.url,
+                    title: params.title,
+                    canGoBack: params.canGoBack,
+                    canGoForward: params.canGoForward,
+                    startPage: this._startPage
+                };
+            })
+            .add('webview_startPage', (params) => {
+                this._startPage = params.url;
+                this._ipcRenderer.sendSync('store-application', 'startPage', this._startPage);
+                this._webviewComponent.loadUrl(this._startPage);
+                return false;
+            })
+            .add('webview_navigation', (params) => {
+                switch (params.action) {
+                    case 'load':
+                        this._webviewComponent.loadUrl(params.url);
+                        break;
+                    case 'home':
+                        this._webviewComponent.loadUrl(this._startPage);
+                        break;
+                    case 'back':
+                        this._webviewComponent.goBack();
+                        break;
+                    case 'forward':
+                        this._webviewComponent.goForward();
+                        break;
+                    case 'reload':
+                        this._webviewComponent.reload();
+                        break;
+                    case 'stop':
+                        this._webviewComponent.stop();
+                        break;
+                }
+                return false;
+            });
     }
 
 }
