@@ -13,15 +13,15 @@ import BaseComponent from './BaseComponent.js';
 export default class RootComponent extends BaseComponent {
 
     init() {
-        this.stateManager = new Chirit.StateManager(this);
+        this._stateManager = new Chirit.StateManager(this);
 
         document.title = this.ipcRenderer.sendSync('app', 'package').productName;
 
         const ocsManagerApi = new OcsManagerApi(ipcRenderer.sendSync('ocs-manager', 'url'));
 
-        new GeneralHandler(this.stateManager, ipcRenderer);
-        new WebviewHandler(this.stateManager, ipcRenderer);
-        new OcsManagerHandler(this.stateManager, ocsManagerApi);
+        new GeneralHandler(this._stateManager, ipcRenderer);
+        new WebviewHandler(this._stateManager, ipcRenderer);
+        new OcsManagerHandler(this._stateManager, ocsManagerApi);
     }
 
     render() {
@@ -43,7 +43,11 @@ export default class RootComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
-        this.stateManager.dispatch('ocsManager_initial', {});
+        this._stateManager.dispatch('ocsManager_initial', {});
+    }
+
+    getStateManager() {
+        return this._stateManager;
     }
 
 }
