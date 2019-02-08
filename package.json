@@ -17,7 +17,7 @@
   "dependencies": {
     "electron-store": "2.*.*",
     "request": "2.*.*",
-    "import-export": "1.*.*"
+    "esm": "3.*.*"
   },
   "devDependencies": {
     "electron": "4.*.*",

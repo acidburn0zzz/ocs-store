@@ -20,8 +20,8 @@
 <root-component class="flex-auto flex-column"></root-component>
 
 <script>
-require('import-export');
-require('./scripts/renderers/browser-window.js');
+require = require('esm')(module);
+module.exports = require('./scripts/renderers/browser-window.js');
 </script>
 </body>
 
