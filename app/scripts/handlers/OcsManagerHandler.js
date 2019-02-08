@@ -7,21 +7,13 @@ export default class OcsManagerHandler {
         this._collectiondialogComponent = this._stateManager.target.contentRoot
             .querySelector('collectiondialog-component');
 
-        this._toolbarComponent = this._stateManager.target.contentRoot
-            .querySelector('#browser toolbar-component');
-
-        this._stateManager.actionHandler
-            .add('ocsManager_initial', this.initialAction.bind(this))
-            .add('ocsManager_ocsUrl', this.ocsUrlAction.bind(this))
-            .add('ocsManager_externalUrl', this.externalUrlAction.bind(this))
-            .add('ocsManager_downloading', this.downloadingAction.bind(this))
-            .add('ocsManager_navigation', this.navigationAction.bind(this));
-
         this._installTypes = {};
         this._installedItems = {};
         this._updateAvailableItems = {};
 
         this._updateCheckAfter = 86400000; // 1day (ms)
+
+        this._subscribe();
 
         this._ocsManagerApi.callback
             .set('ItemHandler::metadataSetChanged', this.ItemHandler_metadataSetChanged.bind(this))
@@ -41,60 +33,57 @@ export default class OcsManagerHandler {
             .set('UpdateHandler::updateProgress', this.UpdateHandler_updateProgress.bind(this));
     }
 
-    //// For stateManager ////
+    _subscribe() {
+        this._stateManager.actionHandler
+            .add('ocsManager_initial', async () => {
+                if (await this._ocsManagerApi.connect()) {
+                    let message = null;
 
-    async initialAction() {
-        if (await this._ocsManagerApi.connect()) {
-            let message = null;
+                    message = await this._ocsManagerApi.sendSync('ConfigHandler::getAppConfigInstallTypes', []);
+                    this._installTypes = message.data[0];
 
-            message = await this._ocsManagerApi.sendSync('ConfigHandler::getAppConfigInstallTypes', []);
-            this._installTypes = message.data[0];
+                    message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigInstalledItems', []);
+                    this._installedItems = message.data[0];
 
-            message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigInstalledItems', []);
-            this._installedItems = message.data[0];
+                    message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigUpdateAvailableItems', []);
+                    this._updateAvailableItems = message.data[0];
 
-            message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigUpdateAvailableItems', []);
-            this._updateAvailableItems = message.data[0];
-
-            message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigApplication', []);
-            if (!message.data[0].update_checked_at
-                || (message.data[0].update_checked_at + this._updateCheckAfter) < new Date().getTime()
-            ) {
-                this._ocsManagerApi.send('UpdateHandler::checkAll', []);
-            }
-        }
-        return false;
-    }
-
-    ocsUrlAction(params) {
-        this._ocsManagerApi.send(
-            'ItemHandler::getItemByOcsUrl',
-            [params.url, params.providerKey, params.contentId]
-        );
-        return false;
-    }
-
-    externalUrlAction(params) {
-        this._ocsManagerApi.send('SystemHandler::openUrl', [params.url]);
-        return false;
-    }
-
-    async downloadingAction() {
-        const message = await this._ocsManagerApi.sendSync('ItemHandler::metadataSet', []);
-        const metadataSet = message.data[0];
-        return {
-            downloading: Object.keys(metadataSet).length,
-            metadataSet: metadataSet
-        };
-    }
-
-    navigationAction(params) {
-        switch (params.action) {
-            case 'collection':
-                this._collectiondialogComponent.open();
-                break;
-        }
-        return false;
+                    message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigApplication', []);
+                    if (!message.data[0].update_checked_at
+                        || (message.data[0].update_checked_at + this._updateCheckAfter) < new Date().getTime()
+                    ) {
+                        this._ocsManagerApi.send('UpdateHandler::checkAll', []);
+                    }
+                }
+                return false;
+            })
+            .add('ocsManager_ocsUrl', (params) => {
+                this._ocsManagerApi.send(
+                    'ItemHandler::getItemByOcsUrl',
+                    [params.url, params.providerKey, params.contentId]
+                );
+                return false;
+            })
+            .add('ocsManager_externalUrl', (params) => {
+                this._ocsManagerApi.send('SystemHandler::openUrl', [params.url]);
+                return false;
+            })
+            .add('ocsManager_downloading', async () => {
+                const message = await this._ocsManagerApi.sendSync('ItemHandler::metadataSet', []);
+                const metadataSet = message.data[0];
+                return {
+                    downloading: Object.keys(metadataSet).length,
+                    metadataSet: metadataSet
+                };
+            })
+            .add('ocsManager_navigation', (params) => {
+                switch (params.action) {
+                    case 'collection':
+                        this._collectiondialogComponent.open();
+                        break;
+                }
+                return false;
+            });
     }
 
     //// For ocsManagerApi ////
