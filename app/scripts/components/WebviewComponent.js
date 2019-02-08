@@ -2,12 +2,26 @@ import BaseComponent from './BaseComponent.js';
 
 export default class WebviewComponent extends BaseComponent {
 
-    static get componentObservedAttributes() {
-        return ['data-partition', 'data-preload', 'data-src', 'data-debug'];
+    init() {
+        this.state = {
+            partition: 'persist:opendesktop',
+            preload: './scripts/renderers/webview.js',
+            src: '',
+            isActivated: false,
+            isDebugMode: false
+        };
+
+        this._webviewElement = null;
+
+        this._viewHandler_webview_activate = this._viewHandler_webview_activate.bind(this);
     }
 
-    init() {
-        this._webviewElement = null;
+    componentConnectedCallback() {
+        this.getStateManager().viewHandler.add('webview_activate', this._viewHandler_webview_activate);
+    }
+
+    componentDisconnectedCallback() {
+        this.getStateManager().viewHandler.remove('webview_activate', this._viewHandler_webview_activate);
     }
 
     render() {
@@ -17,10 +31,15 @@ export default class WebviewComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
-        if (!this._webviewElement) {
-            this._createWebviewElement();
+        if (this.state.isActivated) {
+            if (!this._webviewElement) {
+                this._createWebviewElement();
+            }
+            this.contentRoot.appendChild(this._webviewElement);
         }
-        this.contentRoot.appendChild(this._webviewElement);
+        else {
+            this.dispatch('webview_activate', {webviewComponent: this});
+        }
     }
 
     loadUrl(url) {
@@ -54,9 +73,9 @@ export default class WebviewComponent extends BaseComponent {
     _createWebviewElement() {
         this._webviewElement = document.createElement('webview');
 
-        this._webviewElement.setAttribute('partition', this.getAttribute('data-partition'));
-        this._webviewElement.setAttribute('preload', this.getAttribute('data-preload'));
-        this._webviewElement.setAttribute('src', this.getAttribute('data-src'));
+        this._webviewElement.setAttribute('partition', this.state.partition);
+        this._webviewElement.setAttribute('preload', this.state.preload);
+        this._webviewElement.setAttribute('src', this.state.src);
         this._webviewElement.className = 'flex-auto';
 
         this._webviewElement.addEventListener('did-start-loading', () => {
@@ -75,7 +94,7 @@ export default class WebviewComponent extends BaseComponent {
                 canGoForward: this._webviewElement.canGoForward()
             });
 
-            if (this.hasAttribute('data-debug')) {
+            if (this.state.isDebugMode) {
                 this._webviewElement.openDevTools();
             }
 
@@ -117,6 +136,10 @@ export default class WebviewComponent extends BaseComponent {
             info.contentId = pageUrlParts[1].split('/')[0];
         }
         return info;
+    }
+
+    _viewHandler_webview_activate(state) {
+        this.update(Object.assign(this.state, state));
     }
 
 }

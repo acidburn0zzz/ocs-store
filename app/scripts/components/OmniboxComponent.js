@@ -3,17 +3,28 @@ import BaseComponent from './BaseComponent.js';
 export default class OmniboxComponent extends BaseComponent {
 
     init() {
+        this.state = {
+            url: '',
+            title: '',
+            startPage: ''
+        };
+
         this._omniboxElement = null;
         this._paletteElement = null;
         this._togglerElement = null;
+
+        this._viewHandler_webview_page = this._viewHandler_webview_page.bind(this);
+    }
+
+    componentConnectedCallback() {
+        this.getStateManager().viewHandler.add('webview_page', this._viewHandler_webview_page);
+    }
+
+    componentDisconnectedCallback() {
+        this.getStateManager().viewHandler.remove('webview_page', this._viewHandler_webview_page);
     }
 
     render() {
-        const webviewPageState = this.getStateManager().state.get('webview_page');
-        const url = webviewPageState.url || '';
-        const title = webviewPageState.title || '';
-        const startPage = webviewPageState.startPage || '';
-
         return `
             ${this.sharedStyle}
 
@@ -91,7 +102,7 @@ export default class OmniboxComponent extends BaseComponent {
                 white-space: nowrap;
                 text-overflow: ellipsis;
             }
-            div[data-palette] ul li button.button[name="startPage"][value="${startPage}"] {
+            div[data-palette] ul li button.button[name="startPage"][value="${this.state.startPage}"] {
                 border-color: var(--color-information);
             }
             div[data-palette="inactive"] {
@@ -112,12 +123,12 @@ export default class OmniboxComponent extends BaseComponent {
             </style>
 
             <div data-omnibox="active">
-            <button class="button">${title}</button>
+            <button class="button">${this.state.title}</button>
             </div>
 
             <div class="widget fade-in" data-palette="inactive">
             <div class="widget-header">
-            <a href="${url}" class="icon-open-browser width-1of1" target="_blank">${url}</a>
+            <a href="${this.state.url}" class="icon-open-browser width-1of1" target="_blank">${this.state.url}</a>
             </div>
             <div class="widget-content">
             <h4 class="icon-home">Choose Startpage</h4>
@@ -138,12 +149,9 @@ export default class OmniboxComponent extends BaseComponent {
 
     componentUpdatedCallback() {
         this._omniboxElement = this.contentRoot.querySelector('div[data-omnibox]');
-        this._paletteElement = this.contentRoot.querySelector('div[data-palette]');
-        this._togglerElement = this.contentRoot.querySelector('div[data-toggler]');
-
         this._omniboxElement.addEventListener('click', this._toggle.bind(this), false);
-        this._togglerElement.addEventListener('click', this._toggle.bind(this), false);
 
+        this._paletteElement = this.contentRoot.querySelector('div[data-palette]');
         this._paletteElement.addEventListener('click', (event) => {
             if (event.target.closest('a')) {
                 event.preventDefault();
@@ -162,6 +170,9 @@ export default class OmniboxComponent extends BaseComponent {
                 this._toggle();
             }
         }, false);
+
+        this._togglerElement = this.contentRoot.querySelector('div[data-toggler]');
+        this._togglerElement.addEventListener('click', this._toggle.bind(this), false);
     }
 
     _toggle() {
@@ -177,6 +188,10 @@ export default class OmniboxComponent extends BaseComponent {
             'data-toggler',
             (this._togglerElement.getAttribute('data-toggler') === 'active') ? 'inactive' : 'active'
         );
+    }
+
+    _viewHandler_webview_page(state) {
+        this.update(Object.assign(this.state, state));
     }
 
 }

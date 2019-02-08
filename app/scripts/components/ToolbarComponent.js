@@ -2,6 +2,21 @@ import BaseComponent from './BaseComponent.js';
 
 export default class ToolbarComponent extends BaseComponent {
 
+    init() {
+        this._viewHandler_webview_loading = this._viewHandler_webview_loading.bind(this);
+        this._viewHandler_webview_page = this._viewHandler_webview_page.bind(this);
+    }
+
+    componentConnectedCallback() {
+        this.getStateManager().viewHandler.add('webview_loading', this._viewHandler_webview_loading);
+        this.getStateManager().viewHandler.add('webview_page', this._viewHandler_webview_page);
+    }
+
+    componentDisconnectedCallback() {
+        this.getStateManager().viewHandler.remove('webview_loading', this._viewHandler_webview_loading);
+        this.getStateManager().viewHandler.remove('webview_page', this._viewHandler_webview_page);
+    }
+
     render() {
         return `
             ${this.sharedStyle}
@@ -100,12 +115,10 @@ export default class ToolbarComponent extends BaseComponent {
         `;
     }
 
-    checkWebviewLoadingStatus() {
-        const webviewLoadingState = this.getStateManager().state.get('webview_loading');
-
+    _viewHandler_webview_loading(state) {
         const indicator = this.contentRoot.querySelector('div[data-indicator]');
 
-        if (webviewLoadingState.isLoading) {
+        if (state.isLoading) {
             indicator.setAttribute('data-indicator', 'active');
 
             const reloadButton = this.contentRoot
@@ -125,12 +138,10 @@ export default class ToolbarComponent extends BaseComponent {
         }
     }
 
-    checkWebviewPageStatus() {
-        const webviewPageState = this.getStateManager().state.get('webview_page');
-
+    _viewHandler_webview_page(state) {
         const backButton = this.contentRoot
             .querySelector('navbutton-component[data-type="webview_navigation"][data-action="back"]');
-        if (webviewPageState.canGoBack) {
+        if (state.canGoBack) {
             backButton.removeAttribute('disabled');
         }
         else {
@@ -139,7 +150,7 @@ export default class ToolbarComponent extends BaseComponent {
 
         const forwardButton = this.contentRoot
             .querySelector('navbutton-component[data-type="webview_navigation"][data-action="forward"]');
-        if (webviewPageState.canGoForward) {
+        if (state.canGoForward) {
             forwardButton.removeAttribute('disabled');
         }
         else {
