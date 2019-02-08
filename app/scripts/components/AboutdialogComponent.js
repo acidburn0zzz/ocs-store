@@ -3,20 +3,31 @@ import BaseComponent from './BaseComponent.js';
 export default class AboutdialogComponent extends BaseComponent {
 
     init() {
+        this.state = {
+            productName: '',
+            version: '',
+            description: '',
+            author: '',
+            license: '',
+            homepage: '',
+            repository: '',
+            bugs: ''
+        };
+
         this._dialogComponent = null;
+
+        this._openDialog = this._openDialog.bind(this);
+    }
+
+    componentConnectedCallback() {
+        this.getStateManager().viewHandler.add('general_about', this._openDialog);
+    }
+
+    componentDisconnectedCallback() {
+        this.getStateManager().viewHandler.remove('general_about', this._openDialog);
     }
 
     render() {
-        const generalAboutState = this.getStateManager().state.get('general_about');
-        const productName = generalAboutState.productName || '';
-        const version = generalAboutState.version || '';
-        const description = generalAboutState.description || '';
-        const author = generalAboutState.author || '';
-        const license = generalAboutState.license || '';
-        const homepage = generalAboutState.homepage || '';
-        const repository = generalAboutState.repository || '';
-        const bugs = generalAboutState.bugs || '';
-
         return `
             ${this.sharedStyle}
 
@@ -35,17 +46,17 @@ export default class AboutdialogComponent extends BaseComponent {
             <dialog-component data-min-width="500px" data-max-width="500px" data-header data-autoclose>
             <h3 slot="header">About This App</h3>
             <div slot="content">
-            <h4 class="icon-ocs-store">${productName}</h4>
-            <p>Version ${version}</p>
-            <p>${description}</p>
+            <h4 class="icon-ocs-store">${this.state.productName}</h4>
+            <p>Version ${this.state.version}</p>
+            <p>${this.state.description}</p>
             <p>
-            Author: ${author}<br>
-            License: ${license}
+            Author: ${this.state.author}<br>
+            License: ${this.state.license}
             </p>
             <p>
-            Website: <a href="${homepage}">${homepage}</a><br>
-            Project page: <a href="${repository}">${repository}</a><br>
-            Report a bug: <a href="${bugs}">${bugs}</a>
+            Website: <a href="${this.state.homepage}">${this.state.homepage}</a><br>
+            Project page: <a href="${this.state.repository}">${this.state.repository}</a><br>
+            Report a bug: <a href="${this.state.bugs}">${this.state.bugs}</a>
             </p>
             </div>
             </dialog-component>
@@ -74,6 +85,11 @@ export default class AboutdialogComponent extends BaseComponent {
 
     close() {
         this._dialogComponent.close();
+    }
+
+    _openDialog(state) {
+        this.update(Object.assign(this.state, state));
+        this.open();
     }
 
 }

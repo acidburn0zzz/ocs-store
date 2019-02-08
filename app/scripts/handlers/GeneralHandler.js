@@ -1,40 +1,29 @@
 export default class GeneralHandler {
 
     constructor(stateManager, ipcRenderer) {
-        this.stateManager = stateManager;
-        this.ipcRenderer = ipcRenderer;
+        this._stateManager = stateManager;
+        this._ipcRenderer = ipcRenderer;
 
-        this.appPackage = this.ipcRenderer.sendSync('app', 'package');
+        this._appPackage = this._ipcRenderer.sendSync('app', 'package');
 
-        this.aboutdialogComponent = null;
-
-        this.stateManager.actionHandler
-            .add('general_about', this.aboutAction.bind(this));
-
-        this.stateManager.viewHandler
-            .add('general_about', this.aboutView.bind(this));
+        this._subscribe();
     }
 
-    aboutAction() {
-        return {
-            name: this.appPackage.name,
-            productName: this.appPackage.productName,
-            version: this.appPackage.version,
-            description: this.appPackage.description,
-            author: this.appPackage.author,
-            license: this.appPackage.license,
-            homepage: this.appPackage.homepage,
-            repository: this.appPackage.repository,
-            bugs: this.appPackage.bugs
-        };
-    }
-
-    aboutView() {
-        if (!this.aboutdialogComponent) {
-            this.aboutdialogComponent = document.createElement('aboutdialog-component');
-            this.stateManager.target.contentRoot.appendChild(this.aboutdialogComponent);
-        }
-        this.aboutdialogComponent.open();
+    _subscribe() {
+        this._stateManager.actionHandler
+            .add('general_about', () => {
+                return {
+                    name: this._appPackage.name,
+                    productName: this._appPackage.productName,
+                    version: this._appPackage.version,
+                    description: this._appPackage.description,
+                    author: this._appPackage.author,
+                    license: this._appPackage.license,
+                    homepage: this._appPackage.homepage,
+                    repository: this._appPackage.repository,
+                    bugs: this._appPackage.bugs
+                };
+            });
     }
 
 }

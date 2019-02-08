@@ -15,7 +15,7 @@ export default class RootComponent extends BaseComponent {
     init() {
         this._stateManager = new Chirit.StateManager(this);
 
-        document.title = this.ipcRenderer.sendSync('app', 'package').productName;
+        document.title = ipcRenderer.sendSync('app', 'package').productName;
 
         const ocsManagerApi = new OcsManagerApi(ipcRenderer.sendSync('ocs-manager', 'url'));
 
@@ -39,6 +39,8 @@ export default class RootComponent extends BaseComponent {
             </pageswitcher-component>
 
             <collectiondialog-component></collectiondialog-component>
+
+            <aboutdialog-component></aboutdialog-component>
         `;
     }
 
