@@ -44,10 +44,6 @@ export default class RootComponent extends BaseComponent {
         `;
     }
 
-    componentUpdatedCallback() {
-        this.dispatch('ocsManager_initial', {});
-    }
-
     getStateManager() {
         return this._stateManager;
     }

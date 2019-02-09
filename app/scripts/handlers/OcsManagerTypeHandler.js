@@ -15,12 +15,12 @@ export default class OcsManagerTypeHandler {
 
         this._subscribe();
 
-        this._receive();
+        this._receiveMessage();
     }
 
     _subscribe() {
         this._stateManager.actionHandler
-            .add('ocsManager_initial', async () => {
+            .add('ocsManager_activate', async () => {
                 if (await this._ocsManagerApi.connect()) {
                     let message = null;
 
@@ -42,15 +42,15 @@ export default class OcsManagerTypeHandler {
                 }
                 return false;
             })
-            .add('ocsManager_ocsUrl', (params) => {
+            .add('ocsManager_ocsUrl', (data) => {
                 this._ocsManagerApi.send(
                     'ItemHandler::getItemByOcsUrl',
-                    [params.url, params.providerKey, params.contentId]
+                    [data.url, data.providerKey, data.contentId]
                 );
                 return false;
             })
-            .add('ocsManager_externalUrl', (params) => {
-                this._ocsManagerApi.send('SystemHandler::openUrl', [params.url]);
+            .add('ocsManager_externalUrl', (data) => {
+                this._ocsManagerApi.send('SystemHandler::openUrl', [data.url]);
                 return false;
             })
             .add('ocsManager_downloading', async () => {
@@ -61,8 +61,8 @@ export default class OcsManagerTypeHandler {
                     metadataSet: metadataSet
                 };
             })
-            .add('ocsManager_navigation', (params) => {
-                switch (params.action) {
+            .add('ocsManager_navigation', (data) => {
+                switch (data.action) {
                     case 'collection':
                         this._collectiondialogComponent.open();
                         break;
@@ -71,7 +71,7 @@ export default class OcsManagerTypeHandler {
             });
     }
 
-    _receive() {
+    _receiveMessage() {
         this._ocsManagerApi.callback
             .set('ItemHandler::metadataSetChanged', () => {
                 this._stateManager.dispatch('ocsManager_downloading', {});

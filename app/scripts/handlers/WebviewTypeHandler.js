@@ -4,6 +4,7 @@ export default class WebviewTypeHandler {
         this._stateManager = stateManager;
         this._ipcRenderer = ipcRenderer;
 
+        this._isDebugMode = this._ipcRenderer.sendSync('app', 'isDebugMode');
         this._startPage = this._ipcRenderer.sendSync('store-application', 'startPage');
 
         this._webviewComponent = null;
@@ -13,38 +14,38 @@ export default class WebviewTypeHandler {
 
     _subscribe() {
         this._stateManager.actionHandler
-            .add('webview_activate', (params) => {
-                this._webviewComponent = params.webviewComponent;
+            .add('webview_activate', (data) => {
+                this._webviewComponent = data.webviewComponent;
                 return {
                     src: this._startPage,
                     isActivated: true,
-                    isDebugMode: this._ipcRenderer.sendSync('app', 'isDebugMode')
+                    isDebugMode: this._isDebugMode
                 };
             })
-            .add('webview_loading', (params) => {
+            .add('webview_loading', (data) => {
                 return {
-                    isLoading: params.isLoading
+                    isLoading: data.isLoading
                 };
             })
-            .add('webview_page', (params) => {
+            .add('webview_page', (data) => {
                 return {
-                    url: params.url,
-                    title: params.title,
-                    canGoBack: params.canGoBack,
-                    canGoForward: params.canGoForward,
+                    url: data.url,
+                    title: data.title,
+                    canGoBack: data.canGoBack,
+                    canGoForward: data.canGoForward,
                     startPage: this._startPage
                 };
             })
-            .add('webview_startPage', (params) => {
-                this._startPage = params.url;
+            .add('webview_startPage', (data) => {
+                this._startPage = data.url;
                 this._ipcRenderer.sendSync('store-application', 'startPage', this._startPage);
                 this._webviewComponent.loadUrl(this._startPage);
                 return false;
             })
-            .add('webview_navigation', (params) => {
-                switch (params.action) {
+            .add('webview_navigation', (data) => {
+                switch (data.action) {
                     case 'load':
-                        this._webviewComponent.loadUrl(params.url);
+                        this._webviewComponent.loadUrl(data.url);
                         break;
                     case 'home':
                         this._webviewComponent.loadUrl(this._startPage);
