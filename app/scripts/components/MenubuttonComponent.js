@@ -85,12 +85,9 @@ export default class MenubuttonComponent extends BaseComponent {
 
     componentUpdatedCallback() {
         this._menubuttonElement = this.contentRoot.querySelector('div[data-menubutton]');
-        this._menuitemsElement = this.contentRoot.querySelector('nav[data-menuitems]');
-        this._togglerElement = this.contentRoot.querySelector('div[data-toggler]');
-
         this._menubuttonElement.addEventListener('click', this._toggle.bind(this), false);
-        this._togglerElement.addEventListener('click', this._toggle.bind(this), false);
 
+        this._menuitemsElement = this.contentRoot.querySelector('nav[data-menuitems]');
         this._menuitemsElement.addEventListener('click', (event) => {
             if (event.target.closest('a')) {
                 event.preventDefault();
@@ -102,6 +99,9 @@ export default class MenubuttonComponent extends BaseComponent {
                 }
             }
         }, false);
+
+        this._togglerElement = this.contentRoot.querySelector('div[data-toggler]');
+        this._togglerElement.addEventListener('click', this._toggle.bind(this), false);
     }
 
     _toggle() {

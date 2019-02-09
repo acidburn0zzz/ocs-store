@@ -17,11 +17,13 @@ export default class OmniboxComponent extends BaseComponent {
     }
 
     componentConnectedCallback() {
-        this.getStateManager().viewHandler.add('webview_page', this._viewHandler_webview_page);
+        this.getStateManager().viewHandler
+            .add('webview_page', this._viewHandler_webview_page);
     }
 
     componentDisconnectedCallback() {
-        this.getStateManager().viewHandler.remove('webview_page', this._viewHandler_webview_page);
+        this.getStateManager().viewHandler
+            .remove('webview_page', this._viewHandler_webview_page);
     }
 
     render() {

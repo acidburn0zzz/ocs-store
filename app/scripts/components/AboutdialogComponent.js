@@ -20,11 +20,13 @@ export default class AboutdialogComponent extends BaseComponent {
     }
 
     componentConnectedCallback() {
-        this.getStateManager().viewHandler.add('general_about', this._viewHandler_general_about);
+        this.getStateManager().viewHandler
+            .add('general_about', this._viewHandler_general_about);
     }
 
     componentDisconnectedCallback() {
-        this.getStateManager().viewHandler.remove('general_about', this._viewHandler_general_about);
+        this.getStateManager().viewHandler
+            .remove('general_about', this._viewHandler_general_about);
     }
 
     render() {

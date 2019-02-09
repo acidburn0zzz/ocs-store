@@ -6,8 +6,7 @@ export default class StatusbarComponent extends BaseComponent {
         return `
             ${this.sharedStyle}
 
-            <div>
-            </div>
+            <div></div>
         `;
     }
 

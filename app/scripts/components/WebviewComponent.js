@@ -17,11 +17,13 @@ export default class WebviewComponent extends BaseComponent {
     }
 
     componentConnectedCallback() {
-        this.getStateManager().viewHandler.add('webview_activate', this._viewHandler_webview_activate);
+        this.getStateManager().viewHandler
+            .add('webview_activate', this._viewHandler_webview_activate);
     }
 
     componentDisconnectedCallback() {
-        this.getStateManager().viewHandler.remove('webview_activate', this._viewHandler_webview_activate);
+        this.getStateManager().viewHandler
+            .remove('webview_activate', this._viewHandler_webview_activate);
     }
 
     render() {

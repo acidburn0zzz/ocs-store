@@ -9,15 +9,17 @@ export default class ToolbarComponent extends BaseComponent {
     }
 
     componentConnectedCallback() {
-        this.getStateManager().viewHandler.add('webview_loading', this._viewHandler_webview_loading);
-        this.getStateManager().viewHandler.add('webview_page', this._viewHandler_webview_page);
-        this.getStateManager().viewHandler.add('ocsManager_downloading', this._viewHandler_ocsManager_downloading);
+        this.getStateManager().viewHandler
+            .add('webview_loading', this._viewHandler_webview_loading)
+            .add('webview_page', this._viewHandler_webview_page)
+            .add('ocsManager_downloading', this._viewHandler_ocsManager_downloading);
     }
 
     componentDisconnectedCallback() {
-        this.getStateManager().viewHandler.remove('webview_loading', this._viewHandler_webview_loading);
-        this.getStateManager().viewHandler.remove('webview_page', this._viewHandler_webview_page);
-        this.getStateManager().viewHandler.remove('ocsManager_downloading', this._viewHandler_ocsManager_downloading);
+        this.getStateManager().viewHandler
+            .remove('webview_loading', this._viewHandler_webview_loading)
+            .remove('webview_page', this._viewHandler_webview_page)
+            .remove('ocsManager_downloading', this._viewHandler_ocsManager_downloading);
     }
 
     render() {
