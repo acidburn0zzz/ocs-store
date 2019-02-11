@@ -6,6 +6,10 @@ export default class NavbuttonComponent extends BaseComponent {
         return ['disabled', 'data-type', 'data-action', 'data-icon'];
     }
 
+    init() {
+        this.contentRoot.addEventListener('click', this._handleClick.bind(this));
+    }
+
     render() {
         const disabled = this.hasAttribute('disabled') ? 'disabled' : '';
         const icon = this.getAttribute('data-icon') || this.getAttribute('data-action') || '';
@@ -25,18 +29,15 @@ export default class NavbuttonComponent extends BaseComponent {
         `;
     }
 
-    componentUpdatedCallback() {
+    _handleClick() {
         if (!this.hasAttribute('disabled')
             && this.getAttribute('data-type')
             && this.getAttribute('data-action')
         ) {
-            const buttonComponent = this.contentRoot.querySelector('button-component');
-            buttonComponent.addEventListener('click', () => {
-                this.dispatch(
-                    this.getAttribute('data-type'),
-                    {action: this.getAttribute('data-action')}
-                );
-            }, false);
+            this.dispatch(
+                this.getAttribute('data-type'),
+                {action: this.getAttribute('data-action')}
+            );
         }
     }
 

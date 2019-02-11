@@ -9,9 +9,7 @@ export default class OmniboxComponent extends BaseComponent {
             startPage: ''
         };
 
-        this._omniboxElement = null;
-        this._paletteElement = null;
-        this._togglerElement = null;
+        this.contentRoot.addEventListener('click', this._handleClick.bind(this));
 
         this._viewHandler_webview_page = this._viewHandler_webview_page.bind(this);
     }
@@ -149,47 +147,49 @@ export default class OmniboxComponent extends BaseComponent {
         `;
     }
 
-    componentUpdatedCallback() {
-        this._omniboxElement = this.contentRoot.querySelector('div[data-omnibox]');
-        this._omniboxElement.addEventListener('click', this._toggle.bind(this), false);
+    toggle() {
+        const omniboxElement = this.contentRoot.querySelector('div[data-omnibox]');
+        omniboxElement.setAttribute(
+            'data-omnibox',
+            (omniboxElement.getAttribute('data-omnibox') === 'active') ? 'inactive' : 'active'
+        );
 
-        this._paletteElement = this.contentRoot.querySelector('div[data-palette]');
-        this._paletteElement.addEventListener('click', (event) => {
-            if (event.target.closest('a')) {
-                event.preventDefault();
-                const anchorElement = event.target.closest('a');
-                if (anchorElement.getAttribute('target') === '_blank') {
-                    this.dispatch('ocsManager_externalUrl', {url: anchorElement.href});
-                }
-                this._toggle();
-            }
-            else if (event.target.closest('button')) {
-                event.preventDefault();
-                const buttonElement = event.target.closest('button');
-                if (buttonElement.getAttribute('name') === 'startPage') {
-                    this.dispatch('webview_startPage', {url: buttonElement.value});
-                }
-                this._toggle();
-            }
-        }, false);
+        const paletteElement = this.contentRoot.querySelector('div[data-palette]');
+        paletteElement.setAttribute(
+            'data-palette',
+            (paletteElement.getAttribute('data-palette') === 'active') ? 'inactive' : 'active'
+        );
 
-        this._togglerElement = this.contentRoot.querySelector('div[data-toggler]');
-        this._togglerElement.addEventListener('click', this._toggle.bind(this), false);
+        const togglerElement = this.contentRoot.querySelector('div[data-toggler]');
+        togglerElement.setAttribute(
+            'data-toggler',
+            (togglerElement.getAttribute('data-toggler') === 'active') ? 'inactive' : 'active'
+        );
     }
 
-    _toggle() {
-        this._omniboxElement.setAttribute(
-            'data-omnibox',
-            (this._omniboxElement.getAttribute('data-omnibox') === 'active') ? 'inactive' : 'active'
-        );
-        this._paletteElement.setAttribute(
-            'data-palette',
-            (this._paletteElement.getAttribute('data-palette') === 'active') ? 'inactive' : 'active'
-        );
-        this._togglerElement.setAttribute(
-            'data-toggler',
-            (this._togglerElement.getAttribute('data-toggler') === 'active') ? 'inactive' : 'active'
-        );
+    _handleClick(event) {
+        if (event.target.closest('a')) {
+            event.preventDefault();
+            const anchorElement = event.target.closest('a');
+            if (anchorElement.target === '_blank') {
+                this.dispatch('ocsManager_externalUrl', {url: anchorElement.href});
+            }
+            this.toggle();
+        }
+        else if (event.target.closest('button')) {
+            event.preventDefault();
+            const buttonElement = event.target.closest('button');
+            if (buttonElement.name === 'startPage') {
+                this.dispatch('webview_startPage', {url: buttonElement.value});
+            }
+            this.toggle();
+        }
+        else if (event.target.closest('div[data-omnibox]')) {
+            this.toggle();
+        }
+        else if (event.target.closest('div[data-toggler]')) {
+            this.toggle();
+        }
     }
 
     _viewHandler_webview_page(state) {

@@ -14,7 +14,7 @@ export default class AboutdialogComponent extends BaseComponent {
             bugs: ''
         };
 
-        this._dialogComponent = null;
+        this.contentRoot.addEventListener('click', this._handleClick.bind(this));
 
         this._viewHandler_general_about = this._viewHandler_general_about.bind(this);
     }
@@ -65,28 +65,24 @@ export default class AboutdialogComponent extends BaseComponent {
         `;
     }
 
-    componentUpdatedCallback() {
-        this._dialogComponent = this.contentRoot.querySelector('dialog-component');
-
-        this._dialogComponent.addEventListener('click', (event) => {
-            if (event.target.closest('a')) {
-                event.preventDefault();
-                const anchorElement = event.target.closest('a');
-                this.dispatch('webview_navigation', {
-                    action: 'load',
-                    url: anchorElement.href
-                });
-                this.close();
-            }
-        });
-    }
-
     open() {
-        this._dialogComponent.open();
+        this.contentRoot.querySelector('dialog-component').open();
     }
 
     close() {
-        this._dialogComponent.close();
+        this.contentRoot.querySelector('dialog-component').close();
+    }
+
+    _handleClick(event) {
+        if (event.target.closest('a')) {
+            event.preventDefault();
+            const anchorElement = event.target.closest('a');
+            this.dispatch('webview_navigation', {
+                action: 'load',
+                url: anchorElement.href
+            });
+            this.close();
+        }
     }
 
     _viewHandler_general_about(state) {

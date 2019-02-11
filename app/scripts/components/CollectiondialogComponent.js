@@ -2,10 +2,6 @@ import BaseComponent from './BaseComponent.js';
 
 export default class CollectiondialogComponent extends BaseComponent {
 
-    init() {
-        this._dialogComponent = null;
-    }
-
     render() {
         return `
             ${this.sharedStyle}
@@ -20,19 +16,12 @@ export default class CollectiondialogComponent extends BaseComponent {
         `;
     }
 
-    componentUpdatedCallback() {
-        this._dialogComponent = this.contentRoot.querySelector('dialog-component');
-
-        //this._dialogComponent.addEventListener('click', (event) => {
-        //});
-    }
-
     open() {
-        this._dialogComponent.open();
+        this.contentRoot.querySelector('dialog-component').open();
     }
 
     close() {
-        this._dialogComponent.close();
+        this.contentRoot.querySelector('dialog-component').close();
     }
 
 }

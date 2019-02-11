@@ -3,9 +3,7 @@ import BaseComponent from './BaseComponent.js';
 export default class MenubuttonComponent extends BaseComponent {
 
     init() {
-        this._menubuttonElement = null;
-        this._menuitemsElement = null;
-        this._togglerElement = null;
+        this.contentRoot.addEventListener('click', this._handleClick.bind(this));
     }
 
     render() {
@@ -83,40 +81,36 @@ export default class MenubuttonComponent extends BaseComponent {
         `;
     }
 
-    componentUpdatedCallback() {
-        this._menubuttonElement = this.contentRoot.querySelector('div[data-menubutton]');
-        this._menubuttonElement.addEventListener('click', this._toggle.bind(this), false);
+    toggle() {
+        const menubuttonElement = this.contentRoot.querySelector('div[data-menubutton]');
+        menubuttonElement.setAttribute(
+            'data-menubutton',
+            (menubuttonElement.getAttribute('data-menubutton') === 'active') ? 'inactive' : 'active'
+        );
 
-        this._menuitemsElement = this.contentRoot.querySelector('nav[data-menuitems]');
-        this._menuitemsElement.addEventListener('click', (event) => {
-            if (event.target.closest('a')) {
-                event.preventDefault();
-                this._toggle();
-                const action = event.target.closest('a[data-action]')
-                    .getAttribute('data-action');
-                if (action === 'about') {
-                    this.dispatch('general_about', {});
-                }
-            }
-        }, false);
+        const menuitemsElement = this.contentRoot.querySelector('nav[data-menuitems]');
+        menuitemsElement.setAttribute(
+            'data-menuitems',
+            (menuitemsElement.getAttribute('data-menuitems') === 'active') ? 'inactive' : 'active'
+        );
 
-        this._togglerElement = this.contentRoot.querySelector('div[data-toggler]');
-        this._togglerElement.addEventListener('click', this._toggle.bind(this), false);
+        const togglerElement = this.contentRoot.querySelector('div[data-toggler]');
+        togglerElement.setAttribute(
+            'data-toggler',
+            (togglerElement.getAttribute('data-toggler') === 'active') ? 'inactive' : 'active'
+        );
     }
 
-    _toggle() {
-        this._menubuttonElement.setAttribute(
-            'data-menubutton',
-            (this._menubuttonElement.getAttribute('data-menubutton') === 'active') ? 'inactive' : 'active'
-        );
-        this._menuitemsElement.setAttribute(
-            'data-menuitems',
-            (this._menuitemsElement.getAttribute('data-menuitems') === 'active') ? 'inactive' : 'active'
-        );
-        this._togglerElement.setAttribute(
-            'data-toggler',
-            (this._togglerElement.getAttribute('data-toggler') === 'active') ? 'inactive' : 'active'
-        );
+    _handleClick(event) {
+        this.toggle();
+        if (event.target.closest('a')) {
+            event.preventDefault();
+            const action = event.target.closest('a[data-action]')
+                .getAttribute('data-action');
+            if (action === 'about') {
+                this.dispatch('general_about', {});
+            }
+        }
     }
 
 }

@@ -14,7 +14,6 @@ export default class OcsManagerTypeHandler {
         this._updateCheckAfter = 86400000; // 1day (ms)
 
         this._subscribe();
-
         this._receiveMessage();
     }
 

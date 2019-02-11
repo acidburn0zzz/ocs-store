@@ -12,7 +12,7 @@ export default class DialogComponent extends BaseComponent {
     }
 
     init() {
-        this._containerElement = null;
+        this.contentRoot.addEventListener('click', this._handleClick.bind(this));
     }
 
     render() {
@@ -76,27 +76,25 @@ export default class DialogComponent extends BaseComponent {
         `;
     }
 
-    componentUpdatedCallback() {
-        this._containerElement = this.contentRoot.querySelector('div[data-container]');
-
-        this._containerElement.addEventListener('click', (event) => {
-            if (event.target.getAttribute('data-action') === 'autoclose') {
-                this.close();
-            }
-            else if (event.target.closest('[data-action="close"]')) {
-                this.close();
-            }
-        });
-    }
-
     open() {
-        this._containerElement.setAttribute('data-container', 'active');
+        this.contentRoot.querySelector('div[data-container]')
+            .setAttribute('data-container', 'active');
         this.dispatch('dialog-open', {});
     }
 
     close() {
-        this._containerElement.setAttribute('data-container', 'inactive');
+        this.contentRoot.querySelector('div[data-container]')
+            .setAttribute('data-container', 'inactive');
         this.dispatch('dialog-close', {});
+    }
+
+    _handleClick(event) {
+        if (event.target.getAttribute('data-action') === 'autoclose') {
+            this.close();
+        }
+        else if (event.target.closest('[data-action="close"]')) {
+            this.close();
+        }
     }
 
 }

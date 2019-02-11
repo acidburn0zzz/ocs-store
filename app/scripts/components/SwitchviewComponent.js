@@ -12,12 +12,12 @@ export default class SwitchviewComponent extends BaseComponent {
 
     switch(id) {
         for (const content of this.querySelectorAll('[slot="current"]')) {
-            content.setAttribute('slot', '');
+            content.slot = '';
         }
 
         const target = this.querySelector(`#${id}`);
         if (target) {
-            target.setAttribute('slot', 'current');
+            target.slot = 'current';
         }
     }
 

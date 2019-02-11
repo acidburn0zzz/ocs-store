@@ -75,9 +75,9 @@ export default class WebviewComponent extends BaseComponent {
     _createWebviewElement() {
         this._webviewElement = document.createElement('webview');
 
-        this._webviewElement.setAttribute('partition', this.state.partition);
-        this._webviewElement.setAttribute('preload', this.state.preload);
-        this._webviewElement.setAttribute('src', this.state.src);
+        this._webviewElement.partition = this.state.partition;
+        this._webviewElement.preload = this.state.preload;
+        this._webviewElement.src = this.state.src;
         this._webviewElement.className = 'flex-auto';
 
         this._webviewElement.addEventListener('did-start-loading', () => {
