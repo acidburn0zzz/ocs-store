@@ -15,7 +15,7 @@ export default class WebviewTypeHandler {
     _subscribe() {
         this._stateManager.actionHandler
             .add('webview_activate', (data) => {
-                this._webviewComponent = data.webviewComponent;
+                this._webviewComponent = data.component;
                 return {
                     src: this._startPage,
                     isActivated: true,

@@ -40,7 +40,7 @@ export default class WebviewComponent extends BaseComponent {
             this.contentRoot.appendChild(this._webviewElement);
         }
         else {
-            this.dispatch('webview_activate', {webviewComponent: this});
+            this.dispatch('webview_activate', {component: this});
         }
     }
 

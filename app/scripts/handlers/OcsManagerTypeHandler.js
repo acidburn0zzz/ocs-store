@@ -4,14 +4,13 @@ export default class OcsManagerTypeHandler {
         this._stateManager = stateManager;
         this._ocsManagerApi = ocsManagerApi;
 
-        this._collectiondialogComponent = this._stateManager.target.contentRoot
-            .querySelector('collectiondialog-component');
-
         this._installTypes = {};
         this._installedItems = {};
         this._updateAvailableItems = {};
 
         this._updateCheckAfter = 86400000; // 1day (ms)
+
+        this._collectiondialogComponent = null;
 
         this._subscribe();
         this._receiveMessage();
@@ -19,6 +18,10 @@ export default class OcsManagerTypeHandler {
 
     _subscribe() {
         this._stateManager.actionHandler
+            .add('ocsManager_activate', (data) => {
+                this._collectiondialogComponent = data.component;
+                return {isActivated: true};
+            })
             .add('ocsManager_activate', async () => {
                 if (await this._ocsManagerApi.connect()) {
                     let message = null;
@@ -39,7 +42,7 @@ export default class OcsManagerTypeHandler {
                         this._ocsManagerApi.send('UpdateHandler::checkAll', []);
                     }
                 }
-                return false;
+                return {};
             })
             .add('ocsManager_ocsUrl', (data) => {
                 this._ocsManagerApi.send(

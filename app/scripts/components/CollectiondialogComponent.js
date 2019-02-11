@@ -2,6 +2,24 @@ import BaseComponent from './BaseComponent.js';
 
 export default class CollectiondialogComponent extends BaseComponent {
 
+    init() {
+        this.state = {
+            isActivated: false
+        };
+
+        this._viewHandler_ocsManager_activate = this._viewHandler_ocsManager_activate.bind(this);
+    }
+
+    componentConnectedCallback() {
+        this.getStateManager().viewHandler
+            .add('ocsManager_activate', this._viewHandler_ocsManager_activate);
+    }
+
+    componentDisconnectedCallback() {
+        this.getStateManager().viewHandler
+            .remove('ocsManager_activate', this._viewHandler_ocsManager_activate);
+    }
+
     render() {
         return `
             ${this.sharedStyle}
@@ -16,12 +34,22 @@ export default class CollectiondialogComponent extends BaseComponent {
         `;
     }
 
+    componentUpdatedCallback() {
+        if (!this.state.isActivated) {
+            this.dispatch('ocsManager_activate', {component: this});
+        }
+    }
+
     open() {
         this.contentRoot.querySelector('dialog-component').open();
     }
 
     close() {
         this.contentRoot.querySelector('dialog-component').close();
+    }
+
+    _viewHandler_ocsManager_activate(state) {
+        this.update(Object.assign(this.state, state));
     }
 
 }
