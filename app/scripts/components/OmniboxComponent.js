@@ -193,7 +193,7 @@ export default class OmniboxComponent extends BaseComponent {
     }
 
     _viewHandler_webview_page(state) {
-        this.update(Object.assign(this.state, state));
+        this.update({...this.state, ...state});
     }
 
 }

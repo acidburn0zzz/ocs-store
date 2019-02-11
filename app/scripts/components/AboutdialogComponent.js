@@ -86,7 +86,7 @@ export default class AboutdialogComponent extends BaseComponent {
     }
 
     _viewHandler_general_about(state) {
-        this.update(Object.assign(this.state, state));
+        this.update({...this.state, ...state});
         this.open();
     }
 

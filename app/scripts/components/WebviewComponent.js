@@ -4,26 +4,29 @@ export default class WebviewComponent extends BaseComponent {
 
     init() {
         this.state = {
-            partition: 'persist:opendesktop',
-            preload: './scripts/renderers/webview.js',
+            partition: '',
+            preload: '',
             src: '',
-            isActivated: false,
             isDebugMode: false
         };
 
+        this._isActivated = false;
         this._webviewElement = null;
 
         this._viewHandler_webview_activate = this._viewHandler_webview_activate.bind(this);
+        this._viewHandler_webview_config = this._viewHandler_webview_config.bind(this);
     }
 
     componentConnectedCallback() {
         this.getStateManager().viewHandler
-            .add('webview_activate', this._viewHandler_webview_activate);
+            .add('webview_activate', this._viewHandler_webview_activate)
+            .add('webview_config', this._viewHandler_webview_config);
     }
 
     componentDisconnectedCallback() {
         this.getStateManager().viewHandler
-            .remove('webview_activate', this._viewHandler_webview_activate);
+            .remove('webview_activate', this._viewHandler_webview_activate)
+            .remove('webview_config', this._viewHandler_webview_config);
     }
 
     render() {
@@ -33,10 +36,11 @@ export default class WebviewComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
-        if (this.state.isActivated) {
-            if (!this._webviewElement) {
-                this._createWebviewElement();
-            }
+        if (this._webviewElement) {
+            this.contentRoot.appendChild(this._webviewElement);
+        }
+        else if (this._isActivated) {
+            this._createWebviewElement();
             this.contentRoot.appendChild(this._webviewElement);
         }
         else {
@@ -75,9 +79,9 @@ export default class WebviewComponent extends BaseComponent {
     _createWebviewElement() {
         this._webviewElement = document.createElement('webview');
 
-        this._webviewElement.partition = this.state.partition;
-        this._webviewElement.preload = this.state.preload;
-        this._webviewElement.src = this.state.src;
+        this._webviewElement.setAttribute('partition', this.state.partition);
+        this._webviewElement.setAttribute('preload', this.state.preload);
+        this._webviewElement.setAttribute('src', this.state.src);
         this._webviewElement.className = 'flex-auto';
 
         this._webviewElement.addEventListener('did-start-loading', () => {
@@ -141,7 +145,12 @@ export default class WebviewComponent extends BaseComponent {
     }
 
     _viewHandler_webview_activate(state) {
-        this.update(Object.assign(this.state, state));
+        this._isActivated = state.isActivated;
+        this.dispatch('webview_config', {});
+    }
+
+    _viewHandler_webview_config(state) {
+        this.update({...this.state, ...state});
     }
 
 }

@@ -4,8 +4,10 @@ export default class WebviewTypeHandler {
         this._stateManager = stateManager;
         this._ipcRenderer = ipcRenderer;
 
-        this._isDebugMode = this._ipcRenderer.sendSync('app', 'isDebugMode');
+        this._partition = 'persist:opendesktop';
+        this._preload = './scripts/renderers/webview.js';
         this._startPage = this._ipcRenderer.sendSync('store-application', 'startPage');
+        this._isDebugMode = this._ipcRenderer.sendSync('app', 'isDebugMode');
 
         this._webviewComponent = null;
 
@@ -16,9 +18,13 @@ export default class WebviewTypeHandler {
         this._stateManager.actionHandler
             .add('webview_activate', (data) => {
                 this._webviewComponent = data.component;
+                return {isActivated: true};
+            })
+            .add('webview_config', () => {
                 return {
+                    partition: this._partition,
+                    preload: this._preload,
                     src: this._startPage,
-                    isActivated: true,
                     isDebugMode: this._isDebugMode
                 };
             })

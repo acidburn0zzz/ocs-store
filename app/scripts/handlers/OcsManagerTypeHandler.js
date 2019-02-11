@@ -44,6 +44,13 @@ export default class OcsManagerTypeHandler {
                 }
                 return {};
             })
+            .add('ocsManager_items', () => {
+                return {
+                    installTypes: this._installTypes,
+                    installedItems: this._installedItems,
+                    updateAvailableItems: this._updateAvailableItems
+                };
+            })
             .add('ocsManager_ocsUrl', (data) => {
                 this._ocsManagerApi.send(
                     'ItemHandler::getItemByOcsUrl',
