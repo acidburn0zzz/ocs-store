@@ -4,6 +4,9 @@ export default class CollectiondialogComponent extends BaseComponent {
 
     init() {
         this.state = {
+            installType: '',
+            isApplicableType: false,
+            categorizedInstalledItems: {},
             installTypes: {},
             installedItems: {},
             updateAvailableItems: {}

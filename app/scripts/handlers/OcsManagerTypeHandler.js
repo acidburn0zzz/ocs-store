@@ -44,8 +44,28 @@ export default class OcsManagerTypeHandler {
                 }
                 return {};
             })
-            .add('ocsManager_items', () => {
+            .add('ocsManager_items', async (data) => {
+                const installType = data.installType || '';
+                let isApplicableType = false;
+
+                if (installType) {
+                    const message = await this._ocsManagerApi.sendSync('DesktopThemeHandler::isApplicableType', [installType]);
+                    isApplicableType = message.data[0];
+                }
+
+                // {installType: {id: installedItem}}
+                const categorizedInstalledItems = {};
+                for (const [key, value] of Object.entries(this._installedItems)) {
+                    if (!categorizedInstalledItems[value.install_type]) {
+                        categorizedInstalledItems[value.install_type] = {};
+                    }
+                    categorizedInstalledItems[value.install_type][key] = value;
+                }
+
                 return {
+                    installType: installType,
+                    isApplicableType: isApplicableType,
+                    categorizedInstalledItems: categorizedInstalledItems,
                     installTypes: this._installTypes,
                     installedItems: this._installedItems,
                     updateAvailableItems: this._updateAvailableItems
