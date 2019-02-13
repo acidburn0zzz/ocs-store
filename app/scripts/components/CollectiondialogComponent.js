@@ -14,6 +14,8 @@ export default class CollectiondialogComponent extends BaseComponent {
 
         this._isActivated = false;
 
+        this.contentRoot.addEventListener('click', this._handleClick.bind(this));
+
         this._viewHandler_ocsManager_activate = this._viewHandler_ocsManager_activate.bind(this);
         this._viewHandler_ocsManager_items = this._viewHandler_ocsManager_items.bind(this);
     }
@@ -98,6 +100,19 @@ export default class CollectiondialogComponent extends BaseComponent {
             }
         }
         return `<ul>${list.join('')}</ul>`;
+    }
+
+    _handleClick(event) {
+        if (event.target.closest('a')) {
+            event.preventDefault();
+            const anchorElement = event.target.closest('a');
+            if (anchorElement.getAttribute('data-install-type')) {
+                this.dispatch(
+                    'ocsManager_items',
+                    {installType: anchorElement.getAttribute('data-install-type')}
+                );
+            }
+        }
     }
 
     _viewHandler_ocsManager_activate(state) {
