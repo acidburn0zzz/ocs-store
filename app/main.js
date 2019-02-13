@@ -129,17 +129,26 @@ function isDirectory(path) {
     return false;
 }
 
-function previewPicPath(id) {
-    // "id" will be URL of product file
-    const filename = btoa(id).slice(-255);
+function btoa(string) {
+    const buffer = (string instanceof Buffer) ? string : Buffer.from(string.toString(), 'binary');
+    return buffer.toString('base64');
+}
+
+/*function atob(string) {
+    return Buffer.from(string, 'base64').toString('binary');
+}*/
+
+function previewPicPath(itemKey) {
+    // "itemKey" will be URL of product file
+    const filename = btoa(itemKey).slice(-255);
     return `${previewPicDirectory}/${filename}`;
 }
 
-function downloadPreviewPic(id, url) {
+function downloadPreviewPic(itemKey, url) {
     if (!isDirectory(previewPicDirectory)) {
         fs.mkdirSync(previewPicDirectory);
     }
-    const path = previewPicPath(id);
+    const path = previewPicPath(itemKey);
     request.get(url)
         .on('error', (error) => {
             console.error(error);
@@ -147,8 +156,8 @@ function downloadPreviewPic(id, url) {
         .pipe(fs.createWriteStream(path));
 }
 
-function removePreviewPic(id) {
-    const path = previewPicPath(id);
+function removePreviewPic(itemKey) {
+    const path = previewPicPath(itemKey);
     if (isFile(path)) {
         fs.unlinkSync(path);
     }
@@ -200,16 +209,16 @@ ipcMain.on('store-application', (event, key, value) => {
     event.returnValue = key ? appConfigStore.get(key) : appConfigStore.store;
 });
 
-ipcMain.on('previewPic', (event, action, id, url) => {
-    if (action === 'path' && id) {
-        event.returnValue = previewPicPath(id);
+ipcMain.on('previewPic', (event, action, itemKey, url) => {
+    if (action === 'path' && itemKey) {
+        event.returnValue = previewPicPath(itemKey);
     }
-    else if (action === 'download' && id && url) {
-        downloadPreviewPic(id, url);
+    else if (action === 'download' && itemKey && url) {
+        downloadPreviewPic(itemKey, url);
         event.returnValue = undefined;
     }
-    else if (action === 'remove' && id) {
-        removePreviewPic(id);
+    else if (action === 'remove' && itemKey) {
+        removePreviewPic(itemKey);
         event.returnValue = undefined;
     }
     event.returnValue = false;
