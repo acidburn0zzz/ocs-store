@@ -33,6 +33,8 @@ export default class CollectionComponent extends BaseComponent {
 
             <style>
             nav ul li[data-current="yes"] {}
+
+            button[data-apply="inactive"] {}
             </style>
 
             <div class="flex">
@@ -63,6 +65,7 @@ export default class CollectionComponent extends BaseComponent {
 
     _createItemList() {
         const installedItems = this.state.categorizedInstalledItems[this.state.installType];
+        const apply = this.state.isApplicableType ? 'active' : 'inactive';
         const list = [];
         if (installedItems && Object.keys(installedItems).length) {
             for (const [key, value] of Object.entries(installedItems)) {
@@ -71,6 +74,8 @@ export default class CollectionComponent extends BaseComponent {
                     list.push(`
                         <li>
                         <a href="#" data-installed-item="${key}">${file}</a>
+                        <button class="button-accept" data-apply="${apply}">Apply</button>
+                        <button class="button-warning">Delete</button>
                         </li>
                     `);
                 }
