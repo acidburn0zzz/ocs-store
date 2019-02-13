@@ -35,11 +35,21 @@ export default class CollectiondialogComponent extends BaseComponent {
             ${this.sharedStyle}
 
             <style>
+            nav ul li[data-current="yes"] {}
             </style>
 
-            <dialog-component data-min-width="80%" data-max-width="1000px" data-min-height="80%" data-max-height="800px" data-header data-autoclose>
-            <h3 slot="header">My Collection</h3>
-            <div slot="content"></div>
+            <dialog-component
+                data-min-width="80%" data-max-width="1000px"
+                data-min-height="80%" data-max-height="800px"
+                data-header data-autoclose>
+            <h3 slot="header">
+            <span>My Collection</span>
+            <span>${Object.keys(this.state.installedItems).length}</span>
+            </h3>
+            <div slot="content" class="flex">
+            <nav>${this._createCategoryList()}</nav>
+            <div class="flex-auto">${this._createItemList()}</div>
+            </div>
             </dialog-component>
         `;
     }
@@ -56,6 +66,38 @@ export default class CollectiondialogComponent extends BaseComponent {
 
     close() {
         this.contentRoot.querySelector('dialog-component').close();
+    }
+
+    _createCategoryList() {
+        const list = [];
+        if (Object.keys(this.state.categorizedInstalledItems).length) {
+            for (const [key, value] of Object.entries(this.state.categorizedInstalledItems)) {
+                const current = (key === this.state.installType) ? 'yes' : 'no';
+                list.push(`
+                    <li data-current="${current}">
+                    <a href="#" data-install-type="${key}">
+                    <span>${this.state.installTypes[key].name}</span>
+                    <span>${Object.keys(value).length}</span>
+                    </a>
+                    </li>
+                `);
+            }
+        }
+        return `<ul class="linklist">${list.join('')}</ul>`;
+    }
+
+    _createItemList() {
+        const installedItems = this.state.categorizedInstalledItems[this.state.installType];
+        const list = [];
+        if (installedItems && Object.keys(installedItems).length) {
+            for (const [key, value] of Object.entries(installedItems)) {
+                list.push(`
+                    <li>
+                    </li>
+                `);
+            }
+        }
+        return `<ul>${list.join('')}</ul>`;
     }
 
     _viewHandler_ocsManager_activate(state) {
