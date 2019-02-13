@@ -4,6 +4,7 @@ export default class OcsManagerTypeHandler {
         this._stateManager = stateManager;
         this._ocsManagerApi = ocsManagerApi;
 
+        this._installType = '';
         this._installTypes = {};
         this._installedItems = {};
         this._updateAvailableItems = {};
@@ -45,11 +46,11 @@ export default class OcsManagerTypeHandler {
                 return {};
             })
             .add('ocsManager_items', async (data) => {
-                const installType = data.installType || '';
+                this._installType = data.installType || '';
                 let isApplicableType = false;
 
-                if (installType) {
-                    const message = await this._ocsManagerApi.sendSync('DesktopThemeHandler::isApplicableType', [installType]);
+                if (this._installType) {
+                    const message = await this._ocsManagerApi.sendSync('DesktopThemeHandler::isApplicableType', [this._installType]);
                     isApplicableType = message.data[0];
                 }
 
@@ -63,7 +64,7 @@ export default class OcsManagerTypeHandler {
                 }
 
                 return {
-                    installType: installType,
+                    installType: this._installType,
                     isApplicableType: isApplicableType,
                     categorizedInstalledItems: categorizedInstalledItems,
                     installTypes: this._installTypes,
@@ -72,10 +73,7 @@ export default class OcsManagerTypeHandler {
                 };
             })
             .add('ocsManager_ocsUrl', (data) => {
-                this._ocsManagerApi.send(
-                    'ItemHandler::getItemByOcsUrl',
-                    [data.url, data.providerKey, data.contentId]
-                );
+                this._ocsManagerApi.send('ItemHandler::getItemByOcsUrl', [data.url, data.providerKey, data.contentId]);
                 return false;
             })
             .add('ocsManager_externalUrl', (data) => {
@@ -89,6 +87,14 @@ export default class OcsManagerTypeHandler {
                     downloading: Object.keys(metadataSet).length,
                     metadataSet: metadataSet
                 };
+            })
+            .add('ocsManager_apply', (data) => {
+                this._ocsManagerApi.send('DesktopThemeHandler::applyTheme', [data.path, data.installType]);
+                return false;
+            })
+            .add('ocsManager_uninstall', (data) => {
+                this._ocsManagerApi.send('ItemHandler::uninstall', [data.itemKey]);
+                return false;
             })
             .add('ocsManager_navigation', (data) => {
                 switch (data.action) {
@@ -175,6 +181,8 @@ export default class OcsManagerTypeHandler {
                 this._updateAvailableItems = message.data[0];
 
                 // remove preview pic
+
+                this._stateManager.dispatch('ocsManager_items', {installType: this._installType});
             })
             .set('UpdateHandler::checkAllStarted', (message) => {
                 console.log(message);
