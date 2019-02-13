@@ -93,10 +93,14 @@ export default class CollectiondialogComponent extends BaseComponent {
         const list = [];
         if (installedItems && Object.keys(installedItems).length) {
             for (const [key, value] of Object.entries(installedItems)) {
-                list.push(`
-                    <li>
-                    </li>
-                `);
+                //const pic = getPic(value.url);
+                for (const file of value.files) {
+                    list.push(`
+                        <li>
+                        <a href="#" data-installed-item="${key}">${file}</a>
+                        </li>
+                    `);
+                }
             }
         }
         return `<ul>${list.join('')}</ul>`;
