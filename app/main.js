@@ -210,7 +210,10 @@ ipcMain.on('store-application', (event, key, value) => {
 });
 
 ipcMain.on('previewPic', (event, action, itemKey, url) => {
-    if (action === 'path' && itemKey) {
+    if (action === 'directory') {
+        event.returnValue = previewPicDirectory;
+    }
+    else if (action === 'path' && itemKey) {
         event.returnValue = previewPicPath(itemKey);
     }
     else if (action === 'download' && itemKey && url) {
@@ -221,5 +224,7 @@ ipcMain.on('previewPic', (event, action, itemKey, url) => {
         removePreviewPic(itemKey);
         event.returnValue = undefined;
     }
-    event.returnValue = false;
+    else {
+        event.returnValue = false;
+    }
 });
