@@ -5,6 +5,7 @@ export default class OcsManagerTypeHandler {
         this._ocsManagerApi = ocsManagerApi;
         this._ipcRenderer = ipcRenderer;
 
+        this._previewpicDirectory = this._ipcRenderer.sendSync('previewpic', 'directory');
         this._installType = '';
         this._installTypes = {};
         this._installedItems = {};
@@ -65,6 +66,7 @@ export default class OcsManagerTypeHandler {
                 }
 
                 return {
+                    previewpicDirectory: this._previewpicDirectory,
                     installType: this._installType,
                     isApplicableType: isApplicableType,
                     categorizedInstalledItems: categorizedInstalledItems,
@@ -96,7 +98,7 @@ export default class OcsManagerTypeHandler {
             .add('ocsManager_uninstall', (data) => {
                 this._ocsManagerApi.send('ItemHandler::uninstall', [data.itemKey]);
                 // Remove preview pic
-                this._ipcRenderer.sendSync('previewPic', 'remove', data.itemKey);
+                this._ipcRenderer.sendSync('previewpic', 'remove', data.itemKey);
                 return false;
             })
             .add('ocsManager_navigation', (data) => {
@@ -122,8 +124,8 @@ export default class OcsManagerTypeHandler {
                 else if (message.data[0].metadata.command === 'install') {
                     // Download preview pic
                     if (message.data[0].metadata.provider && message.data[0].metadata.content_id) {
-                        const previewPicUrl = `${message.data[0].metadata.provider}content/previewpic/${message.data[0].metadata.content_id}`;
-                        this._ipcRenderer.sendSync('previewPic', 'download', message.data[0].metadata.url, previewPicUrl);
+                        const previewpicUrl = `${message.data[0].metadata.provider}content/previewpic/${message.data[0].metadata.content_id}`;
+                        this._ipcRenderer.sendSync('previewpic', 'download', message.data[0].metadata.url, previewpicUrl);
                     }
                 }
                 // update component

@@ -11,7 +11,7 @@ const ocsManagerConfig = require('./configs/ocs-manager.json');
 
 const isDebugMode = process.argv.includes('--debug');
 
-const previewPicDirectory = `${app.getPath('userData')}/previewpic`;
+const previewpicDirectory = `${app.getPath('userData')}/previewpic`;
 
 let topWindow = null;
 let ocsManager = null;
@@ -138,17 +138,17 @@ function btoa(string) {
     return Buffer.from(string, 'base64').toString('binary');
 }*/
 
-function previewPicPath(itemKey) {
+function previewpicPath(itemKey) {
     // "itemKey" will be URL of product file
     const filename = btoa(itemKey).slice(-255);
-    return `${previewPicDirectory}/${filename}`;
+    return `${previewpicDirectory}/${filename}`;
 }
 
-function downloadPreviewPic(itemKey, url) {
-    if (!isDirectory(previewPicDirectory)) {
-        fs.mkdirSync(previewPicDirectory);
+function downloadpreviewpic(itemKey, url) {
+    if (!isDirectory(previewpicDirectory)) {
+        fs.mkdirSync(previewpicDirectory);
     }
-    const path = previewPicPath(itemKey);
+    const path = previewpicPath(itemKey);
     request.get(url)
         .on('error', (error) => {
             console.error(error);
@@ -156,8 +156,8 @@ function downloadPreviewPic(itemKey, url) {
         .pipe(fs.createWriteStream(path));
 }
 
-function removePreviewPic(itemKey) {
-    const path = previewPicPath(itemKey);
+function removepreviewpic(itemKey) {
+    const path = previewpicPath(itemKey);
     if (isFile(path)) {
         fs.unlinkSync(path);
     }
@@ -209,19 +209,19 @@ ipcMain.on('store-application', (event, key, value) => {
     event.returnValue = key ? appConfigStore.get(key) : appConfigStore.store;
 });
 
-ipcMain.on('previewPic', (event, action, itemKey, url) => {
+ipcMain.on('previewpic', (event, action, itemKey, url) => {
     if (action === 'directory') {
-        event.returnValue = previewPicDirectory;
+        event.returnValue = previewpicDirectory;
     }
     else if (action === 'path' && itemKey) {
-        event.returnValue = previewPicPath(itemKey);
+        event.returnValue = previewpicPath(itemKey);
     }
     else if (action === 'download' && itemKey && url) {
-        downloadPreviewPic(itemKey, url);
+        downloadpreviewpic(itemKey, url);
         event.returnValue = undefined;
     }
     else if (action === 'remove' && itemKey) {
-        removePreviewPic(itemKey);
+        removepreviewpic(itemKey);
         event.returnValue = undefined;
     }
     else {

@@ -4,6 +4,7 @@ export default class CollectionComponent extends BaseComponent {
 
     init() {
         this.state = {
+            previewpicDirectory: '',
             installType: '',
             isApplicableType: false,
             categorizedInstalledItems: {},
@@ -82,15 +83,14 @@ export default class CollectionComponent extends BaseComponent {
             }
 
             for (const [key, value] of Object.entries(installedItems)) {
-                //const previewPicUrl = this._picUrl(value.url);
-                const previewPicUrl = '';
+                const previewpicUrl = `file://${this._previewpicPath(key)}`;
                 for (const file of value.files) {
                     const path = `${destination}/${file}`;
                     const fileUrl = `file://${path}`;
                     list.push(`
                         <li>
                         <a href="${fileUrl}" target="_blank">
-                        <figure style="background-image: url(${previewPicUrl});"></figure>
+                        <figure style="background-image: url('${previewpicUrl}');"></figure>
                         <span>${file}</span>
                         </a>
                         <button class="button-accept"
@@ -105,6 +105,12 @@ export default class CollectionComponent extends BaseComponent {
         }
 
         return `<ul>${list.join('')}</ul>`;
+    }
+
+    _previewpicPath(itemKey) {
+        // See also main.js
+        const filename = btoa(itemKey).slice(-255);
+        return `${this.state.previewpicDirectory}/${filename}`;
     }
 
     _handleClick(event) {
