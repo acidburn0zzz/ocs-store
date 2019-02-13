@@ -1,13 +1,17 @@
+const fs = require('fs');
 const {spawn} = require('child_process');
 
 const {app, BrowserWindow, ipcMain} = require('electron');
 const ElectronStore = require('electron-store');
+const request = require('request');
 
 const appPackage = require('../package.json');
 const appConfig = require('./configs/application.json');
 const ocsManagerConfig = require('./configs/ocs-manager.json');
 
 const isDebugMode = process.argv.includes('--debug');
+
+const previewPicDirectory = `${app.getPath('userData')}/previewpic`;
 
 let topWindow = null;
 let ocsManager = null;
@@ -99,6 +103,57 @@ function createWindow() {
     });
 }
 
+function isFile(path) {
+    try {
+        const stats = fs.statSync(path);
+        if (stats.isFile()) {
+            return true;
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+    return false;
+}
+
+function isDirectory(path) {
+    try {
+        const stats = fs.statSync(path);
+        if (stats.isDirectory()) {
+            return true;
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+    return false;
+}
+
+function previewPicPath(id) {
+    // "id" will be URL of product file
+    const filename = btoa(id).slice(-255);
+    return `${previewPicDirectory}/${filename}`;
+}
+
+function downloadPreviewPic(id, url) {
+    if (!isDirectory(previewPicDirectory)) {
+        fs.mkdirSync(previewPicDirectory);
+    }
+    const path = previewPicPath(id);
+    request.get(url)
+        .on('error', (error) => {
+            console.error(error);
+        })
+        .pipe(fs.createWriteStream(path));
+}
+
+function removePreviewPic(id) {
+    const path = previewPicPath(id);
+    if (isFile(path)) {
+        fs.unlinkSync(path);
+    }
+}
+
 app.on('ready', async () => {
     ocsManagerUrl = await startOcsManager();
     createWindow();
@@ -143,4 +198,19 @@ ipcMain.on('store-application', (event, key, value) => {
         appConfigStore.set(key, value);
     }
     event.returnValue = key ? appConfigStore.get(key) : appConfigStore.store;
+});
+
+ipcMain.on('previewPic', (event, action, id, url) => {
+    if (action === 'path' && id) {
+        event.returnValue = previewPicPath(id);
+    }
+    else if (action === 'download' && id && url) {
+        downloadPreviewPic(id, url);
+        event.returnValue = undefined;
+    }
+    else if (action === 'remove' && id) {
+        removePreviewPic(id);
+        event.returnValue = undefined;
+    }
+    event.returnValue = false;
 });
