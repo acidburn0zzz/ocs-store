@@ -1,8 +1,9 @@
 export default class OcsManagerTypeHandler {
 
-    constructor(stateManager, ocsManagerApi) {
+    constructor(stateManager, ocsManagerApi, ipcRenderer) {
         this._stateManager = stateManager;
         this._ocsManagerApi = ocsManagerApi;
+        this._ipcRenderer = ipcRenderer;
 
         this._installType = '';
         this._installTypes = {};
@@ -94,6 +95,8 @@ export default class OcsManagerTypeHandler {
             })
             .add('ocsManager_uninstall', (data) => {
                 this._ocsManagerApi.send('ItemHandler::uninstall', [data.itemKey]);
+                // Remove preview pic
+                this._ipcRenderer.sendSync('previewPic', 'remove', data.itemKey);
                 return false;
             })
             .add('ocsManager_navigation', (data) => {
@@ -117,7 +120,11 @@ export default class OcsManagerTypeHandler {
                     console.error(new Error(message.data[0].message));
                 }
                 else if (message.data[0].metadata.command === 'install') {
-                    // download preview pic
+                    // Download preview pic
+                    if (message.data[0].metadata.provider && message.data[0].metadata.content_id) {
+                        const previewPicUrl = `${message.data[0].metadata.provider}content/previewpic/${message.data[0].metadata.content_id}`;
+                        this._ipcRenderer.sendSync('previewPic', 'download', message.data[0].metadata.url, previewPicUrl);
+                    }
                 }
                 // update component
             })
@@ -179,8 +186,6 @@ export default class OcsManagerTypeHandler {
                 this._installedItems = message.data[0];
                 message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigUpdateAvailableItems', []);
                 this._updateAvailableItems = message.data[0];
-
-                // remove preview pic
 
                 this._stateManager.dispatch('ocsManager_items', {installType: this._installType});
             })
