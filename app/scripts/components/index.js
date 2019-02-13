@@ -36,3 +36,6 @@ AboutdialogComponent.define('aboutdialog-component');
 
 import CollectiondialogComponent from './CollectiondialogComponent.js';
 CollectiondialogComponent.define('collectiondialog-component');
+
+import CollectionComponent from './CollectionComponent.js';
+CollectionComponent.define('collection-component');
