@@ -47,12 +47,13 @@ export default class CollectionComponent extends BaseComponent {
 
     _createCategoryList() {
         const list = [];
+
         if (Object.keys(this.state.categorizedInstalledItems).length) {
             for (const [key, value] of Object.entries(this.state.categorizedInstalledItems)) {
                 const current = (key === this.state.installType) ? 'yes' : 'no';
                 list.push(`
                     <li data-current="${current}">
-                    <a href="#" data-install-type="${key}">
+                    <a href="#" data-action="items" data-install-type="${key}">
                     <span>${this.state.installTypes[key].name}</span>
                     <span>${Object.keys(value).length}</span>
                     </a>
@@ -60,27 +61,49 @@ export default class CollectionComponent extends BaseComponent {
                 `);
             }
         }
+
         return `<ul class="linklist">${list.join('')}</ul>`;
     }
 
     _createItemList() {
-        const installedItems = this.state.categorizedInstalledItems[this.state.installType];
-        const apply = this.state.isApplicableType ? 'active' : 'inactive';
         const list = [];
+        const installedItems = this.state.categorizedInstalledItems[this.state.installType];
+
         if (installedItems && Object.keys(installedItems).length) {
+            const apply = this.state.isApplicableType ? 'active' : 'inactive';
+            let destination = '';
+
+            if (['aix', 'freebsd', 'linux', 'openbsd', 'sunos'].includes(process.platform )) {
+                destination = this.state.installTypes[this.state.installType].destination;
+            }
+            else {
+                // darwin, win32, android
+                destination = this.state.installTypes[this.state.installType].generic_destination;
+            }
+
             for (const [key, value] of Object.entries(installedItems)) {
-                //const pic = getPic(value.url);
+                //const previewPicUrl = this._picUrl(value.url);
+                const previewPicUrl = '';
                 for (const file of value.files) {
+                    const path = `${destination}/${file}`;
+                    const fileUrl = `file://${path}`;
                     list.push(`
                         <li>
-                        <a href="#" data-installed-item="${key}">${file}</a>
-                        <button class="button-accept" data-apply="${apply}">Apply</button>
-                        <button class="button-warning">Delete</button>
+                        <a href="${fileUrl}" target="_blank">
+                        <figure style="background-image: url(${previewPicUrl});"></figure>
+                        <span>${file}</span>
+                        </a>
+                        <button class="button-accept"
+                            name="apply"
+                            data-path="${path}" data-install-type="${this.state.installType}"
+                            data-apply="${apply}">Apply</button>
+                        <button class="button-warning" name="uninstall" data-item-key="${key}">Delete</button>
                         </li>
                     `);
                 }
             }
         }
+
         return `<ul>${list.join('')}</ul>`;
     }
 
@@ -88,11 +111,29 @@ export default class CollectionComponent extends BaseComponent {
         if (event.target.closest('a')) {
             event.preventDefault();
             const anchorElement = event.target.closest('a');
-            if (anchorElement.getAttribute('data-install-type')) {
-                this.dispatch(
-                    'ocsManager_items',
-                    {installType: anchorElement.getAttribute('data-install-type')}
-                );
+            const action = anchorElement.getAttribute('data-action');
+            if (action === 'items') {
+                this.dispatch('ocsManager_items', {
+                    installType: anchorElement.getAttribute('data-install-type')
+                });
+            }
+            else if (anchorElement.target === '_blank') {
+                this.dispatch('ocsManager_externalUrl', {url: anchorElement.href});
+            }
+        }
+        else if (event.target.closest('button')) {
+            event.preventDefault();
+            const buttonElement = event.target.closest('button');
+            if (buttonElement.name === 'apply') {
+                this.dispatch('ocsManager_apply', {
+                    path: buttonElement.getAttribute('data-path'),
+                    installType: buttonElement.getAttribute('data-install-type')
+                });
+            }
+            else if (buttonElement.name === 'uninstall') {
+                this.dispatch('ocsManager_uninstall', {
+                    itemKey: buttonElement.getAttribute('data-item-key')
+                });
             }
         }
     }
