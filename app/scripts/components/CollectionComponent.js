@@ -102,10 +102,9 @@ export default class CollectionComponent extends BaseComponent {
         return `<ul>${list.join('')}</ul>`;
     }
 
-    _previewpicPath(itemKey) {
+    _previewpicFilename(itemKey) {
         // See also main.js
-        const filename = btoa(itemKey).slice(-255);
-        return `${this.state.previewpicDirectory}/${filename}`;
+        return btoa(itemKey).slice(-255);
     }
 
     _handleClick(event) {
