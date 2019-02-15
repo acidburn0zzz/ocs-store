@@ -3,6 +3,8 @@ import BaseComponent from './BaseComponent.js';
 export default class CollectionComponent extends BaseComponent {
 
     init() {
+        this._isXdg = ['aix', 'freebsd', 'linux', 'openbsd', 'sunos'].includes(process.platform) ? true : false; // darwin, win32, android
+
         this.contentRoot.addEventListener('click', this._handleClick.bind(this));
 
         this._viewHandler_ocsManager_installedItems = this._viewHandler_ocsManager_installedItems.bind(this);
@@ -29,77 +31,91 @@ export default class CollectionComponent extends BaseComponent {
             ${this.sharedStyle}
 
             <style>
-            nav ul li[data-current="yes"] {}
+            nav[data-sidebar] ul li[data-selected] {
+                background-color: #ccc;
+            }
 
             button[data-apply="inactive"] {}
             </style>
 
             <div class="flex">
-            <nav>${this._createCategoryList()}</nav>
-            <div class="flex-auto">${this._createItemList()}</div>
+            <nav data-sidebar>
+            <ul class="linklist" data-menu="activity">
+            <li><a href="#" data-action="downloadList"><span>Download</span><span data-count></span></a></li>
+            <li><a href="#" data-action="updateList"><span>Update</span><span data-count></span></a></li>
+            </ul>
+            <ul class="linklist" data-menu="category"></ul>
+            </nav>
+            <switchview-component class="flex-auto">
+            <ul id="installed"></ul>
+            <ul id="download"></ul>
+            <ul id="update"></ul>
+            </switchview-component>
             </div>
         `;
     }
 
-    _createCategoryList() {
-        const list = [];
+    _categoryListItemsHtml(installedItemsState) {
+        const listItems = [];
 
-        if (Object.keys(this.state.categorizedInstalledItems).length) {
-            for (const [key, value] of Object.entries(this.state.categorizedInstalledItems)) {
-                const current = (key === this.state.installType) ? 'yes' : 'no';
-                list.push(`
-                    <li data-current="${current}">
-                    <a href="#" data-action="items" data-install-type="${key}">
-                    <span>${this.state.installTypes[key].name}</span>
-                    <span>${Object.keys(value).length}</span>
+        if (Object.keys(installedItemsState.installedItems).length) {
+            const categorizedInstalledItems = {};
+            for (const [key, value] of Object.entries(installedItemsState.installedItems)) {
+                if (!categorizedInstalledItems[value.install_type]) {
+                    categorizedInstalledItems[value.install_type] = {};
+                }
+                categorizedInstalledItems[value.install_type][key] = value;
+            }
+            for (const [key, value] of Object.entries(categorizedInstalledItems)) {
+                listItems.push(`
+                    <li>
+                    <a href="#" data-action="installedList" data-install-type="${key}">
+                    <span>${installedItemsState.installTypes[key].name}</span>
+                    <span data-count>${Object.keys(value).length}</span>
                     </a>
                     </li>
                 `);
             }
         }
 
-        return `<ul class="linklist">${list.join('')}</ul>`;
+        return listItems.join('');
     }
 
-    _createItemList() {
-        const list = [];
-        const installedItems = this.state.categorizedInstalledItems[this.state.installType];
+    _installedListItemsHtml(installedItemsByTypeState) {
+        const listItems = [];
 
-        if (installedItems && Object.keys(installedItems).length) {
-            const apply = this.state.isApplicableType ? 'active' : 'inactive';
+        if (Object.keys(installedItemsByTypeState.installedItemsByType).length) {
+            const apply = installedItemsByTypeState.isApplicableType ? 'active' : 'inactive';
             let destination = '';
-
-            if (['aix', 'freebsd', 'linux', 'openbsd', 'sunos'].includes(process.platform )) {
-                destination = this.state.installTypes[this.state.installType].destination;
+            if (this._isXdg) {
+                destination = installedItemsByTypeState.installTypes[installedItemsByTypeState.installType].destination;
             }
             else {
-                // darwin, win32, android
-                destination = this.state.installTypes[this.state.installType].generic_destination;
+                destination = installedItemsByTypeState.installTypes[installedItemsByTypeState.installType].generic_destination;
             }
-
-            for (const [key, value] of Object.entries(installedItems)) {
-                const previewpicUrl = `file://${this._previewpicPath(key)}`;
+            for (const [key, value] of Object.entries(installedItemsByTypeState.installedItemsByType)) {
+                const previewpicUrl = `file://${installedItemsByTypeState.previewpicDirectory}/${this._previewpicFilename(key)}`;
                 for (const file of value.files) {
                     const path = `${destination}/${file}`;
                     const fileUrl = `file://${path}`;
-                    list.push(`
+                    listItems.push(`
                         <li>
                         <a href="${fileUrl}" target="_blank">
                         <figure style="background-image: url('${previewpicUrl}');"></figure>
                         <span>${file}</span>
                         </a>
                         <button class="button-accept"
-                            name="apply"
-                            data-path="${path}" data-install-type="${this.state.installType}"
+                            data-action="apply"
+                            data-path="${path}" data-install-type="${installedItemsByTypeState.installType}"
                             data-apply="${apply}">Apply</button>
-                        <button class="button-warning" name="uninstall" data-item-key="${key}">Delete</button>
+                        <button class="button-warning" data-action="uninstall" data-item-key="${key}">Delete</button>
                         </li>
                     `);
                 }
             }
         }
 
-        return `<ul>${list.join('')}</ul>`;
+        return listItems.join('');
     }
 
     _previewpicFilename(itemKey) {
@@ -112,10 +128,11 @@ export default class CollectionComponent extends BaseComponent {
             event.preventDefault();
             const anchorElement = event.target.closest('a');
             const action = anchorElement.getAttribute('data-action');
-            if (action === 'installedItemsByType') {
+            if (action === 'installedList') {
                 this.dispatch('ocsManager_installedItemsByType', {
                     installType: anchorElement.getAttribute('data-install-type')
                 });
+                this.contentRoot.querySelector('switchview-component').switch('installed');
             }
             else if (anchorElement.target === '_blank') {
                 this.dispatch('ocsManager_externalUrl', {url: anchorElement.href});
@@ -124,24 +141,30 @@ export default class CollectionComponent extends BaseComponent {
         else if (event.target.closest('button')) {
             event.preventDefault();
             const buttonElement = event.target.closest('button');
-            if (buttonElement.name === 'apply') {
+            const action = buttonElement.getAttribute('data-action');
+            if (action === 'apply') {
                 this.dispatch('ocsManager_apply', {
                     path: buttonElement.getAttribute('data-path'),
                     installType: buttonElement.getAttribute('data-install-type')
                 });
             }
-            else if (buttonElement.name === 'uninstall') {
+            else if (action === 'uninstall') {
                 this.dispatch('ocsManager_uninstall', {
                     itemKey: buttonElement.getAttribute('data-item-key')
                 });
+                buttonElement.closest('li').remove();
             }
         }
     }
 
     _viewHandler_ocsManager_installedItems(state) {
+        this.contentRoot.querySelector('nav[data-sidebar] ul[data-menu="category"]')
+            .innerHTML = this._categoryListItemsHtml(state);
     }
 
     _viewHandler_ocsManager_installedItemsByType(state) {
+        this.contentRoot.querySelector('#installed')
+            .innerHTML = this._installedListItemsHtml(state);
     }
 
     _viewHandler_ocsManager_updateAvailableItems(state) {
