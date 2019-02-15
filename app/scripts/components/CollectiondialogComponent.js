@@ -48,7 +48,7 @@ export default class CollectiondialogComponent extends BaseComponent {
 
     _viewHandler_ocsManager_activate(state) {
         this._isActivated = state.isActivated;
-        this.dispatch('ocsManager_items', {});
+        this.dispatch('ocsManager_installedItems', {});
     }
 
 }
