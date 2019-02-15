@@ -138,17 +138,16 @@ function btoa(string) {
     return Buffer.from(string, 'base64').toString('binary');
 }*/
 
-function previewpicPath(itemKey) {
+function previewpicFilename(itemKey) {
     // "itemKey" will be URL of product file
-    const filename = btoa(itemKey).slice(-255);
-    return `${previewpicDirectory}/${filename}`;
+    return btoa(itemKey).slice(-255);
 }
 
 function downloadpreviewpic(itemKey, url) {
     if (!isDirectory(previewpicDirectory)) {
         fs.mkdirSync(previewpicDirectory);
     }
-    const path = previewpicPath(itemKey);
+    const path = `${previewpicDirectory}/${previewpicFilename(itemKey)}`;
     request.get(url)
         .on('error', (error) => {
             console.error(error);
@@ -157,7 +156,7 @@ function downloadpreviewpic(itemKey, url) {
 }
 
 function removepreviewpic(itemKey) {
-    const path = previewpicPath(itemKey);
+    const path = `${previewpicDirectory}/${previewpicFilename(itemKey)}`;
     if (isFile(path)) {
         fs.unlinkSync(path);
     }
@@ -214,7 +213,7 @@ ipcMain.on('previewpic', (event, action, itemKey, url) => {
         event.returnValue = previewpicDirectory;
     }
     else if (action === 'path' && itemKey) {
-        event.returnValue = previewpicPath(itemKey);
+        event.returnValue = `${previewpicDirectory}/${previewpicFilename(itemKey)}`;
     }
     else if (action === 'download' && itemKey && url) {
         downloadpreviewpic(itemKey, url);
