@@ -65,17 +65,17 @@ export default class OcsManagerTypeHandler {
                 message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigInstalledItems', []);
                 const installedItems = message.data[0];
 
-                const reducedInstalledItems = {};
+                const installedItemsByType = {};
                 for (const [key, value] of Object.entries(installedItems)) {
                     if (value.install_type === installType) {
-                        reducedInstalledItems[key] = value;
+                        installedItemsByType[key] = value;
                     }
                 }
 
                 return {
                     installType: installType,
                     isApplicableType: isApplicableType,
-                    installedItems: reducedInstalledItems,
+                    installedItemsByType: installedItemsByType,
                     installTypes: this._installTypes,
                     previewpicDirectory: this._previewpicDirectory
                 };
