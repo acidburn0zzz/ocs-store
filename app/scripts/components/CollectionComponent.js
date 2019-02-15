@@ -31,19 +31,86 @@ export default class CollectionComponent extends BaseComponent {
             ${this.sharedStyle}
 
             <style>
-            nav[data-sidebar] ul li[data-selected] {
-                background-color: #ccc;
+            nav[data-sidebar] {
+                width: 200px;
+                background-color: var(--color-widget);
+            }
+            nav[data-sidebar] ul.linklist li a {
+                display: flex;
+                flex-flow: row nowrap;
+                align-items: center;
+                width: 100%;
+                color: var(--color-text);
+            }
+            nav[data-sidebar] ul.linklist li a span[data-title] {
+                flex: 1 1 auto;
+                display: inline-block;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+            nav[data-sidebar] ul.linklist li a span[data-count] {
+                display: inline-block;
+                padding: 0.3em 0.5em;
+                border-radius: 1em;
+                background-color: var(--color-active-secondary);
+                line-height: 1;
+            }
+            nav[data-sidebar] ul.linklist li a[data-selected] {
+                background-color: var(--color-active);
             }
 
-            button[data-apply="inactive"] {}
+            switchview-component ul {
+                list-style: none;
+                margin: 0;
+            }
+            switchview-component ul li {
+                display: flex;
+                flex-flow: row nowrap;
+                align-items: center;
+                margin: 0.4em;
+                padding: 0.4em;
+                border-bottom: 1px solid var(--color-border);
+            }
+            switchview-component ul li:last-child {
+                border-bottom: none;
+            }
+            switchview-component ul li a {
+                flex: 1 1 auto;
+                display: flex;
+                flex-flow: row nowrap;
+                align-items: center;
+                color: var(--color-text);
+            }
+            switchview-component ul li a figure[data-previewpic] {
+                display: inline-block;
+                width: 64px;
+                height: 64px;
+                margin-right: 1em;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: contain;
+            }
+            switchview-component ul li a span[data-title] {
+                flex: 1 1 auto;
+                display: inline-block;
+            }
+            switchview-component ul li nav[data-actions] {
+                display: inline-block;
+            }
+
+            #installed button[data-apply="inactive"] {
+                display: none;
+            }
             </style>
 
             <div class="flex">
             <nav data-sidebar>
             <ul class="linklist" data-menu="activity">
-            <li><a href="#" data-action="downloadList"><span>Download</span><span data-count></span></a></li>
-            <li><a href="#" data-action="updateList"><span>Update</span><span data-count></span></a></li>
+            <li><a href="#" data-action="downloadList"><span data-title>Download</span><span data-count></span></a></li>
+            <li><a href="#" data-action="updateList"><span data-title>Update</span><span data-count></span></a></li>
             </ul>
+            <h4>Installed</h4>
             <ul class="linklist" data-menu="category"></ul>
             </nav>
             <switchview-component class="flex-auto">
@@ -70,7 +137,7 @@ export default class CollectionComponent extends BaseComponent {
                 listItems.push(`
                     <li>
                     <a href="#" data-action="installedList" data-install-type="${key}">
-                    <span>${installedItemsState.installTypes[key].name}</span>
+                    <span data-title>${installedItemsState.installTypes[key].name}</span>
                     <span data-count>${Object.keys(value).length}</span>
                     </a>
                     </li>
@@ -101,14 +168,16 @@ export default class CollectionComponent extends BaseComponent {
                     listItems.push(`
                         <li>
                         <a href="${fileUrl}" target="_blank">
-                        <figure style="background-image: url('${previewpicUrl}');"></figure>
-                        <span>${file}</span>
+                        <figure data-previewpic style="background-image: url('${previewpicUrl}');"></figure>
+                        <span data-title>${file}</span>
                         </a>
+                        <nav data-actions>
                         <button class="button-accept"
                             data-action="apply"
                             data-path="${path}" data-install-type="${installedItemsByTypeState.installType}"
                             data-apply="${apply}">Apply</button>
                         <button class="button-warning" data-action="uninstall" data-item-key="${key}">Delete</button>
+                        </nav>
                         </li>
                     `);
                 }
@@ -128,6 +197,15 @@ export default class CollectionComponent extends BaseComponent {
             event.preventDefault();
             const anchorElement = event.target.closest('a');
             const action = anchorElement.getAttribute('data-action');
+
+            const sidebarElement = anchorElement.closest('nav[data-sidebar]');
+            if (sidebarElement && action) {
+                for (const menuItemElement of sidebarElement.querySelectorAll('a[data-action]')) {
+                    menuItemElement.removeAttribute('data-selected');
+                }
+                anchorElement.setAttribute('data-selected', 'data-selected');
+            }
+
             if (action === 'installedList') {
                 this.dispatch('ocsManager_installedItemsByType', {
                     installType: anchorElement.getAttribute('data-install-type')
