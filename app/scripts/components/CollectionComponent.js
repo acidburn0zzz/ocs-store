@@ -3,29 +3,25 @@ import BaseComponent from './BaseComponent.js';
 export default class CollectionComponent extends BaseComponent {
 
     init() {
-        this.state = {
-            previewpicDirectory: '',
-            installType: '',
-            isApplicableType: false,
-            categorizedInstalledItems: {},
-            installTypes: {},
-            installedItems: {},
-            updateAvailableItems: {}
-        };
-
         this.contentRoot.addEventListener('click', this._handleClick.bind(this));
 
-        this._viewHandler_ocsManager_items = this._viewHandler_ocsManager_items.bind(this);
+        this._viewHandler_ocsManager_installedItems = this._viewHandler_ocsManager_installedItems.bind(this);
+        this._viewHandler_ocsManager_installedItemsByType = this._viewHandler_ocsManager_installedItemsByType.bind(this);
+        this._viewHandler_ocsManager_updateAvailableItems = this._viewHandler_ocsManager_updateAvailableItems.bind(this);
     }
 
     componentConnectedCallback() {
         this.getStateManager().viewHandler
-            .add('ocsManager_items', this._viewHandler_ocsManager_items);
+            .add('ocsManager_installedItems', this._viewHandler_ocsManager_installedItems)
+            .add('ocsManager_installedItemsByType', this._viewHandler_ocsManager_installedItemsByType)
+            .add('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems);
     }
 
     componentDisconnectedCallback() {
         this.getStateManager().viewHandler
-            .remove('ocsManager_items', this._viewHandler_ocsManager_items);
+            .remove('ocsManager_installedItems', this._viewHandler_ocsManager_installedItems)
+            .remove('ocsManager_installedItemsByType', this._viewHandler_ocsManager_installedItemsByType)
+            .remove('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems);
     }
 
     render() {
@@ -43,7 +39,6 @@ export default class CollectionComponent extends BaseComponent {
             <div class="flex-auto">${this._createItemList()}</div>
             </div>
         `;
-
     }
 
     _createCategoryList() {
@@ -118,8 +113,8 @@ export default class CollectionComponent extends BaseComponent {
             event.preventDefault();
             const anchorElement = event.target.closest('a');
             const action = anchorElement.getAttribute('data-action');
-            if (action === 'items') {
-                this.dispatch('ocsManager_items', {
+            if (action === 'installedItemsByType') {
+                this.dispatch('ocsManager_installedItemsByType', {
                     installType: anchorElement.getAttribute('data-install-type')
                 });
             }
@@ -144,8 +139,13 @@ export default class CollectionComponent extends BaseComponent {
         }
     }
 
-    _viewHandler_ocsManager_items(state) {
-        this.update({...this.state, ...state});
+    _viewHandler_ocsManager_installedItems(state) {
+    }
+
+    _viewHandler_ocsManager_installedItemsByType(state) {
+    }
+
+    _viewHandler_ocsManager_updateAvailableItems(state) {
     }
 
 }
