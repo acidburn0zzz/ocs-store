@@ -1,6 +1,9 @@
 import RootComponent from './RootComponent.js';
 RootComponent.define('root-component');
 
+import SplashscreenComponent from './SplashscreenComponent.js';
+SplashscreenComponent.define('splashscreen-component');
+
 import SwitchviewComponent from './SwitchviewComponent.js';
 SwitchviewComponent.define('switchview-component');
 
