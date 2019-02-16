@@ -5,7 +5,7 @@ export default class CollectiondialogComponent extends BaseComponent {
     init() {
         this._isActivated = false;
 
-        this.contentRoot.addEventListener('collectionsidebar-select', this._handleCollectionsidebarSelect.bind(this));
+        this.contentRoot.addEventListener('collectionsidebar_select', this._handleCollectionsidebarSelect.bind(this));
 
         this._viewHandler_ocsManager_activate = this._viewHandler_ocsManager_activate.bind(this);
     }

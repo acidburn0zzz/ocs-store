@@ -118,16 +118,16 @@ export default class CollectionsidebarComponent extends BaseComponent {
             }
 
             if (action === 'download') {
-                this.dispatch('collectionsidebar-select', {select: 'download'});
+                this.dispatch('collectionsidebar_select', {select: 'download'});
             }
             else if (action === 'update') {
-                this.dispatch('collectionsidebar-select', {select: 'update'});
+                this.dispatch('collectionsidebar_select', {select: 'update'});
             }
             else if (action === 'installed') {
                 this.dispatch('ocsManager_installedItemsByType', {
                     installType: anchorElement.getAttribute('data-install-type')
                 });
-                this.dispatch('collectionsidebar-select', {select: 'installed'});
+                this.dispatch('collectionsidebar_select', {select: 'installed'});
             }
         }
     }
