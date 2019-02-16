@@ -28,15 +28,11 @@ export default class RootComponent extends BaseComponent {
         return `
             ${this.sharedStyle}
 
-            <switchview-component class="flex-auto flex-column">
-
-            <page-component id="browser" slot="current" class="flex-auto flex-column">
+            <page-component id="browser" class="flex-auto flex-column">
             <toolbar-component slot="header"></toolbar-component>
             <webview-component slot="content" class="flex-auto flex-column"></webview-component>
             <statusbar-component slot="footer"></statusbar-component>
             </page-component>
-
-            </switchview-component>
 
             <collectiondialog-component></collectiondialog-component>
 

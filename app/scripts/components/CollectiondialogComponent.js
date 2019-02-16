@@ -25,12 +25,12 @@ export default class CollectiondialogComponent extends BaseComponent {
             ${this.sharedStyle}
 
             <dialog-component
-                data-min-width="80%" data-max-width="1000px"
-                data-min-height="80%" data-max-height="800px"
+                data-min-width="80%" data-max-width="80%"
+                data-min-height="80%" data-max-height="80%"
                 data-header data-autoclose>
             <h3 slot="header">My Collection</h3>
             <page-component id="collection" slot="content" class="flex-auto flex-column">
-            <collectionsidebar-component slot="sidebar" class="flex-column"></collectionsidebar-component>
+            <collectionsidebar-component slot="sidebar" class="flex-auto flex-column"></collectionsidebar-component>
             <switchview-component slot="content" class="flex-auto flex-column">
             <collectiondownload-component id="download" class="flex-auto flex-column"></collectiondownload-component>
             <collectionupdate-component id="update" class="flex-auto flex-column"></collectionupdate-component>

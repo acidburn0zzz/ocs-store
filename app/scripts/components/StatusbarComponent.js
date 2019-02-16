@@ -4,9 +4,6 @@ export default class StatusbarComponent extends BaseComponent {
 
     render() {
         return `
-            ${this.sharedStyle}
-
-            <div></div>
         `;
     }
 

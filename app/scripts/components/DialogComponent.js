@@ -64,12 +64,12 @@ export default class DialogComponent extends BaseComponent {
             <div class="flex" data-container="inactive" data-action="${autoclose}">
 
             <div class="widget flex-column fade-in" data-dialog>
-            <div class="widget-header flex" data-header="${header}">
+            <div class="widget-header flex-fixed flex" data-header="${header}">
             <div class="flex-auto"><slot name="header"></slot></div>
             <div><button-component data-icon="close" data-action="close"></button-component></div>
             </div>
             <div class="flex-auto flex-column" data-content><slot name="content"></slot></div>
-            <div class="widget-footer" data-footer="${footer}"><slot name="footer"></slot></div>
+            <div class="widget-footer flex-fixed" data-footer="${footer}"><slot name="footer"></slot></div>
             </div>
 
             </div>
