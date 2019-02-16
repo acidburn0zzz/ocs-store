@@ -37,4 +37,14 @@ AboutdialogComponent.define('aboutdialog-component');
 import CollectiondialogComponent from './CollectiondialogComponent.js';
 CollectiondialogComponent.define('collectiondialog-component');
 
+import CollectionsidebarComponent from './CollectionsidebarComponent.js';
+CollectionsidebarComponent.define('collectionsidebar-component');
 
+import CollectiondownloadComponent from './CollectiondownloadComponent.js';
+CollectiondownloadComponent.define('collectiondownload-component');
+
+import CollectionupdateComponent from './CollectionupdateComponent.js';
+CollectionupdateComponent.define('collectionupdate-component');
+
+import CollectioninstalledComponent from './CollectioninstalledComponent.js';
+CollectioninstalledComponent.define('collectioninstalled-component');
