@@ -24,10 +24,7 @@ export default class CollectiondialogComponent extends BaseComponent {
         return `
             ${this.sharedStyle}
 
-            <dialog-component
-                data-min-width="80%" data-max-width="80%"
-                data-min-height="80%" data-max-height="80%"
-                data-header data-auto-close>
+            <dialog-component data-width="80%" data-height="80%" data-header data-auto-close>
             <h3 slot="header">My Collection</h3>
             <page-component id="collection" slot="content" class="flex-auto flex-column">
             <collectionsidebar-component slot="sidebar" class="flex-auto flex-column"></collectionsidebar-component>

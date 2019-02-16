@@ -4,8 +4,8 @@ export default class DialogComponent extends BaseComponent {
 
     static get componentObservedAttributes() {
         return [
-            'data-min-width', 'data-max-width',
-            'data-min-height', 'data-max-height',
+            'data-width', 'data-min-width', 'data-max-width',
+            'data-height', 'data-min-height', 'data-max-height',
             'data-header', 'data-footer',
             'data-auto-open', 'data-auto-close'
         ];
@@ -16,8 +16,10 @@ export default class DialogComponent extends BaseComponent {
     }
 
     render() {
+        const width = this.getAttribute('data-width') ? this.getAttribute('data-width') : 'auto';
         const minWidth = this.getAttribute('data-min-width') ? this.getAttribute('data-min-width') : 'auto';
         const maxWidth = this.getAttribute('data-max-width') ? this.getAttribute('data-max-width') : 'auto';
+        const height = this.getAttribute('data-height') ? this.getAttribute('data-height') : 'auto';
         const minHeight = this.getAttribute('data-min-height') ? this.getAttribute('data-min-height') : 'auto';
         const maxHeight = this.getAttribute('data-max-height') ? this.getAttribute('data-max-height') : 'auto';
         const header = this.hasAttribute('data-header') ? 'active' : 'inactive';
@@ -44,8 +46,10 @@ export default class DialogComponent extends BaseComponent {
             }
 
             div[data-dialog] {
+                width: ${width};
                 min-width: ${minWidth};
                 max-width: ${maxWidth};
+                height: ${height};
                 min-height: ${minHeight};
                 max-height: ${maxHeight};
                 background-color: var(--color-content);
