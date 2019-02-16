@@ -27,7 +27,7 @@ export default class CollectiondialogComponent extends BaseComponent {
             <dialog-component
                 data-min-width="80%" data-max-width="80%"
                 data-min-height="80%" data-max-height="80%"
-                data-header data-autoclose>
+                data-header data-auto-close>
             <h3 slot="header">My Collection</h3>
             <page-component id="collection" slot="content" class="flex-auto flex-column">
             <collectionsidebar-component slot="sidebar" class="flex-auto flex-column"></collectionsidebar-component>

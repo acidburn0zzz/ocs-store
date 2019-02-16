@@ -7,7 +7,7 @@ export default class DialogComponent extends BaseComponent {
             'data-min-width', 'data-max-width',
             'data-min-height', 'data-max-height',
             'data-header', 'data-footer',
-            'data-autoclose'
+            'data-auto-open', 'data-auto-close'
         ];
     }
 
@@ -22,7 +22,8 @@ export default class DialogComponent extends BaseComponent {
         const maxHeight = this.getAttribute('data-max-height') ? this.getAttribute('data-max-height') : 'auto';
         const header = this.hasAttribute('data-header') ? 'active' : 'inactive';
         const footer = this.hasAttribute('data-footer') ? 'active' : 'inactive';
-        const autoclose = this.hasAttribute('data-autoclose') ? 'autoclose' : '';
+        const autoOpen = this.hasAttribute('data-auto-open') ? 'active' : 'inactive';
+        const autoClose = this.hasAttribute('data-auto-close') ? 'dialog-auto-close' : '';
 
         return `
             ${this.sharedStyle}
@@ -61,12 +62,12 @@ export default class DialogComponent extends BaseComponent {
             }
             </style>
 
-            <div class="flex" data-container="inactive" data-action="${autoclose}">
+            <div class="flex" data-container="${autoOpen}" data-action="${autoClose}">
 
             <div class="widget flex-column fade-in" data-dialog>
             <div class="widget-header flex-fixed flex" data-header="${header}">
             <div class="flex-auto"><slot name="header"></slot></div>
-            <div><button-component data-icon="close" data-action="close"></button-component></div>
+            <div><button-component data-icon="close" data-action="dialog-close"></button-component></div>
             </div>
             <div class="flex-auto flex-column" data-content><slot name="content"></slot></div>
             <div class="widget-footer flex-fixed" data-footer="${footer}"><slot name="footer"></slot></div>
@@ -89,10 +90,10 @@ export default class DialogComponent extends BaseComponent {
     }
 
     _handleClick(event) {
-        if (event.target.getAttribute('data-action') === 'autoclose') {
+        if (event.target.getAttribute('data-action') === 'dialog-auto-close') {
             this.close();
         }
-        else if (event.target.closest('[data-action="close"]')) {
+        else if (event.target.closest('[data-action="dialog-close"]')) {
             this.close();
         }
     }
