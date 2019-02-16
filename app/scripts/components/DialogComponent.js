@@ -68,7 +68,7 @@ export default class DialogComponent extends BaseComponent {
             <div class="flex-auto"><slot name="header"></slot></div>
             <div><button-component data-icon="close" data-action="close"></button-component></div>
             </div>
-            <div class="widget-content flex-auto" data-content><slot name="content"></slot></div>
+            <div class="flex-auto flex-column" data-content><slot name="content"></slot></div>
             <div class="widget-footer" data-footer="${footer}"><slot name="footer"></slot></div>
             </div>
 
