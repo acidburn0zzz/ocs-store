@@ -10,9 +10,6 @@ PageComponent.define('page-component');
 import ToolbarComponent from './ToolbarComponent.js';
 ToolbarComponent.define('toolbar-component');
 
-import StatusbarComponent from './StatusbarComponent.js';
-StatusbarComponent.define('statusbar-component');
-
 import WebviewComponent from './WebviewComponent.js';
 WebviewComponent.define('webview-component');
 
