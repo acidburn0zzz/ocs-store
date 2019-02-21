@@ -3,17 +3,17 @@ import BaseComponent from './BaseComponent.js';
 export default class CollectiondownloadComponent extends BaseComponent {
 
     init() {
-        this._viewHandler_ocsManager_install = this._viewHandler_ocsManager_install.bind(this);
+        this._viewHandler_ocsManager_installing = this._viewHandler_ocsManager_installing.bind(this);
     }
 
     componentConnectedCallback() {
         this.getStateManager().viewHandler
-            .add('ocsManager_install', this._viewHandler_ocsManager_install);
+            .add('ocsManager_installing', this._viewHandler_ocsManager_installing);
     }
 
     componentDisconnectedCallback() {
         this.getStateManager().viewHandler
-            .remove('ocsManager_install', this._viewHandler_ocsManager_install);
+            .remove('ocsManager_installing', this._viewHandler_ocsManager_installing);
     }
 
     render() {
@@ -39,18 +39,18 @@ export default class CollectiondownloadComponent extends BaseComponent {
         `;
     }
 
-    _listItemHtml(downloadState) {
+    _listItemHtml(installingState) {
         return `
-            <li class="widget" data-url="${downloadState.metadata.url}">
+            <li class="widget" data-url="${installingState.metadata.url}">
             <div>
-            <span data-name>${downloadState.metadata.filename}</span>
-            <span data-message>${downloadState.message}</span>
+            <span data-name>${installingState.metadata.filename}</span>
+            <span data-message>${installingState.message}</span>
             </div>
             </li>
         `;
     }
 
-    _viewHandler_ocsManager_install(state) {
+    _viewHandler_ocsManager_installing(state) {
         const downloadItem = this.contentRoot.querySelector(`li[data-url="${state.metadata.url}"]`);
         if (downloadItem) {
             downloadItem.querySelector('span[data-message]').textContent = state.message;

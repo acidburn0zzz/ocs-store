@@ -104,7 +104,7 @@ export default class OcsManagerTypeHandler {
                     metadataSet: metadataSet
                 };
             })
-            .add('ocsManager_install', (data) => {
+            .add('ocsManager_installing', (data) => {
                 return {
                     status: data.status,
                     message: data.message,
@@ -143,7 +143,7 @@ export default class OcsManagerTypeHandler {
                     return;
                 }
 
-                this._stateManager.dispatch('ocsManager_install', {
+                this._stateManager.dispatch('ocsManager_installing', {
                     status: message.data[0].status,
                     message: message.data[0].message,
                     metadata: message.data[0].metadata
@@ -163,7 +163,7 @@ export default class OcsManagerTypeHandler {
                     console.error(new Error(message.data[0].message));
                 }
 
-                this._stateManager.dispatch('ocsManager_install', {
+                this._stateManager.dispatch('ocsManager_installing', {
                     status: message.data[0].status,
                     message: message.data[0].message,
                     metadata: message.data[0].metadata
@@ -178,7 +178,7 @@ export default class OcsManagerTypeHandler {
                     console.error(new Error(message.data[0].message));
                 }
 
-                this._stateManager.dispatch('ocsManager_install', {
+                this._stateManager.dispatch('ocsManager_installing', {
                     status: message.data[0].status,
                     message: message.data[0].message,
                     metadata: message.data[0].metadata
@@ -190,7 +190,7 @@ export default class OcsManagerTypeHandler {
                     console.error(new Error(message.data[0].message));
                 }
 
-                this._stateManager.dispatch('ocsManager_install', {
+                this._stateManager.dispatch('ocsManager_installing', {
                     status: message.data[0].status,
                     message: message.data[0].message,
                     metadata: message.data[0].metadata
@@ -202,7 +202,7 @@ export default class OcsManagerTypeHandler {
                     console.error(new Error(message.data[0].message));
                 }
 
-                this._stateManager.dispatch('ocsManager_install', {
+                this._stateManager.dispatch('ocsManager_installing', {
                     status: message.data[0].status,
                     message: message.data[0].message,
                     metadata: message.data[0].metadata
@@ -215,7 +215,7 @@ export default class OcsManagerTypeHandler {
                     return;
                 }
 
-                this._stateManager.dispatch('ocsManager_install', {
+                this._stateManager.dispatch('ocsManager_installing', {
                     status: message.data[0].status,
                     message: message.data[0].message,
                     metadata: message.data[0].metadata
