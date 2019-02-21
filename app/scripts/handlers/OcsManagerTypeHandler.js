@@ -96,7 +96,7 @@ export default class OcsManagerTypeHandler {
                     previewpicDirectory: this._previewpicDirectory
                 };
             })
-            .add('ocsManager_downloading', async () => {
+            .add('ocsManager_metadataSet', async () => {
                 const message = await this._ocsManagerApi.sendSync('ItemHandler::metadataSet', []);
                 const metadataSet = message.data[0];
                 return {
@@ -127,7 +127,7 @@ export default class OcsManagerTypeHandler {
     _receiveMessage() {
         this._ocsManagerApi.callback
             .set('ItemHandler::metadataSetChanged', () => {
-                this._stateManager.dispatch('ocsManager_downloading', {});
+                this._stateManager.dispatch('ocsManager_metadataSet', {});
             })
             .set('ItemHandler::downloadStarted', (message) => {
                 console.log(message);

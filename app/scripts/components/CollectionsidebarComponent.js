@@ -6,19 +6,19 @@ export default class CollectionsidebarComponent extends BaseComponent {
         this.contentRoot.addEventListener('click', this._handleClick.bind(this));
 
         this._viewHandler_ocsManager_installedItems = this._viewHandler_ocsManager_installedItems.bind(this);
-        this._viewHandler_ocsManager_downloading = this._viewHandler_ocsManager_downloading.bind(this);
+        this._viewHandler_ocsManager_metadataSet = this._viewHandler_ocsManager_metadataSet.bind(this);
     }
 
     componentConnectedCallback() {
         this.getStateManager().viewHandler
             .add('ocsManager_installedItems', this._viewHandler_ocsManager_installedItems)
-            .add('ocsManager_downloading', this._viewHandler_ocsManager_downloading);
+            .add('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
     componentDisconnectedCallback() {
         this.getStateManager().viewHandler
             .remove('ocsManager_installedItems', this._viewHandler_ocsManager_installedItems)
-            .remove('ocsManager_downloading', this._viewHandler_ocsManager_downloading);
+            .remove('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
     render() {
@@ -140,7 +140,7 @@ export default class CollectionsidebarComponent extends BaseComponent {
             .innerHTML = this._categoryMenuItemsHtml(state);
     }
 
-    _viewHandler_ocsManager_downloading(state) {
+    _viewHandler_ocsManager_metadataSet(state) {
         const downloadCount = this.contentRoot
             .querySelector('nav ul[data-menu="activity"] a[data-action="download"] span[data-count]');
         downloadCount.textContent = '' + state.downloading;

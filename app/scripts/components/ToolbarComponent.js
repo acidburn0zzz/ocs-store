@@ -5,21 +5,21 @@ export default class ToolbarComponent extends BaseComponent {
     init() {
         this._viewHandler_webview_loading = this._viewHandler_webview_loading.bind(this);
         this._viewHandler_webview_page = this._viewHandler_webview_page.bind(this);
-        this._viewHandler_ocsManager_downloading = this._viewHandler_ocsManager_downloading.bind(this);
+        this._viewHandler_ocsManager_metadataSet = this._viewHandler_ocsManager_metadataSet.bind(this);
     }
 
     componentConnectedCallback() {
         this.getStateManager().viewHandler
             .add('webview_loading', this._viewHandler_webview_loading)
             .add('webview_page', this._viewHandler_webview_page)
-            .add('ocsManager_downloading', this._viewHandler_ocsManager_downloading);
+            .add('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
     componentDisconnectedCallback() {
         this.getStateManager().viewHandler
             .remove('webview_loading', this._viewHandler_webview_loading)
             .remove('webview_page', this._viewHandler_webview_page)
-            .remove('ocsManager_downloading', this._viewHandler_ocsManager_downloading);
+            .remove('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
     render() {
@@ -163,7 +163,7 @@ export default class ToolbarComponent extends BaseComponent {
         }
     }
 
-    _viewHandler_ocsManager_downloading(state) {
+    _viewHandler_ocsManager_metadataSet(state) {
         const downloadingBadge = this.contentRoot
             .querySelector('span[data-downloadingbadge]');
         if (state.downloading) {
