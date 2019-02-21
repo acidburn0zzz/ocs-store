@@ -32,12 +32,8 @@ export default class CollectioninstalledComponent extends BaseComponent {
                 display: flex;
                 flex-flow: row nowrap;
                 align-items: center;
-                margin: 0.4em;
-                padding: 0.4em;
-                border-bottom: 1px solid var(--color-border);
-            }
-            ul[data-container] li:last-child {
-                border-bottom: none;
+                margin: 1em;
+                padding: 1em;
             }
             ul[data-container] li a {
                 flex: 1 1 auto;
@@ -85,7 +81,7 @@ export default class CollectioninstalledComponent extends BaseComponent {
                     const path = `${destination}/${file}`;
                     const fileUrl = `file://${path}`;
                     listItems.push(`
-                        <li>
+                        <li class="widget">
                         <a href="${fileUrl}" target="_blank">
                         <figure data-previewpic style="background-image: url('${previewpicUrl}');"></figure>
                         <span data-name>${file}</span>
