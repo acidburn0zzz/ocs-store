@@ -162,6 +162,12 @@ export default class OcsManagerTypeHandler {
                 if (message.data[0].status !== 'success_download') {
                     console.error(new Error(message.data[0].message));
                 }
+
+                this._stateManager.dispatch('ocsManager_install', {
+                    status: message.data[0].status,
+                    message: message.data[0].message,
+                    metadata: message.data[0].metadata
+                });
             })
             .set('ItemHandler::downloadProgress', (message) => {
                 console.log(message);
@@ -171,18 +177,36 @@ export default class OcsManagerTypeHandler {
                 if (message.data[0].status !== 'success_savestart') {
                     console.error(new Error(message.data[0].message));
                 }
+
+                this._stateManager.dispatch('ocsManager_install', {
+                    status: message.data[0].status,
+                    message: message.data[0].message,
+                    metadata: message.data[0].metadata
+                });
             })
             .set('ItemHandler::saveFinished', (message) => {
                 console.log(message);
                 if (message.data[0].status !== 'success_save') {
                     console.error(new Error(message.data[0].message));
                 }
+
+                this._stateManager.dispatch('ocsManager_install', {
+                    status: message.data[0].status,
+                    message: message.data[0].message,
+                    metadata: message.data[0].metadata
+                });
             })
             .set('ItemHandler::installStarted', (message) => {
                 console.log(message);
                 if (message.data[0].status !== 'success_installstart') {
                     console.error(new Error(message.data[0].message));
                 }
+
+                this._stateManager.dispatch('ocsManager_install', {
+                    status: message.data[0].status,
+                    message: message.data[0].message,
+                    metadata: message.data[0].metadata
+                });
             })
             .set('ItemHandler::installFinished', (message) => {
                 console.log(message);
@@ -190,6 +214,13 @@ export default class OcsManagerTypeHandler {
                     console.error(new Error(message.data[0].message));
                     return;
                 }
+
+                this._stateManager.dispatch('ocsManager_install', {
+                    status: message.data[0].status,
+                    message: message.data[0].message,
+                    metadata: message.data[0].metadata
+                });
+
                 this._stateManager.dispatch('ocsManager_installedItems', {});
             })
             .set('ItemHandler::uninstallStarted', (message) => {
