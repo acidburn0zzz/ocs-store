@@ -137,10 +137,8 @@ export default class OcsManagerTypeHandler {
                 this._stateManager.dispatch('ocsManager_metadataSet', {});
             })
             .set('ItemHandler::downloadStarted', (message) => {
-                console.log(message);
                 if (message.data[0].status !== 'success_downloadstart') {
                     console.error(new Error(message.data[0].message));
-                    return;
                 }
 
                 this._stateManager.dispatch('ocsManager_installing', {
@@ -158,7 +156,6 @@ export default class OcsManagerTypeHandler {
                 }
             })
             .set('ItemHandler::downloadFinished', (message) => {
-                console.log(message);
                 if (message.data[0].status !== 'success_download') {
                     console.error(new Error(message.data[0].message));
                 }
@@ -173,7 +170,6 @@ export default class OcsManagerTypeHandler {
                 console.log(message);
             })
             .set('ItemHandler::saveStarted', (message) => {
-                console.log(message);
                 if (message.data[0].status !== 'success_savestart') {
                     console.error(new Error(message.data[0].message));
                 }
@@ -185,7 +181,6 @@ export default class OcsManagerTypeHandler {
                 });
             })
             .set('ItemHandler::saveFinished', (message) => {
-                console.log(message);
                 if (message.data[0].status !== 'success_save') {
                     console.error(new Error(message.data[0].message));
                 }
@@ -197,7 +192,6 @@ export default class OcsManagerTypeHandler {
                 });
             })
             .set('ItemHandler::installStarted', (message) => {
-                console.log(message);
                 if (message.data[0].status !== 'success_installstart') {
                     console.error(new Error(message.data[0].message));
                 }
@@ -209,10 +203,8 @@ export default class OcsManagerTypeHandler {
                 });
             })
             .set('ItemHandler::installFinished', (message) => {
-                console.log(message);
                 if (message.data[0].status !== 'success_install') {
                     console.error(new Error(message.data[0].message));
-                    return;
                 }
 
                 this._stateManager.dispatch('ocsManager_installing', {
