@@ -104,7 +104,7 @@ export default class OcsManagerTypeHandler {
                     metadataSet: metadataSet
                 };
             })
-            .add('ocsManager_download', (data) => {
+            .add('ocsManager_install', (data) => {
                 return {
                     status: data.status,
                     message: data.message,
@@ -143,7 +143,7 @@ export default class OcsManagerTypeHandler {
                     return;
                 }
 
-                this._stateManager.dispatch('ocsManager_download', {
+                this._stateManager.dispatch('ocsManager_install', {
                     status: message.data[0].status,
                     message: message.data[0].message,
                     metadata: message.data[0].metadata
