@@ -164,15 +164,15 @@ export default class ToolbarComponent extends BaseComponent {
     }
 
     _viewHandler_ocsManager_downloading(state) {
-        const downloadingBadget = this.contentRoot
+        const downloadingBadge = this.contentRoot
             .querySelector('span[data-downloadingbadge]');
         if (state.downloading) {
-            downloadingBadget.textContent = '' + state.downloading;
-            downloadingBadget.setAttribute('data-downloadingbadge', 'active');
+            downloadingBadge.textContent = '' + state.downloading;
+            downloadingBadge.setAttribute('data-downloadingbadge', 'active');
         }
         else {
-            downloadingBadget.textContent = '0';
-            downloadingBadget.setAttribute('data-downloadingbadge', 'inactive');
+            downloadingBadge.textContent = '0';
+            downloadingBadge.setAttribute('data-downloadingbadge', 'inactive');
         }
     }
 
