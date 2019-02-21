@@ -104,6 +104,13 @@ export default class OcsManagerTypeHandler {
                     metadataSet: metadataSet
                 };
             })
+            .add('ocsManager_download', (data) => {
+                return {
+                    status: data.status,
+                    message: data.message,
+                    metadata: data.metadata
+                };
+            })
             .add('ocsManager_uninstall', (data) => {
                 this._ocsManagerApi.send('ItemHandler::uninstall', [data.itemKey]);
                 // Remove preview pic
@@ -135,6 +142,13 @@ export default class OcsManagerTypeHandler {
                     console.error(new Error(message.data[0].message));
                     return;
                 }
+
+                this._stateManager.dispatch('ocsManager_download', {
+                    status: message.data[0].status,
+                    message: message.data[0].message,
+                    metadata: message.data[0].metadata
+                });
+
                 // Download preview pic
                 if (message.data[0].metadata.command === 'install'
                     && message.data[0].metadata.provider && message.data[0].metadata.content_id
