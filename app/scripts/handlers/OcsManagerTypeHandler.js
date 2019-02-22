@@ -227,45 +227,36 @@ export default class OcsManagerTypeHandler {
                 this._stateManager.dispatch('ocsManager_installedItems', {});
             })
             .set('ItemHandler::uninstallStarted', (message) => {
-                console.log(message);
                 if (message.data[0].status !== 'success_uninstallstart') {
                     console.error(new Error(message.data[0].message));
                 }
             })
             .set('ItemHandler::uninstallFinished', (message) => {
-                console.log(message);
                 if (message.data[0].status !== 'success_uninstall') {
                     console.error(new Error(message.data[0].message));
-                    return;
                 }
                 this._stateManager.dispatch('ocsManager_installedItems', {});
                 this._stateManager.dispatch('ocsManager_updateAvailableItems', {});
             })
             .set('UpdateHandler::checkAllStarted', (message) => {
-                console.log(message);
                 if (!message.data[0]) {
                     console.error(new Error('Item update check failed'));
                 }
             })
             .set('UpdateHandler::checkAllFinished', (message) => {
-                console.log(message);
                 if (!message.data[0]) {
                     console.error(new Error('Item update check failed'));
-                    return;
                 }
                 this._stateManager.dispatch('ocsManager_updateAvailableItems', {});
             })
             .set('UpdateHandler::updateStarted', (message) => {
-                console.log(message);
                 if (!message.data[1]) {
                     console.error(new Error('Item update failed'));
                 }
             })
             .set('UpdateHandler::updateFinished', (message) => {
-                console.log(message);
                 if (!message.data[1]) {
                     console.error(new Error('Item update failed'));
-                    return;
                 }
                 this._stateManager.dispatch('ocsManager_installedItems', {});
                 this._stateManager.dispatch('ocsManager_updateAvailableItems', {});
