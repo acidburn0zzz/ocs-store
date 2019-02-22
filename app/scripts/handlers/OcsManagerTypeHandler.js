@@ -90,6 +90,7 @@ export default class OcsManagerTypeHandler {
                 const installedItems = message.data[0];
 
                 return {
+                    updateAvailable: Object.keys(updateAvailableItems).length,
                     updateAvailableItems: updateAvailableItems,
                     installedItems: installedItems,
                     installTypes: this._installTypes,

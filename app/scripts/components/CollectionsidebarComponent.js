@@ -6,18 +6,21 @@ export default class CollectionsidebarComponent extends BaseComponent {
         this.contentRoot.addEventListener('click', this._handleClick.bind(this));
 
         this._viewHandler_ocsManager_installedItems = this._viewHandler_ocsManager_installedItems.bind(this);
+        this._viewHandler_ocsManager_updateAvailableItems = this._viewHandler_ocsManager_updateAvailableItems.bind(this);
         this._viewHandler_ocsManager_metadataSet = this._viewHandler_ocsManager_metadataSet.bind(this);
     }
 
     componentConnectedCallback() {
         this.getStateManager().viewHandler
             .add('ocsManager_installedItems', this._viewHandler_ocsManager_installedItems)
+            .add('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems)
             .add('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
     componentDisconnectedCallback() {
         this.getStateManager().viewHandler
             .remove('ocsManager_installedItems', this._viewHandler_ocsManager_installedItems)
+            .remove('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems)
             .remove('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
@@ -138,6 +141,12 @@ export default class CollectionsidebarComponent extends BaseComponent {
     _viewHandler_ocsManager_installedItems(state) {
         this.contentRoot.querySelector('nav ul[data-menu="category"]')
             .innerHTML = this._categoryMenuItemsHtml(state);
+    }
+
+    _viewHandler_ocsManager_updateAvailableItems(state) {
+        const updateCount = this.contentRoot
+            .querySelector('nav ul[data-menu="activity"] a[data-action="update"] span[data-count]');
+        updateCount.textContent = '' + state.updateAvailable;
     }
 
     _viewHandler_ocsManager_metadataSet(state) {
