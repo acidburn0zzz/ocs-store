@@ -90,7 +90,7 @@ export default class OcsManagerTypeHandler {
                 const installedItems = message.data[0];
 
                 return {
-                    updateAvailable: Object.keys(updateAvailableItems).length,
+                    count: Object.keys(updateAvailableItems).length,
                     updateAvailableItems: updateAvailableItems,
                     installedItems: installedItems,
                     installTypes: this._installTypes,
@@ -101,7 +101,7 @@ export default class OcsManagerTypeHandler {
                 const message = await this._ocsManagerApi.sendSync('ItemHandler::metadataSet', []);
                 const metadataSet = message.data[0];
                 return {
-                    downloading: Object.keys(metadataSet).length,
+                    count: Object.keys(metadataSet).length,
                     metadataSet: metadataSet
                 };
             })

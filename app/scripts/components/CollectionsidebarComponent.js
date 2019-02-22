@@ -146,13 +146,13 @@ export default class CollectionsidebarComponent extends BaseComponent {
     _viewHandler_ocsManager_updateAvailableItems(state) {
         const updateCount = this.contentRoot
             .querySelector('nav ul[data-menu="activity"] a[data-action="update"] span[data-count]');
-        updateCount.textContent = '' + state.updateAvailable;
+        updateCount.textContent = '' + state.count;
     }
 
     _viewHandler_ocsManager_metadataSet(state) {
         const downloadCount = this.contentRoot
             .querySelector('nav ul[data-menu="activity"] a[data-action="download"] span[data-count]');
-        downloadCount.textContent = '' + state.downloading;
+        downloadCount.textContent = '' + state.count;
     }
 
 }

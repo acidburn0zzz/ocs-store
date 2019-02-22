@@ -166,14 +166,13 @@ export default class ToolbarComponent extends BaseComponent {
     _viewHandler_ocsManager_metadataSet(state) {
         const downloadingBadge = this.contentRoot
             .querySelector('span[data-downloadingbadge]');
-        if (state.downloading) {
-            downloadingBadge.textContent = '' + state.downloading;
+        if (state.count) {
             downloadingBadge.setAttribute('data-downloadingbadge', 'active');
         }
         else {
-            downloadingBadge.textContent = '0';
             downloadingBadge.setAttribute('data-downloadingbadge', 'inactive');
         }
+        downloadingBadge.textContent = state.count;
     }
 
 }
