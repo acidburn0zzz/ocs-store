@@ -143,7 +143,7 @@ function previewpicFilename(itemKey) {
     return btoa(itemKey).slice(-255);
 }
 
-function downloadpreviewpic(itemKey, url) {
+function downloadPreviewpic(itemKey, url) {
     if (!isDirectory(previewpicDirectory)) {
         fs.mkdirSync(previewpicDirectory);
     }
@@ -155,7 +155,7 @@ function downloadpreviewpic(itemKey, url) {
         .pipe(fs.createWriteStream(path));
 }
 
-function removepreviewpic(itemKey) {
+function removePreviewpic(itemKey) {
     const path = `${previewpicDirectory}/${previewpicFilename(itemKey)}`;
     if (isFile(path)) {
         fs.unlinkSync(path);
@@ -216,11 +216,11 @@ ipcMain.on('previewpic', (event, action, itemKey, url) => {
         event.returnValue = `${previewpicDirectory}/${previewpicFilename(itemKey)}`;
     }
     else if (action === 'download' && itemKey && url) {
-        downloadpreviewpic(itemKey, url);
+        downloadPreviewpic(itemKey, url);
         event.returnValue = undefined;
     }
     else if (action === 'remove' && itemKey) {
-        removepreviewpic(itemKey);
+        removePreviewpic(itemKey);
         event.returnValue = undefined;
     }
     else {
