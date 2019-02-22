@@ -128,7 +128,7 @@ export default class WebviewComponent extends BaseComponent {
 
     _detectOcsApiInfo(url) {
         // Detect provider key and content id from page url
-        // https://www.opendesktop.org/p/123456789/?key=val#hash
+        // https://www.opendesktop.org/s/Gnome/p/123456789/?key=val#hash
         //
         // providerKey = https://www.opendesktop.org/ocs/v1/
         // contentId = 123456789
@@ -136,10 +136,10 @@ export default class WebviewComponent extends BaseComponent {
             providerKey: '',
             contentId: ''
         };
-        const pageUrlParts = url.split('?')[0].split('#')[0].split('/p/');
-        if (pageUrlParts[0] && pageUrlParts[1]) {
-            info.providerKey = `${pageUrlParts[0]}/ocs/v1/`;
-            info.contentId = pageUrlParts[1].split('/')[0];
+        const matches = url.match(/(https?:\/\/[^/]+).*\/p\/([^/?#]+)/);
+        if (matches) {
+            info.providerKey = `${matches[1]}/ocs/v1/`;
+            info.contentId = matches[2];
         }
         return info;
     }
