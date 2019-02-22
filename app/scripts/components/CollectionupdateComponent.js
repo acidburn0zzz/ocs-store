@@ -82,13 +82,12 @@ export default class CollectionupdateComponent extends BaseComponent {
                 const file = updateAvailableItemsState.installedItems[itemKey].files[0];
                 const previewpicUrl = `file://${updateAvailableItemsState.previewpicDirectory}/${this.convertItemKeyToPreviewpicFilename(itemKey)}`;
                 listItems.push(`
-                    <li class="widget">
+                    <li class="widget" data-item-key="${itemKey}">
                     <div>
                     <figure data-previewpic style="background-image: url('${previewpicUrl}');"></figure>
                     <div>
                     <span data-name>${file}</span><br>
                     <progress data-progress value="" max=""></progress>
-                    <span data-progress></span>
                     </div>
                     </div>
                     <nav data-actions>
@@ -102,11 +101,31 @@ export default class CollectionupdateComponent extends BaseComponent {
         return listItems.join('');
     }
 
+    _handleClick(event) {
+        if (event.target.closest('button')) {
+            event.preventDefault();
+            const buttonElement = event.target.closest('button');
+            const action = buttonElement.getAttribute('data-action');
+            if (action === 'update') {
+                this.dispatch('ocsManager_update', {
+                    itemKey: buttonElement.getAttribute('data-item-key')
+                });
+            }
+        }
+    }
+
     _viewHandler_ocsManager_updateAvailableItems(state) {
         this.contentRoot.querySelector('ul[data-container]')
             .innerHTML = this._listItemsHtml(state);
     }
 
-    _viewHandler_ocsManager_updating(state) {}
+    _viewHandler_ocsManager_updating(state) {
+        const updateItem = this.contentRoot.querySelector(`li[data-item-key="${state.itemKey}"]`);
+        if (updateItem) {
+            const progressElement = updateItem.querySelector('progress[data-progress]');
+            progressElement.value = state.progress;
+            progressElement.max = 1;
+        }
+    }
 
 }

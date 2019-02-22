@@ -73,8 +73,8 @@ export default class CollectiondownloadComponent extends BaseComponent {
         const downloadItem = this.contentRoot.querySelector(`li[data-url="${state.url}"]`);
         if (downloadItem) {
             const progressElement = downloadItem.querySelector('progress[data-progress]');
-            progressElement.setAttribute('value', state.received);
-            progressElement.setAttribute('max', state.total);
+            progressElement.value = state.received;
+            progressElement.max = state.total;
             downloadItem.querySelector('span[data-progress]')
                 .textContent = Chilit.Utility.convertByteToHumanReadable(state.received)
                     + ' / '
