@@ -125,6 +125,16 @@ export default class OcsManagerTypeHandler {
                 this._ipcRenderer.sendSync('previewpic', 'remove', data.itemKey);
                 return false;
             })
+            .add('ocsManager_update', (data) => {
+                this._ocsManagerApi.send('UpdateHandler::update', [data.itemKey]);
+                return false;
+            })
+            .add('ocsManager_updating', (data) => {
+                return {
+                    itemKey: data.itemKey,
+                    progress: data.progress
+                };
+            })
             .add('ocsManager_apply', (data) => {
                 this._ocsManagerApi.send('DesktopThemeHandler::applyTheme', [data.path, data.installType]);
                 return false;
@@ -263,7 +273,10 @@ export default class OcsManagerTypeHandler {
                 this._stateManager.dispatch('ocsManager_updateAvailableItems', {});
             })
             .set('UpdateHandler::updateProgress', (message) => {
-                console.log(message);
+                this._stateManager.dispatch('ocsManager_updating', {
+                    itemKey: message.data[0],
+                    progress: message.data[1]
+                });
             });
     }
 
