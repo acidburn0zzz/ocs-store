@@ -111,6 +111,13 @@ export default class OcsManagerTypeHandler {
                     metadata: data.metadata
                 };
             })
+            .add('ocsManager_downloading', (data) => {
+                return {
+                    url: data.url,
+                    received: data.received,
+                    total: data.total
+                };
+            })
             .add('ocsManager_uninstall', (data) => {
                 this._ocsManagerApi.send('ItemHandler::uninstall', [data.itemKey]);
                 // Remove preview pic
@@ -167,7 +174,11 @@ export default class OcsManagerTypeHandler {
                 });
             })
             .set('ItemHandler::downloadProgress', (message) => {
-                console.log(message);
+                this._stateManager.dispatch('ocsManager_downloading', {
+                    url: message.data[0],
+                    received: message.data[1],
+                    total: message.data[2]
+                });
             })
             .set('ItemHandler::saveStarted', (message) => {
                 if (message.data[0].status !== 'success_savestart') {
