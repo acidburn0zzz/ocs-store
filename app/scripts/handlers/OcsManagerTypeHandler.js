@@ -9,6 +9,7 @@ export default class OcsManagerTypeHandler {
         this._previewpicDirectory = this._ipcRenderer.sendSync('previewpic', 'directory');
         this._installTypes = {};
 
+        this._webviewComponent = null;
         this._collectiondialogComponent = null;
 
         this._subscribe();
@@ -17,6 +18,10 @@ export default class OcsManagerTypeHandler {
 
     _subscribe() {
         this._stateManager.actionHandler
+            .add('webview_activate', (data) => {
+                this._webviewComponent = data.component;
+                return {};
+            })
             .add('ocsManager_activate', (data) => {
                 this._collectiondialogComponent = data.component;
                 return {isActivated: true};
