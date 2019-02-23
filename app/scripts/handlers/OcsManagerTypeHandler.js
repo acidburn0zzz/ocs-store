@@ -171,12 +171,23 @@ export default class OcsManagerTypeHandler {
                 });
 
                 // Download preview pic
-                if (message.data[0].metadata.command === 'install'
-                    && message.data[0].metadata.provider && message.data[0].metadata.content_id
-                ) {
-                    const previewpicUrl = `${message.data[0].metadata.provider}content/previewpic/${message.data[0].metadata.content_id}`;
-                    this._ipcRenderer.sendSync('previewpic', 'download', message.data[0].metadata.url, previewpicUrl);
-                }
+                this._webviewComponent.executeJavaScript(
+                    `document.querySelector('meta[property="og:image"]').content`,
+                    false,
+                    (result) => {
+                        let previewpicUrl = result || '';
+                        // Previewpic API has been deprecated?
+                        /*if (!previewpicUrl
+                            && message.data[0].metadata.command === 'install'
+                            && message.data[0].metadata.provider && message.data[0].metadata.content_id
+                        ) {
+                            previewpicUrl = `${message.data[0].metadata.provider}content/previewpic/${message.data[0].metadata.content_id}`;
+                        }*/
+                        if (previewpicUrl) {
+                            this._ipcRenderer.sendSync('previewpic', 'download', message.data[0].metadata.url, previewpicUrl);
+                        }
+                    }
+                );
             })
             .set('ItemHandler::downloadFinished', (message) => {
                 if (message.data[0].status !== 'success_download') {
