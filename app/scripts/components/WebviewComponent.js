@@ -76,6 +76,10 @@ export default class WebviewComponent extends BaseComponent {
         this._webviewElement.stop();
     }
 
+    executeJavaScript(...args) {
+        this._webviewElement.executeJavaScript(...args);
+    }
+
     _createWebviewElement() {
         this._webviewElement = document.createElement('webview');
 
