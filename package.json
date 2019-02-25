@@ -1,25 +1,26 @@
 {
   "name": "ocs-store",
   "productName": "OCS-Store",
-  "version": "3.5.0",
+  "version": "3.9.0",
   "description": "Store Frontend and Management Application based on OpenCollaborationServices (OCS) of Opendesktop.org.",
   "author": "Opendesktop.org",
   "license": "GPL-3.0",
   "homepage": "https://www.opendesktop.org/",
   "repository": "https://git.opendesktop.org/akiraohgaki/ocs-store",
+  "bugs": "https://git.opendesktop.org/akiraohgaki/ocs-store/issues",
   "main": "app/main.js",
   "scripts": {
     "start": "electron .",
     "debug": "electron . --debug",
-    "package": "electron-packager . ocs-store --platform=linux --arch=x64 --out=dist --overwrite --ignore='^/(\\.gitignore|\\.gitlab\\-ci\\.yml|Makefile|README\\.md|desktop|launcher|pkg|scripts|appimagebuild|appimagetool|squashfs\\-root)($|/)'"
+    "package": "electron-packager . ocs-store --platform=linux --arch=x64 --out=dist --overwrite --ignore='^/(\\.gitignore|\\.gitlab\\-ci\\.yml|Makefile|README\\.md|desktop|launcher|pkg|scripts|appimagebuild)($|/)'"
   },
   "dependencies": {
-    "electron-store": "2.0.0",
-    "import-export": "1.0.1",
-    "request": "2.88.0"
+    "electron-store": "2.*.*",
+    "request": "2.*.*",
+    "esm": "3.*.*"
   },
   "devDependencies": {
-    "electron": "2.0.8",
-    "electron-packager": "12.1.1"
+    "electron": "4.*.*",
+    "electron-packager": "13.*.*"
   }
 }

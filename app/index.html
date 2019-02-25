@@ -1,24 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+<meta http-equiv="Content-Security-Policy"
+    content="default-src 'self' 'unsafe-inline'; connect-src *">
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="format-detection" content="telephone=no, email=no, address=no">
 
 <title></title>
 
-<link href="./images/images.css" rel="stylesheet">
-<link href="./styles/reset.css" rel="stylesheet">
-<link href="./styles/style.css" rel="stylesheet">
+<link href="libs/chirit/css/alt.css" rel="stylesheet">
+<link href="libs/chirit/css/ui.css" rel="stylesheet">
+<link href="styles/global.css" rel="stylesheet">
 </head>
 
-<body>
-<div data-component="Root"></div>
+<body class="flex-column">
+<root-component class="flex-auto flex-column"></root-component>
 
 <script>
-require('import-export'); // Polyfill to use ES6 modules syntax in nodejs
-require('./scripts/renderers/window-renderer.js');
+require = require('esm')(module);
+module.exports = require('./scripts/renderers/browser-window.js');
 </script>
 </body>
 
