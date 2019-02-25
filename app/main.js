@@ -10,7 +10,7 @@ const appConfig = require('./configs/application.json');
 const ocsManagerConfig = require('./configs/ocs-manager.json');
 
 const isDebugMode = process.argv.includes('--debug');
-
+const isXdg = ['aix', 'freebsd', 'linux', 'openbsd', 'sunos'].includes(process.platform);
 const previewpicDirectory = `${app.getPath('userData')}/previewpic`;
 
 let topWindow = null;
@@ -187,7 +187,8 @@ ipcMain.on('app', (event, key) => {
     const data = {
         package: appPackage,
         config: appConfig,
-        isDebugMode: isDebugMode
+        isDebugMode: isDebugMode,
+        isXdg: isXdg
     };
     event.returnValue = key ? data[key] : data;
 });

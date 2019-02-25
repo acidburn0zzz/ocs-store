@@ -73,7 +73,7 @@ export default class CollectioninstalledComponent extends BaseComponent {
 
         if (Object.keys(installedItemsByTypeState.installedItemsByType).length) {
             const apply = installedItemsByTypeState.isApplicableType ? 'active' : 'inactive';
-            const destinationKey = this.isXdg() ? 'destination' : 'generic_destination';
+            const destinationKey = installedItemsByTypeState.isXdg ? 'destination' : 'generic_destination';
             const destination = installedItemsByTypeState.installTypes[installedItemsByTypeState.installType][destinationKey];
             for (const [key, value] of Object.entries(installedItemsByTypeState.installedItemsByType)) {
                 const previewpicUrl = `file://${installedItemsByTypeState.previewpicDirectory}/${this.convertItemKeyToPreviewpicFilename(key)}`;

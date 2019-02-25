@@ -15,12 +15,6 @@ export default class BaseComponent extends Chirit.Component {
         return document.querySelector('root-component').getStateManager();
     }
 
-    isXdg() {
-        return ['aix', 'freebsd', 'linux', 'openbsd', 'sunos']
-            .includes(process.platform) ? true : false;
-        // false = darwin/win32/android
-    }
-
     convertItemKeyToPreviewpicFilename(itemKey) {
         // See also btoa() in main.js
         return btoa(itemKey).slice(-255);
