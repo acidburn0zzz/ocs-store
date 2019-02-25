@@ -13,9 +13,9 @@ import BaseComponent from './BaseComponent.js';
 export default class RootComponent extends BaseComponent {
 
     init() {
-        this._stateManager = new Chirit.StateManager(this);
-
         document.title = ipcRenderer.sendSync('app', 'package').productName;
+
+        this._stateManager = new Chirit.StateManager(this);
 
         const ocsManagerApi = new OcsManagerApi(ipcRenderer.sendSync('ocs-manager', 'url'));
 

@@ -139,7 +139,7 @@ function btoa(string) {
 }*/
 
 function previewpicFilename(itemKey) {
-    // "itemKey" will be URL of product file
+    // "itemKey" will be URL to product file
     return btoa(itemKey).slice(-255);
 }
 

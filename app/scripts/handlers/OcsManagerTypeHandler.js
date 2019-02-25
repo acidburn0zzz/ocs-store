@@ -5,7 +5,6 @@ export default class OcsManagerTypeHandler {
         this._ocsManagerApi = ocsManagerApi;
         this._ipcRenderer = ipcRenderer;
 
-        this._updateCheckAfter = 86400000; // 1day (ms)
         this._previewpicDirectory = this._ipcRenderer.sendSync('previewpic', 'directory');
         this._installTypes = {};
 
@@ -20,7 +19,7 @@ export default class OcsManagerTypeHandler {
         this._stateManager.actionHandler
             .add('webview_activate', (data) => {
                 this._webviewComponent = data.component;
-                return {};
+                return {isActivated: true};
             })
             .add('ocsManager_activate', (data) => {
                 this._collectiondialogComponent = data.component;
@@ -34,8 +33,9 @@ export default class OcsManagerTypeHandler {
                     this._installTypes = message.data[0];
 
                     message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigApplication', []);
+                    const updateCheckAfter = this._ipcRenderer.sendSync('app', 'config').updateCheckAfter;
                     if (!message.data[0].update_checked_at
-                        || (message.data[0].update_checked_at + this._updateCheckAfter) < new Date().getTime()
+                        || (message.data[0].update_checked_at + updateCheckAfter) < new Date().getTime()
                     ) {
                         this._ocsManagerApi.send('UpdateHandler::checkAll', []);
                     }

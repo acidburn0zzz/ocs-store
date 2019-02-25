@@ -22,7 +22,7 @@ export default class BaseComponent extends Chirit.Component {
     }
 
     convertItemKeyToPreviewpicFilename(itemKey) {
-        // See also main.js
+        // See also btoa() in main.js
         return btoa(itemKey).slice(-255);
     }
 
