@@ -5,7 +5,6 @@ export default class OcsManagerTypeHandler {
         this._ocsManagerApi = ocsManagerApi;
         this._ipcRenderer = ipcRenderer;
 
-        this._isXdg = this._ipcRenderer.sendSync('app', 'isXdg');
         this._previewpicDirectory = this._ipcRenderer.sendSync('previewpic', 'directory');
         this._installTypes = {};
 
@@ -57,7 +56,6 @@ export default class OcsManagerTypeHandler {
                 return {
                     installedItems: installedItems,
                     installTypes: this._installTypes,
-                    isXdg: this._isXdg,
                     previewpicDirectory: this._previewpicDirectory
                 };
             })
@@ -84,7 +82,6 @@ export default class OcsManagerTypeHandler {
                     isApplicableType: isApplicableType,
                     installedItemsByType: installedItemsByType,
                     installTypes: this._installTypes,
-                    isXdg: this._isXdg,
                     previewpicDirectory: this._previewpicDirectory
                 };
             })
@@ -102,7 +99,6 @@ export default class OcsManagerTypeHandler {
                     updateAvailableItems: updateAvailableItems,
                     installedItems: installedItems,
                     installTypes: this._installTypes,
-                    isXdg: this._isXdg,
                     previewpicDirectory: this._previewpicDirectory
                 };
             })

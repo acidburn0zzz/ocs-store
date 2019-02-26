@@ -73,9 +73,8 @@ export default class CollectioninstalledComponent extends BaseComponent {
 
         if (Object.keys(installedItemsByTypeState.installedItemsByType).length) {
             const apply = installedItemsByTypeState.isApplicableType ? 'active' : 'inactive';
-            const destinationKey = installedItemsByTypeState.isXdg ? 'destination' : 'generic_destination';
             const openButtonText = (installedItemsByTypeState.installType === 'bin') ? 'Run' : 'Open';
-            const destination = installedItemsByTypeState.installTypes[installedItemsByTypeState.installType][destinationKey];
+            const destination = installedItemsByTypeState.installTypes[installedItemsByTypeState.installType].destination;
             for (const [key, value] of Object.entries(installedItemsByTypeState.installedItemsByType)) {
                 const previewpicUrl = `file://${installedItemsByTypeState.previewpicDirectory}/${this.convertItemKeyToPreviewpicFilename(key)}`;
                 for (const file of value.files) {
