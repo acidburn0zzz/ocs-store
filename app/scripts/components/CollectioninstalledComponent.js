@@ -35,14 +35,14 @@ export default class CollectioninstalledComponent extends BaseComponent {
                 margin: 1em;
                 padding: 1em;
             }
-            ul[data-container] li a {
+            ul[data-container] li > div {
                 flex: 1 1 auto;
                 display: flex;
                 flex-flow: row nowrap;
                 align-items: center;
                 color: var(--color-text);
             }
-            ul[data-container] li a figure[data-previewpic] {
+            ul[data-container] li > div figure[data-previewpic] {
                 display: inline-block;
                 width: 64px;
                 height: 64px;
@@ -51,7 +51,7 @@ export default class CollectioninstalledComponent extends BaseComponent {
                 background-repeat: no-repeat;
                 background-size: contain;
             }
-            ul[data-container] li a span[data-name] {
+            ul[data-container] li > div span[data-name] {
                 flex: 1 1 auto;
                 display: inline-block;
             }
@@ -74,6 +74,7 @@ export default class CollectioninstalledComponent extends BaseComponent {
         if (Object.keys(installedItemsByTypeState.installedItemsByType).length) {
             const apply = installedItemsByTypeState.isApplicableType ? 'active' : 'inactive';
             const destinationKey = installedItemsByTypeState.isXdg ? 'destination' : 'generic_destination';
+            const openButtonText = (installedItemsByTypeState.installType === 'bin') ? 'Run' : 'Open';
             const destination = installedItemsByTypeState.installTypes[installedItemsByTypeState.installType][destinationKey];
             for (const [key, value] of Object.entries(installedItemsByTypeState.installedItemsByType)) {
                 const previewpicUrl = `file://${installedItemsByTypeState.previewpicDirectory}/${this.convertItemKeyToPreviewpicFilename(key)}`;
@@ -82,11 +83,12 @@ export default class CollectioninstalledComponent extends BaseComponent {
                     const fileUrl = `file://${path}`;
                     listItems.push(`
                         <li class="widget">
-                        <a href="${fileUrl}" target="_blank">
+                        <div>
                         <figure data-previewpic style="background-image: url('${previewpicUrl}');"></figure>
                         <span data-name>${file}</span>
-                        </a>
+                        </div>
                         <nav data-actions>
+                        <button class="button" data-action="open" data-url="${fileUrl}">${openButtonText}</button>
                         <button class="button-accept"
                             data-action="apply"
                             data-path="${path}" data-install-type="${installedItemsByTypeState.installType}"
@@ -103,18 +105,16 @@ export default class CollectioninstalledComponent extends BaseComponent {
     }
 
     _handleClick(event) {
-        if (event.target.closest('a')) {
-            event.preventDefault();
-            const anchorElement = event.target.closest('a');
-            if (anchorElement.target === '_blank') {
-                this.dispatch('ocsManager_externalUrl', {url: anchorElement.href});
-            }
-        }
-        else if (event.target.closest('button')) {
+        if (event.target.closest('button')) {
             event.preventDefault();
             const buttonElement = event.target.closest('button');
             const action = buttonElement.getAttribute('data-action');
-            if (action === 'apply') {
+            if (action === 'open') {
+                this.dispatch('ocsManager_externalUrl', {
+                    url: buttonElement.getAttribute('data-url')
+                });
+            }
+            else if (action === 'apply') {
                 this.dispatch('ocsManager_apply', {
                     path: buttonElement.getAttribute('data-path'),
                     installType: buttonElement.getAttribute('data-install-type')
