@@ -19,7 +19,7 @@ install -D -m 755 /usr/lib/x86_64-linux-gnu/libXss.so.1 ${APPDIR}/usr/lib/ocs-st
 install -D -m 755 /usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libcanberra-gtk-module.so ${APPDIR}/usr/lib/ocs-store-linux-x64/libcanberra-gtk-module.so
 install -D -m 755 /usr/lib/x86_64-linux-gnu/libgnome-keyring.so.0 ${APPDIR}/usr/lib/ocs-store-linux-x64/libgnome-keyring.so.0
 
-curl -fsSL -o ocs-manager https://git.opendesktop.org/akiraohgaki/ocs-manager/uploads/3b76554230b91093fc998915f970fcdc/ocs-manager-0.7.1-1-x86_64.AppImage
+curl -fsSL -o ocs-manager https://git.opendesktop.org/akiraohgaki/ocs-manager/uploads/ebf99a67dcd30bc57cfa371cac1f959e/ocs-manager-0.7.2-1-x86_64.AppImage
 install -D -m 755 ocs-manager ${APPDIR}/usr/bin/ocs-manager
 
 curl -fsSL -o appimagetool https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
