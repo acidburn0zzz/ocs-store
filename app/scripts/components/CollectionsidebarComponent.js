@@ -94,12 +94,33 @@ export default class CollectionsidebarComponent extends BaseComponent {
                 }
                 categorizedInstalledItems[value.install_type][key] = value;
             }
-            for (const [key, value] of Object.entries(categorizedInstalledItems)) {
+
+            const categories = [];
+            for (const installType of Object.keys(categorizedInstalledItems)) {
+                categories.push({
+                    installType: installType,
+                    name: installedItemsState.installTypes[installType].name,
+                    count: Object.keys(categorizedInstalledItems[installType]).length
+                });
+            }
+            categories.sort((a, b) => {
+                const nameA = a.name.toUpperCase();
+                const nameB = b.name.toUpperCase();
+                if (nameA > nameB) {
+                    return 1;
+                }
+                else if (nameA < nameB) {
+                    return -1;
+                }
+                return 0;
+            });
+
+            for (const category of categories) {
                 listItems.push(`
                     <li>
-                    <a href="#" data-action="installed" data-install-type="${key}">
-                    <span data-name>${installedItemsState.installTypes[key].name}</span>
-                    <span data-count>${Object.keys(value).length}</span>
+                    <a href="#" data-action="installed" data-install-type="${category.installType}">
+                    <span data-name>${category.name}</span>
+                    <span data-count>${category.count}</span>
                     </a>
                     </li>
                 `);
