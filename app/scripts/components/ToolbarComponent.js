@@ -103,12 +103,12 @@ export default class ToolbarComponent extends BaseComponent {
 
             <nav data-toolbar>
             <ul class="flex">
-            <li><navbutton-component data-type="webview_navigation" data-action="back" title="Back" disabled></navbutton-component></li>
-            <li><navbutton-component data-type="webview_navigation" data-action="forward" title="Forward" disabled></navbutton-component></li>
-            <li><navbutton-component data-type="webview_navigation" data-action="reload" title="Reload"></navbutton-component></li>
-            <li><navbutton-component data-type="webview_navigation" data-action="home" title="Startpage"></navbutton-component></li>
+            <li><navbutton-component data-action="webview_back" data-icon="back" title="Back" disabled></navbutton-component></li>
+            <li><navbutton-component data-action="webview_forward" data-icon="forward" title="Forward" disabled></navbutton-component></li>
+            <li><navbutton-component data-action="webview_reload" data-icon="reload" title="Reload"></navbutton-component></li>
+            <li><navbutton-component data-action="webview_home" data-icon="home" title="Startpage"></navbutton-component></li>
             <li>
-            <navbutton-component data-type="ocsManager_navigation" data-action="collection" title="My Collection"></navbutton-component><br>
+            <navbutton-component data-action="ocsManager_collection" data-icon="collection" title="My Collection"></navbutton-component><br>
             <span data-downloadingbadge="inactive">0</span>
             </li>
             <li class="flex-auto flex"><omnibox-component></omnibox-component></li>
@@ -127,25 +127,27 @@ export default class ToolbarComponent extends BaseComponent {
             indicator.setAttribute('data-indicator', 'active');
 
             const reloadButton = this.contentRoot
-                .querySelector('navbutton-component[data-type="webview_navigation"][data-action="reload"]');
+                .querySelector('navbutton-component[data-action="webview_reload"]');
             if (reloadButton) {
-                reloadButton.setAttribute('data-action', 'stop');
+                reloadButton.setAttribute('data-action', 'webview_stop');
+                reloadButton.setAttribute('data-icon', 'stop');
             }
         }
         else {
             indicator.setAttribute('data-indicator', 'inactive');
 
             const stopButton = this.contentRoot
-                .querySelector('navbutton-component[data-type="webview_navigation"][data-action="stop"]');
+                .querySelector('navbutton-component[data-action="webview_stop"]');
             if (stopButton) {
-                stopButton.setAttribute('data-action', 'reload');
+                stopButton.setAttribute('data-action', 'webview_reload');
+                stopButton.setAttribute('data-icon', 'reload');
             }
         }
     }
 
     _viewHandler_webview_page(state) {
         const backButton = this.contentRoot
-            .querySelector('navbutton-component[data-type="webview_navigation"][data-action="back"]');
+            .querySelector('navbutton-component[data-action="webview_back"]');
         if (state.canGoBack) {
             backButton.removeAttribute('disabled');
         }
@@ -154,7 +156,7 @@ export default class ToolbarComponent extends BaseComponent {
         }
 
         const forwardButton = this.contentRoot
-            .querySelector('navbutton-component[data-type="webview_navigation"][data-action="forward"]');
+            .querySelector('navbutton-component[data-action="webview_forward"]');
         if (state.canGoForward) {
             forwardButton.removeAttribute('disabled');
         }

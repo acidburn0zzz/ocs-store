@@ -148,12 +148,8 @@ export default class OcsManagerTypeHandler {
                 this._ocsManagerApi.send('DesktopThemeHandler::applyTheme', [data.path, data.installType]);
                 return false;
             })
-            .add('ocsManager_navigation', (data) => {
-                switch (data.action) {
-                    case 'collection':
-                        this._collectiondialogComponent.open();
-                        break;
-                }
+            .add('ocsManager_collection', () => {
+                this._collectiondialogComponent.open();
                 return false;
             });
     }

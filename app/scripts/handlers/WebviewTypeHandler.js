@@ -48,27 +48,28 @@ export default class WebviewTypeHandler {
                 this._webviewComponent.loadUrl(this._startPage);
                 return false;
             })
-            .add('webview_navigation', (data) => {
-                switch (data.action) {
-                    case 'load':
-                        this._webviewComponent.loadUrl(data.url);
-                        break;
-                    case 'home':
-                        this._webviewComponent.loadUrl(this._startPage);
-                        break;
-                    case 'back':
-                        this._webviewComponent.goBack();
-                        break;
-                    case 'forward':
-                        this._webviewComponent.goForward();
-                        break;
-                    case 'reload':
-                        this._webviewComponent.reload();
-                        break;
-                    case 'stop':
-                        this._webviewComponent.stop();
-                        break;
-                }
+            .add('webview_load', (data) => {
+                this._webviewComponent.loadUrl(data.url);
+                return false;
+            })
+            .add('webview_home', () => {
+                this._webviewComponent.loadUrl(this._startPage);
+                return false;
+            })
+            .add('webview_back', () => {
+                this._webviewComponent.goBack();
+                return false;
+            })
+            .add('webview_forward', () => {
+                this._webviewComponent.goForward();
+                return false;
+            })
+            .add('webview_reload', () => {
+                this._webviewComponent.reload();
+                return false;
+            })
+            .add('webview_stop', () => {
+                this._webviewComponent.stop();
                 return false;
             });
     }
