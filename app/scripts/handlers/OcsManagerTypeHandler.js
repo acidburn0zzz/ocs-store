@@ -177,8 +177,9 @@ export default class OcsManagerTypeHandler {
                 });
 
                 // Download preview pic
+                const selector = 'meta[property="og:image"]';
                 this._webviewComponent.executeJavaScript(
-                    `document.querySelector('meta[property="og:image"]').content`,
+                    `document.querySelector('${selector}').content`,
                     false,
                     (result) => {
                         let previewpicUrl = result || '';
