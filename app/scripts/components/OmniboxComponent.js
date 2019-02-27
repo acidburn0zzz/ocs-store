@@ -172,7 +172,7 @@ export default class OmniboxComponent extends BaseComponent {
             event.preventDefault();
             const anchorElement = event.target.closest('a');
             if (anchorElement.target === '_blank') {
-                this.dispatch('ocsManager_externalUrl', {url: anchorElement.href});
+                this.dispatch('ocsManager_openUrl', {url: anchorElement.href});
             }
             this.toggle();
         }

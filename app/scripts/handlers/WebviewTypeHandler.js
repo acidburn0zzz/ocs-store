@@ -24,36 +24,32 @@ export default class WebviewTypeHandler {
                 return {
                     partition: this._partition,
                     preload: this._preload,
-                    src: this._startPage,
+                    startPage: this._startPage,
                     isDebugMode: this._isDebugMode
                 };
             })
             .add('webview_loading', (data) => {
-                return {
-                    isLoading: data.isLoading
-                };
+                return {isLoading: data.isLoading};
             })
             .add('webview_page', (data) => {
                 return {
+                    startPage: this._startPage,
                     url: data.url,
                     title: data.title,
                     canGoBack: data.canGoBack,
-                    canGoForward: data.canGoForward,
-                    startPage: this._startPage
+                    canGoForward: data.canGoForward
                 };
             })
             .add('webview_startPage', (data) => {
-                this._startPage = data.url;
-                this._ipcRenderer.sendSync('store', 'startPage', this._startPage);
+                if (data.url) {
+                    this._startPage = data.url;
+                    this._ipcRenderer.sendSync('store', 'startPage', this._startPage);
+                }
                 this._webviewComponent.loadUrl(this._startPage);
                 return false;
             })
             .add('webview_load', (data) => {
                 this._webviewComponent.loadUrl(data.url);
-                return false;
-            })
-            .add('webview_home', () => {
-                this._webviewComponent.loadUrl(this._startPage);
                 return false;
             })
             .add('webview_back', () => {

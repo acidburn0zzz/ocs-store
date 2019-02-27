@@ -86,7 +86,7 @@ export default class CollectionsidebarComponent extends BaseComponent {
     _categoryMenuItemsHtml(installedItemsState) {
         const listItems = [];
 
-        if (Object.keys(installedItemsState.installedItems).length) {
+        if (installedItemsState.count) {
             const categorizedInstalledItems = {};
             for (const [key, value] of Object.entries(installedItemsState.installedItems)) {
                 if (!categorizedInstalledItems[value.install_type]) {

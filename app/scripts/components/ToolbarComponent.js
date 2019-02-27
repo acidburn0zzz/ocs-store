@@ -106,7 +106,7 @@ export default class ToolbarComponent extends BaseComponent {
             <li><navbutton-component data-action="webview_back" data-icon="back" title="Back" disabled></navbutton-component></li>
             <li><navbutton-component data-action="webview_forward" data-icon="forward" title="Forward" disabled></navbutton-component></li>
             <li><navbutton-component data-action="webview_reload" data-icon="reload" title="Reload"></navbutton-component></li>
-            <li><navbutton-component data-action="webview_home" data-icon="home" title="Startpage"></navbutton-component></li>
+            <li><navbutton-component data-action="webview_startPage" data-icon="home" title="Startpage"></navbutton-component></li>
             <li>
             <navbutton-component data-action="ocsManager_collection" data-icon="collection" title="My Collection"></navbutton-component><br>
             <span data-downloadingbadge="inactive">0</span>

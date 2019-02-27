@@ -71,7 +71,7 @@ export default class CollectioninstalledComponent extends BaseComponent {
     _listItemsHtml(installedItemsByTypeState) {
         const listItems = [];
 
-        if (Object.keys(installedItemsByTypeState.installedItemsByType).length) {
+        if (installedItemsByTypeState.count) {
             const apply = installedItemsByTypeState.isApplicableType ? 'active' : 'inactive';
             const openButtonText = (installedItemsByTypeState.installType === 'bin') ? 'Run' : 'Open';
             const destination = installedItemsByTypeState.installTypes[installedItemsByTypeState.installType].destination;
@@ -109,12 +109,12 @@ export default class CollectioninstalledComponent extends BaseComponent {
             const buttonElement = event.target.closest('button');
             const action = buttonElement.getAttribute('data-action');
             if (action === 'open') {
-                this.dispatch('ocsManager_externalUrl', {
+                this.dispatch('ocsManager_openUrl', {
                     url: buttonElement.getAttribute('data-url')
                 });
             }
             else if (action === 'apply') {
-                this.dispatch('ocsManager_apply', {
+                this.dispatch('ocsManager_applyTheme', {
                     path: buttonElement.getAttribute('data-path'),
                     installType: buttonElement.getAttribute('data-install-type')
                 });

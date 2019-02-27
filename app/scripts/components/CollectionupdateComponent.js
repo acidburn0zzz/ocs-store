@@ -76,13 +76,12 @@ export default class CollectionupdateComponent extends BaseComponent {
     _listItemsHtml(updateAvailableItemsState) {
         const listItems = [];
 
-        if (Object.keys(updateAvailableItemsState.updateAvailableItems).length) {
-            for (const value of Object.values(updateAvailableItemsState.updateAvailableItems)) {
-                const itemKey = value.installed_item;
-                const file = updateAvailableItemsState.installedItems[itemKey].files[0];
-                const previewpicUrl = `file://${updateAvailableItemsState.previewpicDirectory}/${this.convertItemKeyToPreviewpicFilename(itemKey)}`;
+        if (updateAvailableItemsState.count) {
+            for (const [key, value] of Object.entries(updateAvailableItemsState.updateAvailableItems)) {
+                const file = value.files[0];
+                const previewpicUrl = `file://${updateAvailableItemsState.previewpicDirectory}/${this.convertItemKeyToPreviewpicFilename(key)}`;
                 listItems.push(`
-                    <li class="widget" data-item-key="${itemKey}">
+                    <li class="widget" data-item-key="${key}">
                     <div>
                     <figure data-previewpic style="background-image: url('${previewpicUrl}');"></figure>
                     <div>
@@ -91,7 +90,7 @@ export default class CollectionupdateComponent extends BaseComponent {
                     </div>
                     </div>
                     <nav data-actions>
-                    <button class="button-accept" data-action="update" data-item-key="${itemKey}">Update</button>
+                    <button class="button-accept" data-action="update" data-item-key="${key}">Update</button>
                     </nav>
                     </li>
                 `);

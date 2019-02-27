@@ -6,7 +6,7 @@ export default class WebviewComponent extends BaseComponent {
         this.state = {
             partition: '',
             preload: '',
-            src: '',
+            startPage: '',
             isDebugMode: false
         };
 
@@ -85,7 +85,7 @@ export default class WebviewComponent extends BaseComponent {
 
         this._webviewElement.setAttribute('partition', this.state.partition);
         this._webviewElement.setAttribute('preload', this.state.preload);
-        this._webviewElement.setAttribute('src', this.state.src);
+        this._webviewElement.setAttribute('src', this.state.startPage);
         this._webviewElement.className = 'flex-auto';
 
         this._webviewElement.addEventListener('did-start-loading', () => {
@@ -113,14 +113,14 @@ export default class WebviewComponent extends BaseComponent {
 
         this._webviewElement.addEventListener('new-window', (event) => {
             if (event.url.startsWith('http://') || event.url.startsWith('https://')) {
-                this.dispatch('ocsManager_externalUrl', {url: event.url});
+                this.dispatch('ocsManager_openUrl', {url: event.url});
             }
         });
 
         this._webviewElement.addEventListener('will-navigate', (event) => {
             if (event.url.startsWith('ocs://') || event.url.startsWith('ocss://')) {
                 const info = this._detectOcsApiInfo(this._webviewElement.getURL());
-                this.dispatch('ocsManager_ocsUrl', {
+                this.dispatch('ocsManager_getItemByOcsUrl', {
                     url: event.url,
                     ...info
                 });

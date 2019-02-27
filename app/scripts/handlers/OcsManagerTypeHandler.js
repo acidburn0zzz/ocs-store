@@ -33,20 +33,27 @@ export default class OcsManagerTypeHandler {
                     this._installTypes = message.data[0];
 
                     message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigApplication', []);
+                    const updateCheckedAt = message.data[0].update_checked_at;
+
                     const updateCheckAfter = this._ipcRenderer.sendSync('app', 'config').updateCheckAfter;
-                    if (!message.data[0].update_checked_at
-                        || (message.data[0].update_checked_at + updateCheckAfter) < new Date().getTime()
+
+                    if (!updateCheckedAt
+                        || (updateCheckedAt + updateCheckAfter) < new Date().getTime()
                     ) {
                         this._ocsManagerApi.send('UpdateHandler::checkAll', []);
                     }
                 }
                 return {};
             })
-            .add('ocsManager_externalUrl', (data) => {
+            .add('ocsManager_collection', () => {
+                this._collectiondialogComponent.open();
+                return false;
+            })
+            .add('ocsManager_openUrl', (data) => {
                 this._ocsManagerApi.send('SystemHandler::openUrl', [data.url]);
                 return false;
             })
-            .add('ocsManager_ocsUrl', (data) => {
+            .add('ocsManager_getItemByOcsUrl', (data) => {
                 this._ocsManagerApi.send('ItemHandler::getItemByOcsUrl', [data.url, data.providerKey, data.contentId]);
                 return false;
             })
@@ -54,9 +61,10 @@ export default class OcsManagerTypeHandler {
                 const message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigInstalledItems', []);
                 const installedItems = message.data[0];
                 return {
-                    installedItems: installedItems,
+                    previewpicDirectory: this._previewpicDirectory,
                     installTypes: this._installTypes,
-                    previewpicDirectory: this._previewpicDirectory
+                    installedItems: installedItems,
+                    count: Object.keys(installedItems).length
                 };
             })
             .add('ocsManager_installedItemsByType', async (data) => {
@@ -78,11 +86,12 @@ export default class OcsManagerTypeHandler {
                 }
 
                 return {
+                    previewpicDirectory: this._previewpicDirectory,
+                    installTypes: this._installTypes,
                     installType: installType,
                     isApplicableType: isApplicableType,
                     installedItemsByType: installedItemsByType,
-                    installTypes: this._installTypes,
-                    previewpicDirectory: this._previewpicDirectory
+                    count: Object.keys(installedItemsByType).length
                 };
             })
             .add('ocsManager_updateAvailableItems', async () => {
@@ -94,20 +103,25 @@ export default class OcsManagerTypeHandler {
                 message = await this._ocsManagerApi.sendSync('ConfigHandler::getUsrConfigInstalledItems', []);
                 const installedItems = message.data[0];
 
+                const combinedUpdateAvailableItems = {};
+                for (const value of Object.values(updateAvailableItems)) {
+                    const itemKey = value.installed_item;
+                    combinedUpdateAvailableItems[itemKey] = installedItems[itemKey];
+                }
+
                 return {
-                    count: Object.keys(updateAvailableItems).length,
-                    updateAvailableItems: updateAvailableItems,
-                    installedItems: installedItems,
+                    previewpicDirectory: this._previewpicDirectory,
                     installTypes: this._installTypes,
-                    previewpicDirectory: this._previewpicDirectory
+                    updateAvailableItems: combinedUpdateAvailableItems,
+                    count: Object.keys(combinedUpdateAvailableItems).length
                 };
             })
             .add('ocsManager_metadataSet', async () => {
                 const message = await this._ocsManagerApi.sendSync('ItemHandler::metadataSet', []);
                 const metadataSet = message.data[0];
                 return {
-                    count: Object.keys(metadataSet).length,
-                    metadataSet: metadataSet
+                    metadataSet: metadataSet,
+                    count: Object.keys(metadataSet).length
                 };
             })
             .add('ocsManager_installing', (data) => {
@@ -140,12 +154,8 @@ export default class OcsManagerTypeHandler {
                     progress: data.progress
                 };
             })
-            .add('ocsManager_apply', (data) => {
+            .add('ocsManager_applyTheme', (data) => {
                 this._ocsManagerApi.send('DesktopThemeHandler::applyTheme', [data.path, data.installType]);
-                return false;
-            })
-            .add('ocsManager_collection', () => {
-                this._collectiondialogComponent.open();
                 return false;
             });
     }
@@ -172,13 +182,16 @@ export default class OcsManagerTypeHandler {
                     false,
                     (result) => {
                         let previewpicUrl = result || '';
-                        // Previewpic API has been deprecated?
-                        /*if (!previewpicUrl
+
+                        // FIXME: Previewpic API maybe deprecated
+                        if (!previewpicUrl
                             && message.data[0].metadata.command === 'install'
-                            && message.data[0].metadata.provider && message.data[0].metadata.content_id
+                            && message.data[0].metadata.provider
+                            && message.data[0].metadata.content_id
                         ) {
                             previewpicUrl = `${message.data[0].metadata.provider}content/previewpic/${message.data[0].metadata.content_id}`;
-                        }*/
+                        }
+
                         if (previewpicUrl) {
                             this._ipcRenderer.sendSync('previewpic', 'download', message.data[0].metadata.url, previewpicUrl);
                         }
@@ -189,7 +202,6 @@ export default class OcsManagerTypeHandler {
                 if (message.data[0].status !== 'success_download') {
                     console.error(new Error(message.data[0].message));
                 }
-
                 this._stateManager.dispatch('ocsManager_installing', {
                     status: message.data[0].status,
                     message: message.data[0].message,
@@ -207,7 +219,6 @@ export default class OcsManagerTypeHandler {
                 if (message.data[0].status !== 'success_savestart') {
                     console.error(new Error(message.data[0].message));
                 }
-
                 this._stateManager.dispatch('ocsManager_installing', {
                     status: message.data[0].status,
                     message: message.data[0].message,
@@ -218,7 +229,6 @@ export default class OcsManagerTypeHandler {
                 if (message.data[0].status !== 'success_save') {
                     console.error(new Error(message.data[0].message));
                 }
-
                 this._stateManager.dispatch('ocsManager_installing', {
                     status: message.data[0].status,
                     message: message.data[0].message,
@@ -229,7 +239,6 @@ export default class OcsManagerTypeHandler {
                 if (message.data[0].status !== 'success_installstart') {
                     console.error(new Error(message.data[0].message));
                 }
-
                 this._stateManager.dispatch('ocsManager_installing', {
                     status: message.data[0].status,
                     message: message.data[0].message,
@@ -240,13 +249,11 @@ export default class OcsManagerTypeHandler {
                 if (message.data[0].status !== 'success_install') {
                     console.error(new Error(message.data[0].message));
                 }
-
                 this._stateManager.dispatch('ocsManager_installing', {
                     status: message.data[0].status,
                     message: message.data[0].message,
                     metadata: message.data[0].metadata
                 });
-
                 this._stateManager.dispatch('ocsManager_installedItems', {});
             })
             .set('ItemHandler::uninstallStarted', (message) => {
