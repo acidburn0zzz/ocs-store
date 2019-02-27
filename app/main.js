@@ -11,6 +11,9 @@ const ocsManagerConfig = require('./configs/ocs-manager.json');
 
 const isDebugMode = process.argv.includes('--debug');
 const previewpicDirectory = `${app.getPath('userData')}/previewpic`;
+const windowIcon = `${__dirname}/images/app-icons/ocs-store.png`;
+const indexFileUrl = `file://${__dirname}/index.html`;
+const storeAppConfigStorage = 'application';
 
 let topWindow = null;
 let ocsManager = null;
@@ -18,14 +21,12 @@ let ocsManagerUrl = '';
 
 async function startOcsManager() {
     return new Promise((resolve) => {
-        let url = '';
-
         const resolveUrl = (data) => {
             const matches = data.toString()
                 .match(/Websocket server started at: "(wss?:\/\/.+)"/);
             if (matches) {
-                url = matches[1];
-                resolve(url);
+                ocsManagerUrl = matches[1];
+                resolve(true);
             }
         };
 
@@ -33,14 +34,14 @@ async function startOcsManager() {
 
         ocsManager.stdout.on('data', (data) => {
             console.log(`[${ocsManagerConfig.bin}] ${data}`);
-            if (!url) {
+            if (!ocsManagerUrl) {
                 resolveUrl(data);
             }
         });
 
         ocsManager.stderr.on('data', (data) => {
             console.error(`[${ocsManagerConfig.bin}] ${data}`);
-            if (!url) {
+            if (!ocsManagerUrl) {
                 resolveUrl(data);
             }
         });
@@ -51,7 +52,7 @@ async function startOcsManager() {
 
         ocsManager.on('error', () => {
             console.error(`Failed to start ${ocsManagerConfig.bin}`);
-            resolve(url);
+            resolve(false);
         });
     });
 }
@@ -59,12 +60,13 @@ async function startOcsManager() {
 function stopOcsManager() {
     if (ocsManager) {
         ocsManager.kill();
+        ocsManagerUrl = '';
     }
 }
 
 function createWindow() {
     const appConfigStore = new ElectronStore({
-        name: 'application',
+        name: storeAppConfigStorage,
         defaults: appConfig.defaults
     });
 
@@ -72,7 +74,7 @@ function createWindow() {
 
     topWindow = new BrowserWindow({
         title: appPackage.productName,
-        icon: `${__dirname}/images/app-icons/ocs-store.png`,
+        icon: windowIcon,
         x: windowBounds.x,
         y: windowBounds.y,
         width: windowBounds.width,
@@ -86,46 +88,42 @@ function createWindow() {
         topWindow.setMenu(null);
     }
 
-    topWindow.loadURL(`file://${__dirname}/index.html`);
-
-    if (isDebugMode) {
-        topWindow.webContents.openDevTools();
-    }
+    topWindow.loadURL(indexFileUrl);
 
     topWindow.on('close', () => {
-        const appConfigStore = new ElectronStore({name: 'application'});
+        const appConfigStore = new ElectronStore({name: storeAppConfigStorage});
         appConfigStore.set('windowBounds', topWindow.getBounds());
     });
 
     topWindow.on('closed', () => {
         topWindow = null;
     });
+
+    if (isDebugMode) {
+        topWindow.webContents.openDevTools();
+    }
 }
 
 function isFile(path) {
     try {
         const stats = fs.statSync(path);
-        if (stats.isFile()) {
-            return true;
-        }
+        return stats.isFile();
     }
     catch (error) {
         console.error(error);
+        return false;
     }
-    return false;
 }
 
 function isDirectory(path) {
     try {
         const stats = fs.statSync(path);
-        if (stats.isDirectory()) {
-            return true;
-        }
+        return stats.isDirectory();
     }
     catch (error) {
         console.error(error);
+        return false;
     }
-    return false;
 }
 
 function btoa(string) {
@@ -162,8 +160,12 @@ function removePreviewpic(itemKey) {
 }
 
 app.on('ready', async () => {
-    ocsManagerUrl = await startOcsManager();
-    createWindow();
+    if (await startOcsManager()) {
+        createWindow();
+    }
+    else {
+        app.quit();
+    }
 });
 
 app.on('quit', () => {
@@ -199,8 +201,8 @@ ipcMain.on('ocs-manager', (event, key) => {
     event.returnValue = key ? data[key] : data;
 });
 
-ipcMain.on('store-application', (event, key, value) => {
-    const appConfigStore = new ElectronStore({name: 'application'});
+ipcMain.on('store', (event, key, value) => {
+    const appConfigStore = new ElectronStore({name: storeAppConfigStorage});
     if (key && value) {
         appConfigStore.set(key, value);
     }

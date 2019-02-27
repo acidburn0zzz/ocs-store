@@ -6,7 +6,7 @@ export default class WebviewTypeHandler {
 
         this._partition = 'persist:opendesktop';
         this._preload = './scripts/renderers/webview.js';
-        this._startPage = this._ipcRenderer.sendSync('store-application', 'startPage');
+        this._startPage = this._ipcRenderer.sendSync('store', 'startPage');
         this._isDebugMode = this._ipcRenderer.sendSync('app', 'isDebugMode');
 
         this._webviewComponent = null;
@@ -44,7 +44,7 @@ export default class WebviewTypeHandler {
             })
             .add('webview_startPage', (data) => {
                 this._startPage = data.url;
-                this._ipcRenderer.sendSync('store-application', 'startPage', this._startPage);
+                this._ipcRenderer.sendSync('store', 'startPage', this._startPage);
                 this._webviewComponent.loadUrl(this._startPage);
                 return false;
             })
