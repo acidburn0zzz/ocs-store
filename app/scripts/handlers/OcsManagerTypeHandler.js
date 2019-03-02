@@ -134,8 +134,8 @@ export default class OcsManagerTypeHandler {
             .add('ocsManager_downloading', (data) => {
                 return {
                     url: data.url,
-                    received: data.received,
-                    total: data.total
+                    bytesReceived: data.bytesReceived,
+                    bytesTotal: data.bytesTotal
                 };
             })
             .add('ocsManager_uninstall', (data) => {
@@ -212,8 +212,8 @@ export default class OcsManagerTypeHandler {
             .set('ItemHandler::downloadProgress', (message) => {
                 this._stateManager.dispatch('ocsManager_downloading', {
                     url: message.data[0],
-                    received: message.data[1],
-                    total: message.data[2]
+                    bytesReceived: message.data[1],
+                    bytesTotal: message.data[2]
                 });
             })
             .set('ItemHandler::saveStarted', (message) => {
