@@ -24,17 +24,17 @@ export default class CollectiondialogComponent extends BaseComponent {
         return `
             ${this.sharedStyle}
 
-            <dialog-component data-width="80%" data-height="80%" data-header data-auto-close>
+            <app-dialog data-width="80%" data-height="80%" data-header data-auto-close>
             <h3 slot="header">My Collection</h3>
-            <page-component id="collection" slot="content" class="flex-auto flex-column">
-            <collectionsidebar-component slot="sidebar" class="flex-auto flex-column"></collectionsidebar-component>
-            <switchview-component slot="content" class="flex-auto flex-column">
-            <collectiondownload-component id="download" class="flex-auto flex-column"></collectiondownload-component>
-            <collectionupdate-component id="update" class="flex-auto flex-column"></collectionupdate-component>
-            <collectioninstalled-component id="installed" class="flex-auto flex-column"></collectioninstalled-component>
-            </switchview-component>
-            </page-component>
-            </dialog-component>
+            <app-page id="collection" slot="content" class="flex-auto flex-column">
+            <app-collectionsidebar slot="sidebar" class="flex-auto flex-column"></app-collectionsidebar>
+            <app-switchview slot="content" class="flex-auto flex-column">
+            <app-collectiondownload id="download" class="flex-auto flex-column"></app-collectiondownload>
+            <app-collectionupdate id="update" class="flex-auto flex-column"></app-collectionupdate>
+            <app-collectioninstalled id="installed" class="flex-auto flex-column"></app-collectioninstalled>
+            </app-switchview>
+            </app-page>
+            </app-dialog>
         `;
     }
 
@@ -45,15 +45,15 @@ export default class CollectiondialogComponent extends BaseComponent {
     }
 
     open() {
-        this.contentRoot.querySelector('dialog-component').open();
+        this.contentRoot.querySelector('app-dialog').open();
     }
 
     close() {
-        this.contentRoot.querySelector('dialog-component').close();
+        this.contentRoot.querySelector('app-dialog').close();
     }
 
     _handleCollectionsidebarSelect(event) {
-        const switchviewComponent = this.contentRoot.querySelector('switchview-component');
+        const switchviewComponent = this.contentRoot.querySelector('app-switchview');
         switch (event.detail.select) {
             case 'download':
                 switchviewComponent.switch('download');

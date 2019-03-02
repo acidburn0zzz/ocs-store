@@ -1,50 +1,50 @@
 import RootComponent from './RootComponent.js';
-RootComponent.define('root-component');
+RootComponent.define('app-root');
 
 import SplashscreenComponent from './SplashscreenComponent.js';
-SplashscreenComponent.define('splashscreen-component');
+SplashscreenComponent.define('app-splashscreen');
 
 import SwitchviewComponent from './SwitchviewComponent.js';
-SwitchviewComponent.define('switchview-component');
+SwitchviewComponent.define('app-switchview');
 
 import PageComponent from './PageComponent.js';
-PageComponent.define('page-component');
+PageComponent.define('app-page');
 
 import ToolbarComponent from './ToolbarComponent.js';
-ToolbarComponent.define('toolbar-component');
+ToolbarComponent.define('app-toolbar');
 
 import WebviewComponent from './WebviewComponent.js';
-WebviewComponent.define('webview-component');
+WebviewComponent.define('app-webview');
 
 import ButtonComponent from './ButtonComponent.js';
-ButtonComponent.define('button-component');
+ButtonComponent.define('app-button');
 
 import NavbuttonComponent from './NavbuttonComponent.js';
-NavbuttonComponent.define('navbutton-component');
+NavbuttonComponent.define('app-navbutton');
 
 import MenubuttonComponent from './MenubuttonComponent.js';
-MenubuttonComponent.define('menubutton-component');
+MenubuttonComponent.define('app-menubutton');
 
 import OmniboxComponent from './OmniboxComponent.js';
-OmniboxComponent.define('omnibox-component');
+OmniboxComponent.define('app-omnibox');
 
 import DialogComponent from './DialogComponent.js';
-DialogComponent.define('dialog-component');
+DialogComponent.define('app-dialog');
 
 import AboutdialogComponent from './AboutdialogComponent.js';
-AboutdialogComponent.define('aboutdialog-component');
+AboutdialogComponent.define('app-aboutdialog');
 
 import CollectiondialogComponent from './CollectiondialogComponent.js';
-CollectiondialogComponent.define('collectiondialog-component');
+CollectiondialogComponent.define('app-collectiondialog');
 
 import CollectionsidebarComponent from './CollectionsidebarComponent.js';
-CollectionsidebarComponent.define('collectionsidebar-component');
+CollectionsidebarComponent.define('app-collectionsidebar');
 
 import CollectiondownloadComponent from './CollectiondownloadComponent.js';
-CollectiondownloadComponent.define('collectiondownload-component');
+CollectiondownloadComponent.define('app-collectiondownload');
 
 import CollectionupdateComponent from './CollectionupdateComponent.js';
-CollectionupdateComponent.define('collectionupdate-component');
+CollectionupdateComponent.define('app-collectionupdate');
 
 import CollectioninstalledComponent from './CollectioninstalledComponent.js';
-CollectioninstalledComponent.define('collectioninstalled-component');
+CollectioninstalledComponent.define('app-collectioninstalled');

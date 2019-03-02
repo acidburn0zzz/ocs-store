@@ -12,7 +12,7 @@ export default class BaseComponent extends Chirit.Component {
     }
 
     getStateManager() {
-        return document.querySelector('root-component').getStateManager();
+        return document.querySelector('app-root').getStateManager();
     }
 
     convertItemKeyToPreviewpicFilename(itemKey) {

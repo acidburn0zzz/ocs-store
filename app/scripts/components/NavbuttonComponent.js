@@ -25,7 +25,7 @@ export default class NavbuttonComponent extends BaseComponent {
             }
             </style>
 
-            <button-component data-icon="${icon}" ${disabled}></button-component>
+            <app-button data-icon="${icon}" ${disabled}></app-button>
         `;
     }
 

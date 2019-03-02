@@ -28,16 +28,16 @@ export default class RootComponent extends BaseComponent {
         return `
             ${this.sharedStyle}
 
-            <splashscreen-component></splashscreen-component>
+            <app-splashscreen></app-splashscreen>
 
-            <page-component id="browser" class="flex-auto flex-column">
-            <toolbar-component slot="header"></toolbar-component>
-            <webview-component slot="content" class="flex-auto flex-column"></webview-component>
-            </page-component>
+            <app-page id="browser" class="flex-auto flex-column">
+            <app-toolbar slot="header"></app-toolbar>
+            <app-webview slot="content" class="flex-auto flex-column"></app-webview>
+            </app-page>
 
-            <collectiondialog-component></collectiondialog-component>
+            <app-collectiondialog></app-collectiondialog>
 
-            <aboutdialog-component></aboutdialog-component>
+            <app-aboutdialog></app-aboutdialog>
         `;
     }
 

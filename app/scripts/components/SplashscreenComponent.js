@@ -26,12 +26,12 @@ export default class SplashscreenComponent extends BaseComponent {
             }
             </style>
 
-            <dialog-component data-width="400px" data-height="300px" data-auto-open>
+            <app-dialog data-width="400px" data-height="300px" data-auto-open>
             <div slot="content" class="flex-auto flex-column">
             <h4 class="icon-ocs-store">Welcome to ${document.title}</h4>
             <p>Loading...</p>
             </div>
-            </dialog-component>
+            </app-dialog>
         `;
     }
 
@@ -39,7 +39,7 @@ export default class SplashscreenComponent extends BaseComponent {
         if (!state.isLoading) {
             this.getStateManager().viewHandler
                 .remove('webview_loading', this._viewHandler_webview_loading);
-            this.contentRoot.querySelector('dialog-component').close();
+            this.contentRoot.querySelector('app-dialog').close();
             this.remove();
         }
     }

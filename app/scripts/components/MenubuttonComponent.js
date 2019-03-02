@@ -68,7 +68,7 @@ export default class MenubuttonComponent extends BaseComponent {
             </style>
 
             <div data-menubutton="active">
-            <button-component data-icon="menu"></button-component>
+            <app-button data-icon="menu"></app-button>
             </div>
 
             <nav class="widget fade-in" data-menuitems="inactive">

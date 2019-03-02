@@ -45,7 +45,7 @@ export default class AboutdialogComponent extends BaseComponent {
             }
             </style>
 
-            <dialog-component data-width="500px" data-header data-auto-close>
+            <app-dialog data-width="500px" data-header data-auto-close>
             <h3 slot="header">About This App</h3>
             <div slot="content">
             <h4 class="icon-ocs-store">${this.state.productName}</h4>
@@ -61,16 +61,16 @@ export default class AboutdialogComponent extends BaseComponent {
             Report a bug: <a href="${this.state.bugs}">${this.state.bugs}</a>
             </p>
             </div>
-            </dialog-component>
+            </app-dialog>
         `;
     }
 
     open() {
-        this.contentRoot.querySelector('dialog-component').open();
+        this.contentRoot.querySelector('app-dialog').open();
     }
 
     close() {
-        this.contentRoot.querySelector('dialog-component').close();
+        this.contentRoot.querySelector('app-dialog').close();
     }
 
     _handleClick(event) {
