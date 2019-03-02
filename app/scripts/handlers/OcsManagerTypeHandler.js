@@ -1,9 +1,9 @@
 export default class OcsManagerTypeHandler {
 
-    constructor(stateManager, ocsManagerApi, ipcRenderer) {
+    constructor(stateManager, ipcRenderer, ocsManagerApi) {
         this._stateManager = stateManager;
-        this._ocsManagerApi = ocsManagerApi;
         this._ipcRenderer = ipcRenderer;
+        this._ocsManagerApi = ocsManagerApi;
 
         this._previewpicDirectory = this._ipcRenderer.sendSync('previewpic', 'directory');
         this._installTypes = {};

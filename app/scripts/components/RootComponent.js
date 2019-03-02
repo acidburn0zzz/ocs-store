@@ -21,7 +21,7 @@ export default class RootComponent extends BaseComponent {
 
         new GeneralTypeHandler(this._stateManager, ipcRenderer);
         new WebviewTypeHandler(this._stateManager, ipcRenderer);
-        new OcsManagerTypeHandler(this._stateManager, ocsManagerApi, ipcRenderer);
+        new OcsManagerTypeHandler(this._stateManager, ipcRenderer, ocsManagerApi);
     }
 
     render() {
