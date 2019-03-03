@@ -8,5 +8,5 @@
             "height": 768
         }
     },
-    "updateCheckAfter": 86400000, "//": "1day (ms)"
+    "updateCheckAfter": 86400000, "//": "milliseconds"
 }
