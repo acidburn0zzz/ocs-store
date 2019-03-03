@@ -1,0 +1,25 @@
+:root,
+:host {
+    --color-text: #444444;
+    --color-text-secondary: #666666;
+    --color-content: #ffffff;
+    --color-widget: #f5f5f5;
+    --color-border: rgba(0,0,0,0.15);
+    --color-shadow: rgba(0,0,0,0.2);
+
+    --color-active: rgba(0,0,0,0.1);
+    --color-active-secondary: rgba(100,100,100,0.1);
+
+    --color-information: #4496d3;
+    --color-information-secondary: #68a4d9;
+    --color-help: var(--color-information);
+    --color-help-secondary: var(--color-information-secondary);
+    --color-important: #f3981d;
+    --color-important-secondary: #ed6d35;
+    --color-accept: #37a34a;
+    --color-accept-secondary: #79c06e;
+    --color-error: #ea5549;
+    --color-error-secondary: #d83473;
+    --color-warning: var(--color-error);
+    --color-warning-secondary: var(--color-error-secondary);
+}
