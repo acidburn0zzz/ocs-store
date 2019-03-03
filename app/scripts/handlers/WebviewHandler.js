@@ -1,4 +1,4 @@
-export default class WebviewTypeHandler {
+export default class WebviewHandler {
 
     constructor(stateManager, ipcRenderer) {
         this._stateManager = stateManager;

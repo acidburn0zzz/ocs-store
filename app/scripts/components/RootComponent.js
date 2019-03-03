@@ -4,9 +4,9 @@ import Chirit from '../../libs/chirit/Chirit.js';
 
 import OcsManagerApi from '../api/OcsManagerApi.js';
 
-import GeneralTypeHandler from '../handlers/GeneralTypeHandler.js';
-import WebviewTypeHandler from '../handlers/WebviewTypeHandler.js';
-import OcsManagerTypeHandler from '../handlers/OcsManagerTypeHandler.js';
+import GeneralHandler from '../handlers/GeneralHandler.js';
+import WebviewHandler from '../handlers/WebviewHandler.js';
+import OcsManagerHandler from '../handlers/OcsManagerHandler.js';
 
 import BaseComponent from './BaseComponent.js';
 
@@ -19,9 +19,9 @@ export default class RootComponent extends BaseComponent {
 
         const ocsManagerApi = new OcsManagerApi(ipcRenderer.sendSync('ocs-manager', 'url'));
 
-        new GeneralTypeHandler(this._stateManager, ipcRenderer);
-        new WebviewTypeHandler(this._stateManager, ipcRenderer);
-        new OcsManagerTypeHandler(this._stateManager, ipcRenderer, ocsManagerApi);
+        new GeneralHandler(this._stateManager, ipcRenderer);
+        new WebviewHandler(this._stateManager, ipcRenderer);
+        new OcsManagerHandler(this._stateManager, ipcRenderer, ocsManagerApi);
     }
 
     render() {

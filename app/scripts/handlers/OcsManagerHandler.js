@@ -1,4 +1,4 @@
-export default class OcsManagerTypeHandler {
+export default class OcsManagerHandler {
 
     constructor(stateManager, ipcRenderer, ocsManagerApi) {
         this._stateManager = stateManager;
