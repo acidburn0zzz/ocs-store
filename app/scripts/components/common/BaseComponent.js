@@ -1,4 +1,4 @@
-import Chirit from '../../libs/chirit/Chirit.js';
+import Chirit from '../../../libs/chirit/Chirit.js';
 
 export default class BaseComponent extends Chirit.Component {
 

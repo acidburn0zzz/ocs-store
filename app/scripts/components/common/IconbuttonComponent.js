@@ -1,9 +1,9 @@
 import BaseComponent from './BaseComponent.js';
 
-export default class IconButtonComponent extends BaseComponent {
+export default class IconbuttonComponent extends BaseComponent {
 
     static get componentObservedAttributes() {
-        return ['disabled', 'data-title', 'data-icon', 'data-size', 'data-color'];
+        return ['data-title', 'data-icon', 'data-size', 'data-color', 'data-status'];
     }
 
     init() {
@@ -17,12 +17,12 @@ export default class IconButtonComponent extends BaseComponent {
     }
 
     render() {
-        const disabled = this.hasAttribute('disabled') ? 'disabled' : '';
-        const status = disabled ? 'inactive' : 'active';
         const title = this.getAttribute('data-title') || '';
         const icon = this.getAttribute('data-icon') || '';
         const size = this.getAttribute('data-size') || 'medium';
         const color = this.getAttribute('data-color') || 'dark';
+        const status = this.getAttribute('data-status') || 'active';
+        const disabled = (status === 'inactive') ? 'disabled' : '';
 
         return `
             ${this.sharedStyle}
@@ -39,7 +39,7 @@ export default class IconButtonComponent extends BaseComponent {
             button {
                 -webkit-appearance: none;
                 appearance: none;
-                display: inherit;
+                display: inline-block;
                 width: inherit;
                 height: inherit;
                 border: 0;

@@ -6,18 +6,18 @@ export default class SwitchviewComponent extends BaseComponent {
         return `
             ${this.sharedStyle}
 
-            <slot name="current"></slot>
+            <slot name="content"></slot>
         `;
     }
 
     switch(id) {
-        for (const content of this.querySelectorAll('[slot="current"]')) {
+        for (const content of this.querySelectorAll('[slot="content"]')) {
             content.slot = '';
         }
 
         const target = this.querySelector(`#${id}`);
         if (target) {
-            target.slot = 'current';
+            target.slot = 'content';
         }
     }
 
