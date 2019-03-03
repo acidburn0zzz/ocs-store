@@ -16,9 +16,6 @@ ToolbarComponent.define('app-toolbar');
 import WebviewComponent from './WebviewComponent.js';
 WebviewComponent.define('app-webview');
 
-import ButtonComponent from './ButtonComponent.js';
-ButtonComponent.define('app-button');
-
 import NavbuttonComponent from './NavbuttonComponent.js';
 NavbuttonComponent.define('app-navbutton');
 
