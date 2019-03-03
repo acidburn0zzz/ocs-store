@@ -48,3 +48,6 @@ CollectionupdateComponent.define('app-collectionupdate');
 
 import CollectioninstalledComponent from './CollectioninstalledComponent.js';
 CollectioninstalledComponent.define('app-collectioninstalled');
+
+import IconButtonComponent from './IconButtonComponent.js';
+IconButtonComponent.define('app-icon-button');
