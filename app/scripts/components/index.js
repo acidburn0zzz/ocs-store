@@ -7,6 +7,9 @@ PageComponent.define('app-page');
 import IconbuttonComponent from './common/IconbuttonComponent.js';
 IconbuttonComponent.define('app-iconbutton');
 
+import IndicatorComponent from './common/IndicatorComponent.js';
+IndicatorComponent.define('app-indicator');
+
 import DialogComponent from './common/DialogComponent.js';
 DialogComponent.define('app-dialog');
 
