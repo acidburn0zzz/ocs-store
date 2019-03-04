@@ -48,15 +48,15 @@ export default class WebviewHandler {
                 this._webviewComponent.loadUrl(this._startPage);
                 return false;
             })
-            .add('webview_load', (data) => {
+            .add('webview_loadUrl', (data) => {
                 this._webviewComponent.loadUrl(data.url);
                 return false;
             })
-            .add('webview_back', () => {
+            .add('webview_goBack', () => {
                 this._webviewComponent.goBack();
                 return false;
             })
-            .add('webview_forward', () => {
+            .add('webview_goForward', () => {
                 this._webviewComponent.goForward();
                 return false;
             })
