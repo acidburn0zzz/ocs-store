@@ -1,8 +1,10 @@
-import BaseComponent from './BaseComponent.js';
+import BaseComponent from './common/BaseComponent.js';
 
 export default class ToolbarComponent extends BaseComponent {
 
     init() {
+        this.contentRoot.addEventListener('click', this._handleClick.bind(this));
+
         this._viewHandler_webview_loading = this._viewHandler_webview_loading.bind(this);
         this._viewHandler_webview_page = this._viewHandler_webview_page.bind(this);
         this._viewHandler_ocsManager_metadataSet = this._viewHandler_ocsManager_metadataSet.bind(this);
@@ -37,23 +39,36 @@ export default class ToolbarComponent extends BaseComponent {
                 background-color: var(--color-widget);
             }
             nav[data-toolbar] ul {
+                display: flex;
+                flex-flow: row nowrap;
+                align-items: center;
                 list-style: none;
                 height: inherit;
                 margin: 0 4px;
-                align-items: center;
             }
             nav[data-toolbar] ul li {
+                flex: 0 0 auto;
                 height: 30px;
                 margin: 0 2px;
             }
-            nav[data-toolbar] ul li.flex {
+            nav[data-toolbar] ul li[data-omnibox] {
+                display: flex;
+                flex-flow: row nowrap;
+                flex: 1 1 auto;
                 justify-content: center;
             }
 
             @media (min-width: 900px) {
-                nav[data-toolbar] ul li.flex {
+                nav[data-toolbar] ul li[data-omnibox] {
                     margin-right: calc(32px * 4);
                 }
+            }
+
+            app-iconbutton[data-action="webview_reload"][data-status="inactive"] {
+                display: none;
+            }
+            app-iconbutton[data-action="webview_stop"][data-status="inactive"] {
+                display: none;
             }
 
             nav[data-toolbar] ul li span[data-downloadingbadge] {
@@ -69,111 +84,108 @@ export default class ToolbarComponent extends BaseComponent {
                 font-size: 12px;
                 line-height: 1;
             }
-            nav[data-toolbar] ul li span[data-downloadingbadge="inactive"] {
+            nav[data-toolbar] ul li span[data-downloadingbadge][data-status="inactive"] {
                 display: none;
-            }
-
-            div[data-indicator] {
-                z-index: 1;
-                position: relative;
-                top: -2px;
-                left: 0;
-                width: 50%;
-                height: 2px;
-                background-color: var(--color-information);
-            }
-            div[data-indicator="inactive"] {
-                display: none;
-            }
-            div[data-indicator="active"] {
-                animation-name: loading;
-                animation-duration: 1s;
-                animation-iteration-count: infinite;
-                animation-direction: alternate;
-            }
-            @keyframes loading {
-                0% {
-                    left: -40%;
-                }
-                100% {
-                    left: 90%;
-                }
             }
             </style>
 
             <nav data-toolbar>
-            <ul class="flex">
-            <li><app-navbutton data-action="webview_back" data-icon="back" title="Back" disabled></app-navbutton></li>
-            <li><app-navbutton data-action="webview_forward" data-icon="forward" title="Forward" disabled></app-navbutton></li>
-            <li><app-navbutton data-action="webview_reload" data-icon="reload" title="Reload"></app-navbutton></li>
-            <li><app-navbutton data-action="webview_startPage" data-icon="home" title="Startpage"></app-navbutton></li>
+            <ul>
             <li>
-            <app-navbutton data-action="ocsManager_collection" data-icon="collection" title="My Collection"></app-navbutton><br>
-            <span data-downloadingbadge="inactive">0</span>
+            <app-iconbutton data-action="webview_goBack"
+                data-title="Back" data-icon="arrow_back" data-status="inactive"></app-iconbutton>
             </li>
-            <li class="flex-auto flex"><app-omnibox></app-omnibox></li>
-            <li><app-menubutton></app-menubutton></li>
+            <li>
+            <app-iconbutton data-action="webview_goForward"
+                data-title="Forward" data-icon="arrow_forward" data-status="inactive"></app-iconbutton>
+            </li>
+            <li>
+            <app-iconbutton data-action="webview_reload"
+                data-title="Reload" data-icon="refresh" data-status="active"></app-iconbutton>
+            <app-iconbutton data-action="webview_stop"
+                data-title="Stop" data-icon="close" data-status="inactive"></app-iconbutton>
+            </li>
+            <li>
+            <app-iconbutton data-action="webview_startPage"
+                data-title="Startpage" data-icon="home"></app-iconbutton>
+            </li>
+            <li>
+            <app-iconbutton data-action="ocsManager_collection"
+                data-title="My Collection" data-icon="folder"></app-iconbutton><br>
+            <span data-downloadingbadge data-status="inactive">0</span>
+            </li>
+            <li data-omnibox><app-omnibox></app-omnibox></li>
+            <li>
+            <app-iconbutton data-action="menu_open"
+                data-title="Other operations..." data-icon="more_vert"></app-iconbutton>
+            <app-menu data-width="250px" data-offset-x="-220px">
+            <a slot="menuitem" href="#" data-action="general_about">About This App</a>
+            </app-menu>
+            </li>
             </ul>
             </nav>
-
-            <div data-indicator="inactive"></div>
         `;
     }
 
-    _viewHandler_webview_loading(state) {
-        const indicator = this.contentRoot.querySelector('div[data-indicator]');
-
-        if (state.isLoading) {
-            indicator.setAttribute('data-indicator', 'active');
-
-            const reloadButton = this.contentRoot
-                .querySelector('app-navbutton[data-action="webview_reload"]');
-            if (reloadButton) {
-                reloadButton.setAttribute('data-action', 'webview_stop');
-                reloadButton.setAttribute('data-icon', 'stop');
-            }
+    _handleClick(event) {
+        let targetElement = null;
+        if (event.target.closest('app-iconbutton')) {
+            targetElement = event.target.closest('app-iconbutton');
+        }
+        else if (event.target.closest('a[slot="menuitem"]')) {
+            event.preventDefault();
+            targetElement = event.target.closest('a[slot="menuitem"]');
         }
         else {
-            indicator.setAttribute('data-indicator', 'inactive');
-
-            const stopButton = this.contentRoot
-                .querySelector('app-navbutton[data-action="webview_stop"]');
-            if (stopButton) {
-                stopButton.setAttribute('data-action', 'webview_reload');
-                stopButton.setAttribute('data-icon', 'reload');
-            }
+            return;
         }
+
+        switch (targetElement.getAttribute('data-action')) {
+            case 'webview_goBack':
+                this.dispatch('webview_goBack', {});
+                break;
+            case 'webview_goForward':
+                this.dispatch('webview_goForward', {});
+                break;
+            case 'webview_reload':
+                this.dispatch('webview_reload', {});
+                break;
+            case 'webview_stop':
+                this.dispatch('webview_stop', {});
+                break;
+            case 'webview_startPage':
+                this.dispatch('webview_startPage', {});
+                break;
+            case 'ocsManager_collection':
+                this.dispatch('ocsManager_collection', {});
+                break;
+            case 'menu_open':
+                this.contentRoot.querySelector('app-menu').open();
+                break;
+            case 'general_about':
+                this.dispatch('general_about', {});
+                this.contentRoot.querySelector('app-menu').close();
+                break;
+        }
+    }
+
+    _viewHandler_webview_loading(state) {
+        this.contentRoot.querySelector('app-iconbutton[data-action="webview_reload"]')
+            .setAttribute('data-status', state.isLoading ? 'inactive' : 'active');
+        this.contentRoot.querySelector('app-iconbutton[data-action="webview_stop"]')
+            .setAttribute('data-status', state.isLoading ? 'active' : 'inactive');
     }
 
     _viewHandler_webview_page(state) {
-        const backButton = this.contentRoot
-            .querySelector('app-navbutton[data-action="webview_back"]');
-        if (state.canGoBack) {
-            backButton.removeAttribute('disabled');
-        }
-        else {
-            backButton.setAttribute('disabled', 'disabled');
-        }
-
-        const forwardButton = this.contentRoot
-            .querySelector('app-navbutton[data-action="webview_forward"]');
-        if (state.canGoForward) {
-            forwardButton.removeAttribute('disabled');
-        }
-        else {
-            forwardButton.setAttribute('disabled', 'disabled');
-        }
+        this.contentRoot.querySelector('app-iconbutton[data-action="webview_goBack"]')
+            .setAttribute('data-status', state.canGoBack ? 'active' : 'inactive');
+        this.contentRoot.querySelector('app-iconbutton[data-action="webview_goForward"]')
+            .setAttribute('data-status', state.canGoForward ? 'active' : 'inactive');
     }
 
     _viewHandler_ocsManager_metadataSet(state) {
-        const downloadingBadge = this.contentRoot
-            .querySelector('span[data-downloadingbadge]');
-        if (state.count) {
-            downloadingBadge.setAttribute('data-downloadingbadge', 'active');
-        }
-        else {
-            downloadingBadge.setAttribute('data-downloadingbadge', 'inactive');
-        }
+        const downloadingBadge = this.contentRoot.querySelector('span[data-downloadingbadge]');
+        downloadingBadge.setAttribute('data-status', state.count ? 'active' : 'inactive');
         downloadingBadge.textContent = state.count;
     }
 
