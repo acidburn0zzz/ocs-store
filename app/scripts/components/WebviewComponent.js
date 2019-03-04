@@ -47,12 +47,8 @@ export default class WebviewComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
-        if (this._webviewElement) {
-            this.contentRoot.appendChild(this._webviewElement);
-        }
-        else if (this._isActivated) {
+        if (this._isActivated) {
             this._createWebviewElement();
-            this.contentRoot.appendChild(this._webviewElement);
         }
         else {
             this.dispatch('webview_activate', {component: this});
@@ -138,6 +134,8 @@ export default class WebviewComponent extends BaseComponent {
         });
 
         //this._webviewElement.addEventListener('ipc-message', (event) => {});
+
+        this.contentRoot.appendChild(this._webviewElement);
     }
 
     _detectOcsApiInfo(url) {
