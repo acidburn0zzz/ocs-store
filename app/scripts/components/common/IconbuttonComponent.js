@@ -39,7 +39,9 @@ export default class IconbuttonComponent extends BaseComponent {
             button {
                 -webkit-appearance: none;
                 appearance: none;
-                display: inline-block;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
                 width: inherit;
                 height: inherit;
                 border: 0;
