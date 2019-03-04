@@ -45,14 +45,13 @@ export default class SplashscreenComponent extends BaseComponent {
 
             <app-dialog
                 data-width="400px" data-height="300px"
-                data-status="active" data-header-status="inactive" data-auto-close-status="inactive">
+                data-status="active"
+                data-header-status="inactive" data-footer-status="inactive"
+                data-auto-close-status="inactive">
             <div slot="content">
             <figure class="icon-ocs-store"></figure>
             <h3>Welcome to ${document.title}</h3>
             <p>Loading...</p>
-            </div>
-            <div slot="footer">
-            <app-indicator data-status="active"></app-indicator>
             </div>
             </app-dialog>
         `;
