@@ -6,8 +6,7 @@ export default class DialogComponent extends BaseComponent {
         return [
             'data-width', 'data-min-width', 'data-max-width',
             'data-height', 'data-min-height', 'data-max-height',
-            'data-header-status', 'data-footer-status',
-            'data-auto-open-status', 'data-auto-close-status'
+            'data-status', 'data-header-status', 'data-footer-status', 'data-auto-close-status'
         ];
     }
 
@@ -24,10 +23,9 @@ export default class DialogComponent extends BaseComponent {
         const minHeight = this.getAttribute('data-min-height') || 'auto';
         const maxHeight = this.getAttribute('data-max-height') || 'auto';
 
+        const status = this.getAttribute('data-status') || 'inactive';
         const headerStatus = this.getAttribute('data-header-status') || 'active';
         const footerStatus = this.getAttribute('data-footer-status') || 'active';
-
-        const autoOpenStatus = this.getAttribute('data-auto-open-status') || 'inactive';
         const autoCloseStatus = this.getAttribute('data-auto-close-status') || 'active';
 
         const autoCloseAction = (autoCloseStatus === 'active') ? 'dialog_autoClose' : '';
@@ -102,7 +100,7 @@ export default class DialogComponent extends BaseComponent {
             }
             </style>
 
-            <div data-container data-status="${autoOpenStatus}" data-action="${autoCloseAction}">
+            <div data-container data-status="${status}" data-action="${autoCloseAction}">
 
             <article data-dialog class="fade-in">
             <header data-header data-status="${headerStatus}">
@@ -118,14 +116,12 @@ export default class DialogComponent extends BaseComponent {
     }
 
     open() {
-        this.contentRoot.querySelector('div[data-container]')
-            .setAttribute('data-status', 'active');
+        this.contentRoot.querySelector('div[data-container]').setAttribute('data-status', 'active');
         this.dispatch('dialog_open', {});
     }
 
     close() {
-        this.contentRoot.querySelector('div[data-container]')
-            .setAttribute('data-status', 'inactive');
+        this.contentRoot.querySelector('div[data-container]').setAttribute('data-status', 'inactive');
         this.dispatch('dialog_close', {});
     }
 
