@@ -8,7 +8,7 @@ import GeneralHandler from '../handlers/GeneralHandler.js';
 import WebviewHandler from '../handlers/WebviewHandler.js';
 import OcsManagerHandler from '../handlers/OcsManagerHandler.js';
 
-import BaseComponent from './BaseComponent.js';
+import BaseComponent from './common/BaseComponent.js';
 
 export default class RootComponent extends BaseComponent {
 
@@ -28,15 +28,20 @@ export default class RootComponent extends BaseComponent {
         return `
             ${this.sharedStyle}
 
-            <app-splashscreen></app-splashscreen>
+            <style>
+            app-page {
+                width: 100%;
+                height: 100%;
+            }
+            </style>
 
-            <app-page id="browser" class="flex-auto flex-column">
+            <app-page id="browser">
             <app-toolbar slot="header"></app-toolbar>
-            <app-webview slot="content" class="flex-auto flex-column"></app-webview>
+            <app-webview slot="content"></app-webview>
             </app-page>
 
+            <app-splashscreen></app-splashscreen>
             <app-collectiondialog></app-collectiondialog>
-
             <app-aboutdialog></app-aboutdialog>
         `;
     }
