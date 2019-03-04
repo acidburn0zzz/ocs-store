@@ -10,6 +10,9 @@ IconbuttonComponent.define('app-iconbutton');
 import IndicatorComponent from './common/IndicatorComponent.js';
 IndicatorComponent.define('app-indicator');
 
+import MenuComponent from './common/MenuComponent.js';
+MenuComponent.define('app-menu');
+
 import DialogComponent from './common/DialogComponent.js';
 DialogComponent.define('app-dialog');
 
