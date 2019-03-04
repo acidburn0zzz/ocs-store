@@ -81,7 +81,7 @@ export default class MenuComponent extends BaseComponent {
                 border-top: 1px solid var(--color-border);
             }
 
-            div[data-toggler] {
+            div[data-overlay] {
                 z-index: 999;
                 position: absolute;
                 top: 0;
@@ -89,7 +89,7 @@ export default class MenuComponent extends BaseComponent {
                 width: 100%;
                 height: 100%;
             }
-            div[data-toggler][data-status="inactive"] {
+            div[data-overlay][data-status="inactive"] {
                 display: none;
             }
             </style>
@@ -98,19 +98,19 @@ export default class MenuComponent extends BaseComponent {
             <slot name="menuitem"></slot>
             </nav>
 
-            <div data-toggler data-status="${status}" data-action="${autoCloseAction}"></div>
+            <div data-overlay data-status="${status}" data-action="${autoCloseAction}"></div>
         `;
     }
 
     open() {
         this.contentRoot.querySelector('nav[data-menu]').setAttribute('data-status', 'active');
-        this.contentRoot.querySelector('div[data-toggler]').setAttribute('data-status', 'active');
+        this.contentRoot.querySelector('div[data-overlay]').setAttribute('data-status', 'active');
         this.dispatch('menu_open', {});
     }
 
     close() {
         this.contentRoot.querySelector('nav[data-menu]').setAttribute('data-status', 'inactive');
-        this.contentRoot.querySelector('div[data-toggler]').setAttribute('data-status', 'inactive');
+        this.contentRoot.querySelector('div[data-overlay]').setAttribute('data-status', 'inactive');
         this.dispatch('menu_close', {});
     }
 

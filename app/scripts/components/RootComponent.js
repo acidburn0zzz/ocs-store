@@ -40,9 +40,9 @@ export default class RootComponent extends BaseComponent {
             <app-webview slot="content"></app-webview>
             </app-page>
 
-            <app-splashscreen></app-splashscreen>
             <app-collectiondialog></app-collectiondialog>
             <app-aboutdialog></app-aboutdialog>
+            <app-splashscreen></app-splashscreen>
         `;
     }
 
