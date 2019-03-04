@@ -1,4 +1,4 @@
-import BaseComponent from './BaseComponent.js';
+import BaseComponent from './common/BaseComponent.js';
 
 export default class WebviewComponent extends BaseComponent {
 
@@ -32,6 +32,17 @@ export default class WebviewComponent extends BaseComponent {
     render() {
         return `
             ${this.sharedStyle}
+
+            <style>
+            :host {
+                display: flex;
+                flex-flow: column nowrap;
+                flex: 1 1 auto;
+            }
+            webview {
+                flex: 1 1 auto;
+            }
+            </style>
         `;
     }
 
@@ -86,7 +97,6 @@ export default class WebviewComponent extends BaseComponent {
         this._webviewElement.setAttribute('partition', this.state.partition);
         this._webviewElement.setAttribute('preload', this.state.preload);
         this._webviewElement.setAttribute('src', this.state.startPage);
-        this._webviewElement.className = 'flex-auto';
 
         this._webviewElement.addEventListener('did-start-loading', () => {
             this.dispatch('webview_loading', {isLoading: true});
