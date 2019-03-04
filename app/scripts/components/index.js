@@ -30,9 +30,6 @@ import WebviewComponent from './WebviewComponent.js';
 WebviewComponent.define('app-webview');
 
 
-import MenubuttonComponent from './MenubuttonComponent.js';
-MenubuttonComponent.define('app-menubutton');
-
 import OmniboxComponent from './OmniboxComponent.js';
 OmniboxComponent.define('app-omnibox');
 
