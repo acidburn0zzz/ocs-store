@@ -1,12 +1,19 @@
-import BaseComponent from './BaseComponent.js';
+import BaseComponent from './common/BaseComponent.js';
 
 export default class SplashscreenComponent extends BaseComponent {
 
     init() {
         this._viewHandler_webview_loading = this._viewHandler_webview_loading.bind(this);
+    }
 
+    componentConnectedCallback() {
         this.getStateManager().viewHandler
             .add('webview_loading', this._viewHandler_webview_loading);
+    }
+
+    componentDisconnectedCallback() {
+        this.getStateManager().viewHandler
+            .remove('webview_loading', this._viewHandler_webview_loading);
     }
 
     render() {
@@ -14,22 +21,38 @@ export default class SplashscreenComponent extends BaseComponent {
             ${this.sharedStyle}
 
             <style>
+            @import url(images/icon.css);
+
             div[slot="content"] {
+                display: flex;
+                flex-flow: column nowrap;
+                flex: 1 1 auto;
                 align-items: center;
                 justify-content: center;
             }
-            div[slot="content"] h4 {
-                padding-top: calc(96px + 1em);
+            div[slot="content"] figure.icon-ocs-store {
+                display: inline-block;
+                width: 128px;
+                height: 128px;
                 background-position: top center;
                 background-repeat: no-repeat;
-                background-size: 96px 96px;
+                background-size: 128px 128px;
+            }
+            div[slot="content"] h3 {
+                margin: 1em;
             }
             </style>
 
-            <app-dialog data-width="400px" data-height="300px" data-auto-open>
-            <div slot="content" class="flex-auto flex-column">
-            <h4 class="icon-ocs-store">Welcome to ${document.title}</h4>
+            <app-dialog
+                data-width="400px" data-height="300px"
+                data-status="active" data-header-status="inactive" data-auto-close-status="inactive">
+            <div slot="content">
+            <figure class="icon-ocs-store"></figure>
+            <h3>Welcome to ${document.title}</h3>
             <p>Loading...</p>
+            </div>
+            <div slot="footer">
+            <app-indicator data-status="active"></app-indicator>
             </div>
             </app-dialog>
         `;
@@ -37,8 +60,6 @@ export default class SplashscreenComponent extends BaseComponent {
 
     _viewHandler_webview_loading(state) {
         if (!state.isLoading) {
-            this.getStateManager().viewHandler
-                .remove('webview_loading', this._viewHandler_webview_loading);
             this.contentRoot.querySelector('app-dialog').close();
             this.remove();
         }
