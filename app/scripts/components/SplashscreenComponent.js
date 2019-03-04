@@ -34,7 +34,7 @@ export default class SplashscreenComponent extends BaseComponent {
                 display: inline-block;
                 width: 128px;
                 height: 128px;
-                background-position: top center;
+                background-position: center center;
                 background-repeat: no-repeat;
                 background-size: 128px 128px;
             }
