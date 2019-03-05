@@ -158,6 +158,8 @@ export default class OmniboxComponent extends BaseComponent {
             }
             </style>
 
+            <style data-override></style>
+
             <div data-omnibox>
             <div data-content>
             <div></div>
@@ -227,16 +229,26 @@ export default class OmniboxComponent extends BaseComponent {
                 break;
             case 'webview_startPage':
                 this.dispatch('webview_startPage', {url: targetElement.getAttribute('data-url')});
+                this.close();
                 break;
         }
     }
 
     _viewHandler_webview_loading(state) {
-        this.contentRoot.querySelector('app-indicator').setAttribute('data-status', state.isLoading ? 'active' : 'inactive');
+        this.contentRoot.querySelector('app-indicator')
+            .setAttribute('data-status', state.isLoading ? 'active' : 'inactive');
     }
 
     _viewHandler_webview_page(state) {
-        this.update({...this.state, ...state});
+        //this.update({...this.state, ...state});
+
+        this.contentRoot.querySelector('app-iconbutton[data-action="ocsManager_openUrl"]').setAttribute('data-url', state.url);
+        this.contentRoot.querySelector('h3[data-action="omnibox_open"]').textContent = state.title;
+        this.contentRoot.querySelector('style[data-override]').textContent = `
+            div[data-palette] ul li button[data-action="webview_startPage"][data-url="${state.startPage}"] {
+                border-color: var(--color-information);
+            }
+        `;
     }
 
 }
