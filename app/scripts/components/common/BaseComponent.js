@@ -1,6 +1,22 @@
+import {html, render, TemplateResult} from 'lit-html';
+
 import Chirit from '../../../libs/chirit/Chirit.js';
 
 export default class BaseComponent extends Chirit.Component {
+
+    constructor() {
+        super();
+        this.html = html;
+    }
+
+    setContent(content) {
+        if (content instanceof TemplateResult) {
+            render(content, this.contentRoot);
+        }
+        else {
+            super.setContent(content);
+        }
+    }
 
     get sharedStyle() {
         return `
