@@ -30,7 +30,7 @@ export default class AboutdialogComponent extends BaseComponent {
     }
 
     render() {
-        return `
+        return this.html`
             <style>${this.sharedStyle}</style>
 
             <style>

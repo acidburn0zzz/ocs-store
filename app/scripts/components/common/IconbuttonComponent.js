@@ -24,7 +24,7 @@ export default class IconbuttonComponent extends BaseComponent {
         const status = this.getAttribute('data-status') || 'active';
         const disabled = (status === 'inactive') ? 'disabled' : '';
 
-        return `
+        return this.html`
             <style>${this.sharedStyle}</style>
 
             <style>
@@ -56,7 +56,7 @@ export default class IconbuttonComponent extends BaseComponent {
             }
             </style>
 
-            <button title="${title}" ${disabled}>
+            <button title="${title}" ?disabled=${disabled}>
             <i class="material-icons md-${size} md-${color} md-${status}">${icon}</i>
             </button>
         `;

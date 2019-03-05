@@ -9,7 +9,7 @@ export default class IndicatorComponent extends BaseComponent {
     render() {
         const status = this.getAttribute('data-status') || 'inactive';
 
-        return `
+        return this.html`
             <style>${this.sharedStyle}</style>
 
             <style>

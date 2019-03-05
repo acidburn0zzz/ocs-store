@@ -30,7 +30,7 @@ export default class DialogComponent extends BaseComponent {
 
         const autoCloseAction = (autoCloseStatus === 'active') ? 'dialog_autoClose' : '';
 
-        return `
+        return this.html`
             <style>${this.sharedStyle}</style>
 
             <style>

@@ -37,7 +37,7 @@ export default class OmniboxComponent extends BaseComponent {
 
         const autoCloseAction = (autoCloseStatus === 'active') ? 'omnibox_autoClose' : '';
 
-        return `
+        return this.html`
             <style>${this.sharedStyle}</style>
 
             <style>
@@ -158,8 +158,6 @@ export default class OmniboxComponent extends BaseComponent {
             }
             </style>
 
-            <style data-override></style>
-
             <div data-omnibox>
             <div data-content>
             <div></div>
@@ -240,15 +238,7 @@ export default class OmniboxComponent extends BaseComponent {
     }
 
     _viewHandler_webview_page(state) {
-        //this.update({...this.state, ...state});
-
-        this.contentRoot.querySelector('app-iconbutton[data-action="ocsManager_openUrl"]').setAttribute('data-url', state.url);
-        this.contentRoot.querySelector('h3[data-action="omnibox_open"]').textContent = state.title;
-        this.contentRoot.querySelector('style[data-override]').textContent = `
-            div[data-palette] ul li button[data-action="webview_startPage"][data-url="${state.startPage}"] {
-                border-color: var(--color-information);
-            }
-        `;
+        this.update({...this.state, ...state});
     }
 
 }

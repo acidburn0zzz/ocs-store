@@ -32,7 +32,7 @@ export default class MenuComponent extends BaseComponent {
 
         const autoCloseAction = (autoCloseStatus === 'active') ? 'menu_autoClose' : '';
 
-        return `
+        return this.html`
             <style>${this.sharedStyle}</style>
 
             <style>
