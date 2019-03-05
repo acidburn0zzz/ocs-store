@@ -39,10 +39,10 @@ export default class ToolbarComponent extends BaseComponent {
                 background-color: var(--color-widget);
             }
             nav[data-toolbar] ul {
+                list-style: none;
                 display: flex;
                 flex-flow: row nowrap;
                 align-items: center;
-                list-style: none;
                 height: inherit;
                 margin: 0 4px;
             }
@@ -57,7 +57,6 @@ export default class ToolbarComponent extends BaseComponent {
                 flex: 1 1 auto;
                 justify-content: center;
             }
-
             @media (min-width: 900px) {
                 nav[data-toolbar] ul li[data-omnibox] {
                     margin-right: calc(32px * 4);
@@ -117,7 +116,7 @@ export default class ToolbarComponent extends BaseComponent {
             <li data-omnibox><app-omnibox></app-omnibox></li>
             <li>
             <app-iconbutton data-action="menu_open"
-                data-title="Other operations..." data-icon="more_vert"></app-iconbutton>
+                data-title="Other operations..." data-icon="more_vert"></app-iconbutton><br>
             <app-menu data-width="250px" data-offset-x="-220px">
             <a slot="menuitem" href="#" data-action="general_about">About This App</a>
             </app-menu>

@@ -37,6 +37,7 @@ export default class MenuComponent extends BaseComponent {
 
             <style>
             :host {
+                display: inline-block;
                 width: 0;
                 height: 0;
             }
