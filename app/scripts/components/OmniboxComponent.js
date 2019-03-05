@@ -139,7 +139,7 @@ export default class OmniboxComponent extends BaseComponent {
                 text-overflow: ellipsis;
             }
             div[data-palette] ul li button:hover {
-                background-color: var(--color-active-secondary);
+                border-color: rgba(0,0,0,0.3);
             }
             div[data-palette] ul li button[data-action="webview_startPage"][data-url="${this.state.startPage}"] {
                 border-color: var(--color-information);
