@@ -1,6 +1,12 @@
-/*:disabled {
-    opacity: 0.4;
-}*/
+:host {
+    color: var(--color-text);
+}
+a {
+    color: var(--color-information);
+}
+a:hover {
+    color: var(--color-information-secondary);
+}
 
 .fade-in,
 .fade-out {

@@ -40,7 +40,6 @@ export default class CollectioninstalledComponent extends BaseComponent {
                 display: flex;
                 flex-flow: row nowrap;
                 align-items: center;
-                color: var(--color-text);
             }
             ul[data-container] li > div figure[data-previewpic] {
                 display: inline-block;

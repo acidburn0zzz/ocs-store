@@ -104,24 +104,22 @@ export default class OmniboxComponent extends BaseComponent {
             }
             div[data-palette] h4 {
                 margin: 1em 0;
-                color: var(--color-text);
                 text-align: center;
             }
             div[data-palette] h4 i {
                 position: relative;
                 top: 3px;
             }
-            div[data-palette] ul {
-                list-style: none;
+            div[data-palette] nav ul {
                 display: flex;
                 flex-flow: row wrap;
                 justify-content: center;
             }
-            div[data-palette] ul li {
+            div[data-palette] nav ul li {
                 width: 50%;
                 padding: 5px;
             }
-            div[data-palette] ul li button {
+            div[data-palette] nav ul li button {
                 -webkit-appearance: none;
                 appearance: none;
                 display: inline-block;
@@ -130,7 +128,6 @@ export default class OmniboxComponent extends BaseComponent {
                 border: 1px solid var(--color-border);
                 border-radius: 3px;
                 background-color: var(--color-content);
-                color: var(--color-text);
                 line-height: 1;
                 outline: none;
                 cursor: pointer;
@@ -138,10 +135,10 @@ export default class OmniboxComponent extends BaseComponent {
                 white-space: nowrap;
                 text-overflow: ellipsis;
             }
-            div[data-palette] ul li button:hover {
+            div[data-palette] nav ul li button:hover {
                 border-color: rgba(0,0,0,0.3);
             }
-            div[data-palette] ul li button[data-action="webview_startPage"][data-url="${this.state.startPage}"] {
+            div[data-palette] nav ul li button[data-action="webview_startPage"][data-url="${this.state.startPage}"] {
                 border-color: var(--color-information);
             }
 
@@ -172,6 +169,7 @@ export default class OmniboxComponent extends BaseComponent {
 
             <div data-palette data-status="${status}" class="fade-in">
             <h4><i class="material-icons md-small">home</i> Choose Startpage</h4>
+            <nav>
             <ul>
             <li><button data-action="webview_startPage" data-url="https://www.opendesktop.org/">opendesktop.org</button></li>
             <li><button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/Gnome">gnome-look.org</button></li>
@@ -180,6 +178,7 @@ export default class OmniboxComponent extends BaseComponent {
             <li><button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/Window-Managers">box-look.org</button></li>
             <li><button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</button></li>
             </ul>
+            </nav>
             </div>
 
             <div data-overlay data-status="${status}" data-action="${autoCloseAction}"></div>

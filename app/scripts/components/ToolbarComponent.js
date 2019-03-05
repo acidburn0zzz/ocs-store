@@ -39,7 +39,6 @@ export default class ToolbarComponent extends BaseComponent {
                 background-color: var(--color-widget);
             }
             nav[data-toolbar] ul {
-                list-style: none;
                 display: flex;
                 flex-flow: row nowrap;
                 align-items: center;
@@ -70,6 +69,11 @@ export default class ToolbarComponent extends BaseComponent {
                 display: none;
             }
 
+            app-menu a[slot="menuitem"],
+            app-menu a[slot="menuitem"]:hover {
+                color: var(--color-text);
+            }
+
             nav[data-toolbar] ul li span[data-downloadingbadge] {
                 display: inline-block;
                 z-index: 1;
@@ -79,7 +83,7 @@ export default class ToolbarComponent extends BaseComponent {
                 padding: 0.3em 0.5em;
                 border-radius: 1em;
                 background-color: var(--color-information);
-                color: #ffffff;
+                color: var(--color-content);
                 font-size: 12px;
                 line-height: 1;
             }
