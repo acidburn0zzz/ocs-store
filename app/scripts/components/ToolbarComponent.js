@@ -128,12 +128,12 @@ export default class ToolbarComponent extends BaseComponent {
 
     _handleClick(event) {
         let targetElement = null;
-        if (event.target.closest('app-iconbutton')) {
-            targetElement = event.target.closest('app-iconbutton');
+        if (event.target.closest('app-iconbutton[data-action]')) {
+            targetElement = event.target.closest('app-iconbutton[data-action]');
         }
-        else if (event.target.closest('a[slot="menuitem"]')) {
+        else if (event.target.closest('a[slot="menuitem"][data-action]')) {
             event.preventDefault();
-            targetElement = event.target.closest('a[slot="menuitem"]');
+            targetElement = event.target.closest('a[slot="menuitem"][data-action]');
         }
         else {
             return;
