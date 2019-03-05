@@ -1,4 +1,4 @@
-import BaseComponent from './BaseComponent.js';
+import BaseComponent from './common/BaseComponent.js';
 
 export default class AboutdialogComponent extends BaseComponent {
 
@@ -34,21 +34,31 @@ export default class AboutdialogComponent extends BaseComponent {
             <style>${this.sharedStyle}</style>
 
             <style>
+            @import url(images/icon.css);
+
             div[slot="content"] {
+                padding: 1em;
                 text-align: center;
             }
-            div[slot="content"] h4 {
-                padding-top: calc(96px + 1em);
-                background-position: top center;
+            div[slot="content"] figure.icon-ocs-store {
+                display: inline-block;
+                width: 128px;
+                height: 128px;
+                background-position: center center;
                 background-repeat: no-repeat;
-                background-size: 96px 96px;
+                background-size: 128px 128px;
+            }
+            div[slot="content"] h4,
+            div[slot="content"] p {
+                margin: 0.5em 0;
             }
             </style>
 
-            <app-dialog data-width="500px" data-header data-auto-close>
+            <app-dialog data-width="500px" data-footer-status="inactive">
             <h3 slot="header">About This App</h3>
             <div slot="content">
-            <h4 class="icon-ocs-store">${this.state.productName}</h4>
+            <figure class="icon-ocs-store"></figure>
+            <h4>${this.state.productName}</h4>
             <p>Version ${this.state.version}</p>
             <p>${this.state.description}</p>
             <p>
@@ -76,10 +86,7 @@ export default class AboutdialogComponent extends BaseComponent {
     _handleClick(event) {
         if (event.target.closest('a')) {
             event.preventDefault();
-            const anchorElement = event.target.closest('a');
-            this.dispatch('webview_load', {
-                url: anchorElement.href
-            });
+            this.dispatch('webview_loadUrl', {url: event.target.closest('a').href});
             this.close();
         }
     }
