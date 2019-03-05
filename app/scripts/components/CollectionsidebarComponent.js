@@ -26,7 +26,7 @@ export default class CollectionsidebarComponent extends BaseComponent {
 
     render() {
         return `
-            ${this.sharedStyle}
+            <style>${this.sharedStyle}</style>
 
             <style>
             :host {

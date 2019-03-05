@@ -18,7 +18,7 @@ export default class SplashscreenComponent extends BaseComponent {
 
     render() {
         return `
-            ${this.sharedStyle}
+            <style>${this.sharedStyle}</style>
 
             <style>
             @import url(images/icon.css);

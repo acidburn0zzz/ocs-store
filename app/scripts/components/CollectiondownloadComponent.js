@@ -23,7 +23,7 @@ export default class CollectiondownloadComponent extends BaseComponent {
 
     render() {
         return `
-            ${this.sharedStyle}
+            <style>${this.sharedStyle}</style>
 
             <style>
             ul[data-container] {

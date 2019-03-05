@@ -20,10 +20,8 @@ export default class BaseComponent extends Chirit.Component {
 
     get sharedStyle() {
         return `
-            <style>
             @import url(styles/reset.css);
             @import url(styles/component.css);
-            </style>
         `;
     }
 

@@ -25,7 +25,7 @@ export default class IconbuttonComponent extends BaseComponent {
         const disabled = (status === 'inactive') ? 'disabled' : '';
 
         return `
-            ${this.sharedStyle}
+            <style>${this.sharedStyle}</style>
 
             <style>
             @import url(styles/material-icons.css);

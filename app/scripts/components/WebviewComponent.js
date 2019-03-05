@@ -31,7 +31,7 @@ export default class WebviewComponent extends BaseComponent {
 
     render() {
         return `
-            ${this.sharedStyle}
+            <style>${this.sharedStyle}</style>
 
             <style>
             :host {

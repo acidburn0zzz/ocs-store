@@ -38,7 +38,7 @@ export default class OmniboxComponent extends BaseComponent {
         const autoCloseAction = (autoCloseStatus === 'active') ? 'omnibox_autoClose' : '';
 
         return `
-            ${this.sharedStyle}
+            <style>${this.sharedStyle}</style>
 
             <style>
             @import url(styles/material-icons.css);

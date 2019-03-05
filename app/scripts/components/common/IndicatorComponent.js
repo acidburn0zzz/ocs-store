@@ -10,7 +10,7 @@ export default class IndicatorComponent extends BaseComponent {
         const status = this.getAttribute('data-status') || 'inactive';
 
         return `
-            ${this.sharedStyle}
+            <style>${this.sharedStyle}</style>
 
             <style>
             :host {

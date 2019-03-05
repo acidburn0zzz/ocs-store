@@ -21,7 +21,7 @@ export default class CollectionupdateComponent extends BaseComponent {
 
     render() {
         return `
-            ${this.sharedStyle}
+            <style>${this.sharedStyle}</style>
 
             <style>
             ul[data-container] {

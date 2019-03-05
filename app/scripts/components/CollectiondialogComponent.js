@@ -22,7 +22,7 @@ export default class CollectiondialogComponent extends BaseComponent {
 
     render() {
         return `
-            ${this.sharedStyle}
+            <style>${this.sharedStyle}</style>
 
             <app-dialog data-width="80%" data-height="80%" data-header data-auto-close>
             <h3 slot="header">My Collection</h3>
