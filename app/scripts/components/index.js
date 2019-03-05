@@ -16,25 +16,17 @@ MenuComponent.define('app-menu');
 import DialogComponent from './common/DialogComponent.js';
 DialogComponent.define('app-dialog');
 
-
 import RootComponent from './RootComponent.js';
 RootComponent.define('app-root');
-
-import SplashscreenComponent from './SplashscreenComponent.js';
-SplashscreenComponent.define('app-splashscreen');
 
 import ToolbarComponent from './ToolbarComponent.js';
 ToolbarComponent.define('app-toolbar');
 
-import WebviewComponent from './WebviewComponent.js';
-WebviewComponent.define('app-webview');
-
-
 import OmniboxComponent from './OmniboxComponent.js';
 OmniboxComponent.define('app-omnibox');
 
-import AboutdialogComponent from './AboutdialogComponent.js';
-AboutdialogComponent.define('app-aboutdialog');
+import WebviewComponent from './WebviewComponent.js';
+WebviewComponent.define('app-webview');
 
 import CollectiondialogComponent from './CollectiondialogComponent.js';
 CollectiondialogComponent.define('app-collectiondialog');
@@ -50,3 +42,9 @@ CollectionupdateComponent.define('app-collectionupdate');
 
 import CollectioninstalledComponent from './CollectioninstalledComponent.js';
 CollectioninstalledComponent.define('app-collectioninstalled');
+
+import AboutdialogComponent from './AboutdialogComponent.js';
+AboutdialogComponent.define('app-aboutdialog');
+
+import SplashscreenComponent from './SplashscreenComponent.js';
+SplashscreenComponent.define('app-splashscreen');
