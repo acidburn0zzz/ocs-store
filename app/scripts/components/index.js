@@ -34,14 +34,14 @@ CollectiondialogComponent.define('app-collectiondialog');
 import CollectionsidebarComponent from './CollectionsidebarComponent.js';
 CollectionsidebarComponent.define('app-collectionsidebar');
 
-import CollectiondownloadComponent from './CollectiondownloadComponent.js';
-CollectiondownloadComponent.define('app-collectiondownload');
+import CollectioninstalledComponent from './CollectioninstalledComponent.js';
+CollectioninstalledComponent.define('app-collectioninstalled');
 
 import CollectionupdateComponent from './CollectionupdateComponent.js';
 CollectionupdateComponent.define('app-collectionupdate');
 
-import CollectioninstalledComponent from './CollectioninstalledComponent.js';
-CollectioninstalledComponent.define('app-collectioninstalled');
+import CollectiondownloadComponent from './CollectiondownloadComponent.js';
+CollectiondownloadComponent.define('app-collectiondownload');
 
 import AboutdialogComponent from './AboutdialogComponent.js';
 AboutdialogComponent.define('app-aboutdialog');
