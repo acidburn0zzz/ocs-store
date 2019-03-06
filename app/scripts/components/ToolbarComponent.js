@@ -120,7 +120,7 @@ export default class ToolbarComponent extends BaseComponent {
             <li data-omnibox><app-omnibox></app-omnibox></li>
             <li>
             <app-iconbutton data-action="menu_open"
-                data-title="Other operations..." data-icon="more_vert"></app-iconbutton><br>
+                data-title="Other Operations..." data-icon="more_vert"></app-iconbutton><br>
             <app-menu data-width="250px" data-offset-x="-220px">
             <a slot="menuitem" href="#" data-action="general_about">About This App</a>
             </app-menu>

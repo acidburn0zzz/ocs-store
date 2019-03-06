@@ -161,7 +161,7 @@ export default class OmniboxComponent extends BaseComponent {
             <h3 data-action="omnibox_open">${this.state.title}</h3>
             <div>
             <app-iconbutton data-action="ocsManager_openUrl" data-url="${this.state.url}"
-                data-title="Open in browser" data-icon="open_in_browser" data-size="medium"></app-iconbutton>
+                data-title="Open in Browser" data-icon="open_in_browser" data-size="medium"></app-iconbutton>
             </div>
             </div>
             <app-indicator data-status="inactive"></app-indicator>
