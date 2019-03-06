@@ -26,6 +26,8 @@ export default class CollectiondownloadComponent extends BaseComponent {
             <style>${this.sharedStyle}</style>
 
             <style>
+            @import url(styles/material-icons.css);
+
             :host {
                 display: flex;
                 flex-flow: column nowrap;
@@ -102,7 +104,9 @@ export default class CollectiondownloadComponent extends BaseComponent {
     _listItemHtml(state) {
         return `
             <li data-url="${state.metadata.url}">
-            <figure data-previewpic></figure>
+            <figure data-previewpic>
+            <i class="material-icons md-larger md-dark">cloud_download</i>
+            </figure>
             <div data-main>
             <span data-name>${state.metadata.filename}</span>
             <progress data-progress value="" max=""></progress>
