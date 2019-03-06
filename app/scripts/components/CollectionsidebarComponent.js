@@ -73,11 +73,12 @@ export default class CollectionsidebarComponent extends BaseComponent {
                 line-height: 1;
             }
             nav[data-sidebar] ul li a span[data-count] {
+                flex: 0 0 auto;
                 display: inline-block;
-                padding: 4px 6px;
+                padding: 3px 6px;
                 border-radius: 10px;
                 background-color: var(--color-active-secondary);
-                font-size: 10px;
+                font-size: 11px;
                 line-height: 1;
             }
 

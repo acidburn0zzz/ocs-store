@@ -83,10 +83,10 @@ export default class ToolbarComponent extends BaseComponent {
                 top: -36px;
                 left: 22px;
                 display: inline-block;
-                padding: 4px 6px;
+                padding: 3px 6px;
                 border-radius: 10px;
                 background-color: var(--color-active-secondary);
-                font-size: 10px;
+                font-size: 11px;
                 line-height: 1;
             }
             nav[data-toolbar] ul li span[data-badge="update"] {
