@@ -91,7 +91,7 @@ export default class ToolbarComponent extends BaseComponent {
             }
             nav[data-toolbar] ul li span[data-badge="update"] {
                 z-index: 2;
-                background-color: var(--color-important);
+                background-color: var(--color-warning);
                 color: var(--color-content);
             }
             nav[data-toolbar] ul li span[data-badge="download"] {

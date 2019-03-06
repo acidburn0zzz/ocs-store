@@ -83,7 +83,7 @@ export default class CollectionsidebarComponent extends BaseComponent {
             }
 
             nav[data-sidebar] ul li a[data-action="update"] span[data-count] {
-                background-color: var(--color-important);
+                background-color: var(--color-warning);
                 color: var(--color-content);
             }
             nav[data-sidebar] ul li a[data-action="update"] span[data-count="0"] {
