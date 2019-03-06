@@ -1,8 +1,10 @@
-import BaseComponent from './BaseComponent.js';
+import BaseComponent from './common/BaseComponent.js';
 
 export default class CollectionupdateComponent extends BaseComponent {
 
     init() {
+        this.contentRoot.addEventListener('click', this._handleClick.bind(this));
+
         this._viewHandler_ocsManager_updateAvailableItems = this._viewHandler_ocsManager_updateAvailableItems.bind(this);
         this._viewHandler_ocsManager_updating = this._viewHandler_ocsManager_updating.bind(this);
     }
@@ -24,9 +26,15 @@ export default class CollectionupdateComponent extends BaseComponent {
             <style>${this.sharedStyle}</style>
 
             <style>
+            :host {
+                display: flex;
+                flex-flow: column nowrap;
+                flex: 1 1 auto;
+            }
+
             ul[data-container] {
+                flex: 1 1 auto;
                 list-style: none;
-                margin: 0;
                 overflow: auto;
             }
             ul[data-container] li {
@@ -34,63 +42,79 @@ export default class CollectionupdateComponent extends BaseComponent {
                 flex-flow: row nowrap;
                 align-items: center;
                 margin: 1em;
-                padding: 1em;
+                padding: 1em 2em;
+                border: 1px solid var(--color-border);
+                border-radius: 5px;
             }
-            ul[data-container] li > div {
-                flex: 1 1 auto;
-                display: flex;
-                flex-flow: row nowrap;
-                align-items: center;
+            ul[data-container] li:hover {
+                border-color: rgba(0,0,0,0.3);
             }
-            ul[data-container] li > div figure[data-previewpic] {
-                display: inline-block;
+
+            figure[data-previewpic] {
+                flex: 0 0 auto;
                 width: 64px;
                 height: 64px;
-                margin-right: 1em;
                 background-position: center center;
                 background-repeat: no-repeat;
                 background-size: contain;
             }
-            ul[data-container] li > div > div {
-                width: 100%;
-            }
-            ul[data-container] li > div > div span[data-name] {
+
+            div[data-main] {
                 flex: 1 1 auto;
+                padding: 0 1em;
+            }
+            progress[data-progress] {
                 display: inline-block;
+                width: 100%;
+                margin: 0.5em 0;
             }
-            ul[data-container] li > div > div progress[data-progress] {
-                width: 70%;
-            }
-            ul[data-container] li > div > div progress[data-progress][value=""] {
+            progress[data-progress][value=""] {
                 display: none;
             }
-            ul[data-container] li nav[data-actions] {
+
+            nav[data-action] {
+                flex: 0 0 auto;
+            }
+            nav[data-action] button {
+                -webkit-appearance: none;
+                appearance: none;
                 display: inline-block;
+                padding: 0.5em 1em;
+                border: 1px solid var(--color-border);
+                border-radius: 3px;
+                background-color: var(--color-content);
+                line-height: 1;
+                outline: none;
+                cursor: pointer;
+            }
+            nav[data-action] button:hover {
+                border-color: rgba(0,0,0,0.3);
+            }
+            nav[data-action] button[data-status="inactive"] {
+                display: none;
             }
             </style>
 
-            <ul class="flex-auto" data-container></ul>
+            <ul data-container></ul>
         `;
     }
 
-    _listItemsHtml(updateAvailableItemsState) {
+    _listItemsHtml(state) {
         const listItems = [];
 
-        if (updateAvailableItemsState.count) {
-            for (const [key, value] of Object.entries(updateAvailableItemsState.updateAvailableItems)) {
+        if (state.count) {
+            for (const [key, value] of Object.entries(state.updateAvailableItems)) {
                 const file = value.files[0];
-                const previewpicUrl = `file://${updateAvailableItemsState.previewpicDirectory}/${this.convertItemKeyToPreviewpicFilename(key)}`;
+                const previewpicUrl = `file://${state.previewpicDirectory}/${this.convertItemKeyToPreviewpicFilename(key)}`;
                 listItems.push(`
-                    <li class="widget" data-item-key="${key}">
-                    <div>
+                    <li data-item-key="${key}">
                     <figure data-previewpic style="background-image: url('${previewpicUrl}');"></figure>
-                    <div>
+                    <div data-main>
                     <span data-name>${file}</span><br>
                     <progress data-progress value="" max=""></progress>
                     </div>
-                    </div>
-                    <nav data-actions>
-                    <button class="button-accept" data-action="update" data-item-key="${key}">Update</button>
+                    <nav data-action>
+                    <button data-action="ocsManager_update" data-item-key="${key}">Update</button>
                     </nav>
                     </li>
                 `);
@@ -101,14 +125,12 @@ export default class CollectionupdateComponent extends BaseComponent {
     }
 
     _handleClick(event) {
-        if (event.target.closest('button')) {
-            event.preventDefault();
-            const buttonElement = event.target.closest('button');
-            const action = buttonElement.getAttribute('data-action');
-            if (action === 'update') {
-                this.dispatch('ocsManager_update', {
-                    itemKey: buttonElement.getAttribute('data-item-key')
-                });
+        if (event.target.closest('button[data-action]')) {
+            const button = event.target.closest('button[data-action]');
+            switch (button.getAttribute('data-action')) {
+                case 'ocsManager_update':
+                    this.dispatch('ocsManager_update', {itemKey: button.getAttribute('data-item-key')});
+                    break;
             }
         }
     }
@@ -119,11 +141,11 @@ export default class CollectionupdateComponent extends BaseComponent {
     }
 
     _viewHandler_ocsManager_updating(state) {
-        const updateItem = this.contentRoot.querySelector(`li[data-item-key="${state.itemKey}"]`);
-        if (updateItem) {
-            const progressElement = updateItem.querySelector('progress[data-progress]');
-            progressElement.value = state.progress;
-            progressElement.max = 1;
+        const listItem = this.contentRoot.querySelector(`li[data-item-key="${state.itemKey}"]`);
+        if (listItem) {
+            const progress = listItem.querySelector('progress[data-progress]');
+            progress.value = '' + state.progress;
+            progress.max = '' + 1;
         }
     }
 
