@@ -2,17 +2,36 @@
  * Chirit
  *
  * @author      Akira Ohgaki <akiraohgaki@gmail.com>
- * @copyright   Akira Ohgaki
+ * @copyright   2018, Akira Ohgaki
  * @license     https://opensource.org/licenses/BSD-2-Clause
  * @link        https://github.com/akiraohgaki/chirit
  */
 
 export default class WebStorage {
 
-    constructor(type = 'session', prefix = '') {
-        // "type" should be "session" or "local"
-        this._storage = (type === 'local') ? window.localStorage : window.sessionStorage;
+    constructor(type = 'local', prefix = '') {
+        this._type = type;
         this._prefix = prefix;
+        this._storage = null;
+
+        switch (this._type) {
+            case 'local':
+                this._storage = window.localStorage;
+                break;
+            case 'session':
+                this._storage = window.sessionStorage;
+                break;
+            default:
+                throw new Error('Storage type must be "local" or "session"');
+        }
+    }
+
+    get type() {
+        return this._type;
+    }
+
+    get prefix() {
+        return this._prefix;
     }
 
     get length() {
@@ -36,7 +55,7 @@ export default class WebStorage {
             const deserializedValue = JSON.parse(value);
             if (deserializedValue
                 && deserializedValue._key === key
-                && typeof deserializedValue._value !== 'undefined'
+                && deserializedValue._value !== undefined
             ) {
                 return deserializedValue._value;
             }

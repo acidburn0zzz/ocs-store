@@ -1,9 +1,0 @@
-#!/bin/bash
-
-PROJDIR="$(cd "$(dirname "${0}")/../" && pwd)"
-
-if [ ! -f "${PROJDIR}/bin/ocs-manager" ]; then
-    mkdir -p "${PROJDIR}/bin"
-    curl -fsSL -o "${PROJDIR}/bin/ocs-manager" https://git.opendesktop.org/akiraohgaki/ocs-manager/uploads/1156210f020d534fafc330d4e4243501/ocs-manager-0.7.0-1-x86_64.AppImage
-    chmod 755 "${PROJDIR}/bin/ocs-manager"
-fi

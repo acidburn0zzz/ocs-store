@@ -2,122 +2,140 @@
  * Chirit
  *
  * @author      Akira Ohgaki <akiraohgaki@gmail.com>
- * @copyright   Akira Ohgaki
+ * @copyright   2018, Akira Ohgaki
  * @license     https://opensource.org/licenses/BSD-2-Clause
  * @link        https://github.com/akiraohgaki/chirit
  */
 
+import Handler from './Handler.js';
+
 export default class StateManager {
 
-    constructor(eventTarget) {
-        // "eventTarget" should be Element object or selector string
-        if (typeof eventTarget === 'string') {
-            eventTarget = document.querySelector(eventTarget);
+    constructor(target) {
+        // "target" should be Element object or selector string
+        if (typeof target === 'string') {
+            target = document.querySelector(target);
         }
 
-        this._eventTarget = eventTarget || document;
-        this._eventListener = (event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            this.dispatch(event.type, event.detail);
+        this._target = target || document;
+        this._state = new Map();
+        this._eventListener = this._eventListener.bind(this);
+
+        this._eventHandler = null;
+        this._actionHandler = null;
+        this._stateHandler = null;
+        this._viewHandler = null;
+
+        this._initHandlers();
+    }
+
+    get target() {
+        return this._target;
+    }
+
+    get state() {
+        return this._state;
+    }
+
+    get eventHandler() {
+        return this._eventHandler;
+    }
+
+    get actionHandler() {
+        return this._actionHandler;
+    }
+
+    get stateHandler() {
+        return this._stateHandler;
+    }
+
+    get viewHandler() {
+        return this._viewHandler;
+    }
+
+    dispatch(type, data = {}) {
+        this._target.dispatchEvent(new CustomEvent(type, {detail: data}));
+    }
+
+    _eventListener(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this._invokeHandlers(event.detail, event.type);
+    }
+
+    _initHandlers() {
+        this._eventHandler = new Handler((data) => {
+            return data;
+        });
+
+        this._actionHandler = new Handler(() => {
+            return {};
+        });
+
+        this._stateHandler = new Handler((data, type) => {
+            this._state.set(type, data);
+            return data;
+        });
+
+        this._viewHandler = new Handler(() => {
+            return {};
+        });
+
+        const beforeAddCallback = (type) => {
+            if (!this._eventHandler.has(type)
+                && !this._actionHandler.has(type)
+                && !this._stateHandler.has(type)
+                && !this._viewHandler.has(type)
+            ) {
+                this._target.addEventListener(type, this._eventListener, false);
+                this._state.set(type, {});
+            }
         };
 
-        this._states = new Map();
-        this._actions = new Map();
-        this._views = new Map();
-    }
-
-    getStates() {
-        return this._states;
-    }
-
-    getState(type) {
-        return this._states.get(type);
-    }
-
-    registerAction(type, action, options) {
-        const actions = this._actions.has(type) ? this._actions.get(type) : new Map();
-        if (!actions.size) {
-            this._states.set(type, {});
-            this._eventTarget.addEventListener(type, this._eventListener, false);
-        }
-        actions.set(action, options);
-        this._actions.set(type, actions);
-    }
-
-    unregisterAction(type, action) {
-        if (this._actions.has(type)) {
-            const actions = this._actions.get(type);
-            if (actions.has(action)) {
-                actions.delete(action);
-                if (actions.size) {
-                    this._actions.set(type, actions);
-                }
-                else {
-                    this._actions.delete(type);
-                    this._states.delete(type);
-                    this._eventTarget.removeEventListener(type, this._eventListener, false);
-                }
+        const afterRemoveCallback = (type) => {
+            if (!this._eventHandler.has(type)
+                && !this._actionHandler.has(type)
+                && !this._stateHandler.has(type)
+                && !this._viewHandler.has(type)
+            ) {
+                this._target.removeEventListener(type, this._eventListener, false);
+                this._state.delete(type);
             }
-        }
+        };
+
+        this._eventHandler.beforeAddCallback = beforeAddCallback;
+        this._eventHandler.afterRemoveCallback = afterRemoveCallback;
+
+        this._actionHandler.beforeAddCallback = beforeAddCallback;
+        this._actionHandler.afterRemoveCallback = afterRemoveCallback;
+
+        this._stateHandler.beforeAddCallback = beforeAddCallback;
+        this._stateHandler.afterRemoveCallback = afterRemoveCallback;
+
+        this._viewHandler.beforeAddCallback = beforeAddCallback;
+        this._viewHandler.afterRemoveCallback = afterRemoveCallback;
     }
 
-    registerView(type, view, options) {
-        const views = this._views.has(type) ? this._views.get(type) : new Map();
-        views.set(view, options);
-        this._views.set(type, views);
-    }
-
-    unregisterView(type, view) {
-        if (this._views.has(type)) {
-            const views = this._views.get(type);
-            if (views.has(view)) {
-                views.delete(view);
-                if (views.size) {
-                    this._views.set(type, views);
-                }
-                else {
-                    this._views.delete(type);
-                }
+    async _invokeHandlers(data, type) {
+        try {
+            const eventRusult = await this._eventHandler.invoke(data, type);
+            if (!eventRusult) {
+                return;
             }
+            const actionResult = await this._actionHandler.invoke(eventRusult, type);
+            if (!actionResult) {
+                return;
+            }
+            const stateResult = await this._stateHandler.invoke(actionResult, type);
+            if (!stateResult) {
+                return;
+            }
+            //const viewResult = await this._viewHandler.invoke(stateResult, type);
+            this._viewHandler.invoke(stateResult, type);
         }
-    }
-
-    dispatch(type, params) {
-        if (!this._actions.has(type)) {
-            console.error(new Error(`No actions for type "${type}"`));
-            return;
+        catch (error) {
+            console.error(error);
         }
-
-        const actions = this._actions.get(type);
-        const promises = [];
-        for (const [action, options] of actions) {
-            promises.push(new Promise((resolve, reject) => {
-                action(resolve, reject, params, options);
-            }));
-        }
-
-        Promise.all(promises)
-            .then((states) => {
-                const state = {};
-                for (const _state of states) {
-                    Object.assign(state, _state);
-                }
-                this._states.set(type, state);
-
-                if (!this._views.has(type)) {
-                    console.log(`No views for type "${type}"`); // This case is not error
-                    return;
-                }
-
-                const views = this._views.get(type);
-                for (const [view, options] of views) {
-                    view(state, options);
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
     }
 
 }

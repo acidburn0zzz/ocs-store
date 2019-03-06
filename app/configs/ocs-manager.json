@@ -1,4 +1,4 @@
 {
-    "bin": "bin/ocs-manager",
+    "bin": "ocs-manager",
     "port": 0
 }

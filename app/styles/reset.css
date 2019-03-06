@@ -2,10 +2,26 @@
 ::before,
 ::after {
     box-sizing: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
 }
 
-:root {
+:root,
+:host {
     box-sizing: border-box;
+}
+
+:host {
+    display: block;
+}
+
+:host,
+body {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.4;
+    cursor: default;
 }
 
 article,
@@ -91,4 +107,13 @@ details,
 summary {
     margin: 0;
     padding: 0;
+}
+
+nav ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    outline: none;
 }
