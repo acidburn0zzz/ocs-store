@@ -7,6 +7,7 @@ export default class ToolbarComponent extends BaseComponent {
 
         this._viewHandler_webview_loading = this._viewHandler_webview_loading.bind(this);
         this._viewHandler_webview_page = this._viewHandler_webview_page.bind(this);
+        this._viewHandler_ocsManager_updateAvailableItems = this._viewHandler_ocsManager_updateAvailableItems.bind(this);
         this._viewHandler_ocsManager_metadataSet = this._viewHandler_ocsManager_metadataSet.bind(this);
     }
 
@@ -14,6 +15,7 @@ export default class ToolbarComponent extends BaseComponent {
         this.getStateManager().viewHandler
             .add('webview_loading', this._viewHandler_webview_loading)
             .add('webview_page', this._viewHandler_webview_page)
+            .add('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems)
             .add('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
@@ -21,6 +23,7 @@ export default class ToolbarComponent extends BaseComponent {
         this.getStateManager().viewHandler
             .remove('webview_loading', this._viewHandler_webview_loading)
             .remove('webview_page', this._viewHandler_webview_page)
+            .remove('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems)
             .remove('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
@@ -74,20 +77,29 @@ export default class ToolbarComponent extends BaseComponent {
                 color: var(--color-text);
             }
 
-            nav[data-toolbar] ul li span[data-downloadingbadge] {
-                display: inline-block;
+            nav[data-toolbar] ul li span[data-badge] {
                 z-index: 1;
                 position: relative;
-                top: -32px;
-                left: 18px;
-                padding: 0.3em 0.5em;
-                border-radius: 1em;
-                background-color: var(--color-information);
-                color: var(--color-content);
-                font-size: 12px;
+                top: -36px;
+                left: 22px;
+                display: inline-block;
+                padding: 4px 6px;
+                border-radius: 10px;
+                background-color: var(--color-active-secondary);
+                font-size: 10px;
                 line-height: 1;
             }
-            nav[data-toolbar] ul li span[data-downloadingbadge][data-status="inactive"] {
+            nav[data-toolbar] ul li span[data-badge="update"] {
+                z-index: 2;
+                background-color: var(--color-important);
+                color: var(--color-content);
+            }
+            nav[data-toolbar] ul li span[data-badge="download"] {
+                z-index: 3;
+                background-color: var(--color-information);
+                color: var(--color-content);
+            }
+            nav[data-toolbar] ul li span[data-badge][data-count="0"] {
                 display: none;
             }
             </style>
@@ -115,7 +127,8 @@ export default class ToolbarComponent extends BaseComponent {
             <li>
             <app-iconbutton data-action="ocsManager_collection"
                 data-title="My Collection" data-icon="folder"></app-iconbutton><br>
-            <span data-downloadingbadge data-status="inactive">0</span>
+            <span data-badge="update" data-count="0">0</span>
+            <span data-badge="download" data-count="0">0</span>
             </li>
             <li data-omnibox><app-omnibox></app-omnibox></li>
             <li>
@@ -186,10 +199,16 @@ export default class ToolbarComponent extends BaseComponent {
             .setAttribute('data-status', state.canGoForward ? 'active' : 'inactive');
     }
 
+    _viewHandler_ocsManager_updateAvailableItems(state) {
+        const badge = this.contentRoot.querySelector('span[data-badge="update"]');
+        badge.setAttribute('data-count', '' + state.count);
+        badge.textContent = state.count;
+    }
+
     _viewHandler_ocsManager_metadataSet(state) {
-        const downloadingBadge = this.contentRoot.querySelector('span[data-downloadingbadge]');
-        downloadingBadge.setAttribute('data-status', state.count ? 'active' : 'inactive');
-        downloadingBadge.textContent = state.count;
+        const badge = this.contentRoot.querySelector('span[data-badge="download"]');
+        badge.setAttribute('data-count', '' + state.count);
+        badge.textContent = state.count;
     }
 
 }
