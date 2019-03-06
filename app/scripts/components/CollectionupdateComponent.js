@@ -110,11 +110,12 @@ export default class CollectionupdateComponent extends BaseComponent {
                     <li data-item-key="${key}">
                     <figure data-previewpic style="background-image: url('${previewpicUrl}');"></figure>
                     <div data-main>
-                    <span data-name>${file}</span><br>
+                    <span data-name>${file}</span>
                     <progress data-progress value="" max=""></progress>
+                    <span data-message></span>
                     </div>
                     <nav data-action>
-                    <button data-action="ocsManager_update" data-item-key="${key}">Update</button>
+                    <button data-action="ocsManager_update" data-item-key="${key}" data-status="active">Update</button>
                     </nav>
                     </li>
                 `);
@@ -130,6 +131,7 @@ export default class CollectionupdateComponent extends BaseComponent {
             switch (button.getAttribute('data-action')) {
                 case 'ocsManager_update':
                     this.dispatch('ocsManager_update', {itemKey: button.getAttribute('data-item-key')});
+                    button.setAttribute('data-status', 'inactive');
                     break;
             }
         }
@@ -145,7 +147,9 @@ export default class CollectionupdateComponent extends BaseComponent {
         if (listItem) {
             const progress = listItem.querySelector('progress[data-progress]');
             progress.value = '' + state.progress;
-            progress.max = '' + 1;
+            progress.max = '1';
+            const message = `Updating... ${Math.ceil(state.progress * 100)}%`;
+            listItem.querySelector('span[data-message]').textContent = message;
         }
     }
 
