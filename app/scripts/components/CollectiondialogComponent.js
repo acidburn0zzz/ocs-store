@@ -1,4 +1,4 @@
-import BaseComponent from './BaseComponent.js';
+import BaseComponent from './common/BaseComponent.js';
 
 export default class CollectiondialogComponent extends BaseComponent {
 
@@ -24,14 +24,27 @@ export default class CollectiondialogComponent extends BaseComponent {
         return `
             <style>${this.sharedStyle}</style>
 
-            <app-dialog data-width="80%" data-height="80%" data-header data-auto-close>
+            <style>
+            app-page[slot="content"] {
+                display: flex;
+                flex-flow: column nowrap;
+                flex: 1 1 auto;
+            }
+            app-switchview[slot="content"] {
+                display: flex;
+                flex-flow: column nowrap;
+                flex: 1 1 auto;
+            }
+            </style>
+
+            <app-dialog data-width="80%" data-height="80%" data-footer-status="inactive">
             <h3 slot="header">My Collection</h3>
-            <app-page id="collection" slot="content" class="flex-auto flex-column">
-            <app-collectionsidebar slot="sidebar" class="flex-auto flex-column"></app-collectionsidebar>
-            <app-switchview slot="content" class="flex-auto flex-column">
-            <app-collectiondownload id="download" class="flex-auto flex-column"></app-collectiondownload>
-            <app-collectionupdate id="update" class="flex-auto flex-column"></app-collectionupdate>
-            <app-collectioninstalled id="installed" class="flex-auto flex-column"></app-collectioninstalled>
+            <app-page id="collection" slot="content">
+            <app-collectionsidebar slot="sidebar"></app-collectionsidebar>
+            <app-switchview slot="content">
+            <app-collectiondownload id="download"></app-collectiondownload>
+            <app-collectionupdate id="update"></app-collectionupdate>
+            <app-collectioninstalled id="installed"></app-collectioninstalled>
             </app-switchview>
             </app-page>
             </app-dialog>
