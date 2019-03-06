@@ -47,28 +47,22 @@ export default class CollectioninstalledComponent extends BaseComponent {
                 border-color: rgba(0,0,0,0.3);
             }
 
-            div[data-main] {
-                flex: 1 1 auto;
-                display: flex;
-                flex-flow: row nowrap;
-                align-items: center;
-            }
             figure[data-previewpic] {
                 flex: 0 0 auto;
-                display: inline-block;
                 width: 64px;
                 height: 64px;
                 background-position: center center;
                 background-repeat: no-repeat;
                 background-size: contain;
             }
-            span[data-name] {
+
+            div[data-main] {
                 flex: 1 1 auto;
-                display: inline-block;
-                margin: 0 1em;
+                padding: 0 1em;
             }
 
             nav[data-action] {
+                flex: 0 0 auto;
             }
             nav[data-action] button {
                 -webkit-appearance: none;
@@ -109,8 +103,8 @@ export default class CollectioninstalledComponent extends BaseComponent {
                     const fileUrl = `file://${filePath}`;
                     listItems.push(`
                         <li>
-                        <div data-main>
                         <figure data-previewpic style="background-image: url('${previewpicUrl}');"></figure>
+                        <div data-main>
                         <span data-name>${file}</span>
                         </div>
                         <nav data-action>
