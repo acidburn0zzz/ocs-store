@@ -6,19 +6,19 @@ export default class CollectionupdateComponent extends BaseComponent {
         this.contentRoot.addEventListener('click', this._handleClick.bind(this));
 
         this._viewHandler_ocsManager_updateAvailableItems = this._viewHandler_ocsManager_updateAvailableItems.bind(this);
-        this._viewHandler_ocsManager_updating = this._viewHandler_ocsManager_updating.bind(this);
+        this._viewHandler_ocsManager_updateProgress = this._viewHandler_ocsManager_updateProgress.bind(this);
     }
 
     componentConnectedCallback() {
         this.getStateManager().viewHandler
             .add('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems)
-            .add('ocsManager_updating', this._viewHandler_ocsManager_updating);
+            .add('ocsManager_updateProgress', this._viewHandler_ocsManager_updateProgress);
     }
 
     componentDisconnectedCallback() {
         this.getStateManager().viewHandler
             .remove('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems)
-            .remove('ocsManager_updating', this._viewHandler_ocsManager_updating);
+            .remove('ocsManager_updateProgress', this._viewHandler_ocsManager_updateProgress);
     }
 
     render() {
@@ -68,7 +68,7 @@ export default class CollectionupdateComponent extends BaseComponent {
                 width: 100%;
                 margin: 0.5em 0;
             }
-            progress[data-progress][value=""] {
+            progress[data-progress][value="0"] {
                 display: none;
             }
 
@@ -110,9 +110,9 @@ export default class CollectionupdateComponent extends BaseComponent {
                     <li data-item-key="${key}">
                     <figure data-previewpic style="background-image: url('${previewpicUrl}');"></figure>
                     <div data-main>
-                    <span data-name>${file}</span>
-                    <progress data-progress value="" max=""></progress>
-                    <span data-message></span>
+                    <h4 data-name>${file}</h4>
+                    <progress data-progress value="0" max="1"></progress>
+                    <p data-message></p>
                     </div>
                     <nav data-action>
                     <button data-action="ocsManager_update" data-item-key="${key}" data-status="active">Update</button>
@@ -142,14 +142,12 @@ export default class CollectionupdateComponent extends BaseComponent {
             .innerHTML = this._listItemsHtml(state);
     }
 
-    _viewHandler_ocsManager_updating(state) {
+    _viewHandler_ocsManager_updateProgress(state) {
         const listItem = this.contentRoot.querySelector(`li[data-item-key="${state.itemKey}"]`);
         if (listItem) {
-            const progress = listItem.querySelector('progress[data-progress]');
-            progress.value = '' + state.progress;
-            progress.max = '1';
+            listItem.querySelector('progress[data-progress]').value = '' + state.progress;
             const message = `Updating... ${Math.ceil(state.progress * 100)}%`;
-            listItem.querySelector('span[data-message]').textContent = message;
+            listItem.querySelector('p[data-message]').textContent = message;
         }
     }
 

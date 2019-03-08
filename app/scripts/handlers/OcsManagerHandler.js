@@ -131,7 +131,7 @@ export default class OcsManagerHandler {
                     metadata: data.metadata
                 };
             })
-            .add('ocsManager_downloading', (data) => {
+            .add('ocsManager_downloadProgress', (data) => {
                 return {
                     url: data.url,
                     bytesReceived: data.bytesReceived,
@@ -148,7 +148,7 @@ export default class OcsManagerHandler {
                 this._ocsManagerApi.send('UpdateHandler::update', [data.itemKey]);
                 return false;
             })
-            .add('ocsManager_updating', (data) => {
+            .add('ocsManager_updateProgress', (data) => {
                 return {
                     itemKey: data.itemKey,
                     progress: data.progress
@@ -210,7 +210,7 @@ export default class OcsManagerHandler {
                 });
             })
             .set('ItemHandler::downloadProgress', (message) => {
-                this._stateManager.dispatch('ocsManager_downloading', {
+                this._stateManager.dispatch('ocsManager_downloadProgress', {
                     url: message.data[0],
                     bytesReceived: message.data[1],
                     bytesTotal: message.data[2]
@@ -293,7 +293,7 @@ export default class OcsManagerHandler {
                 this._stateManager.dispatch('ocsManager_updateAvailableItems', {});
             })
             .set('UpdateHandler::updateProgress', (message) => {
-                this._stateManager.dispatch('ocsManager_updating', {
+                this._stateManager.dispatch('ocsManager_updateProgress', {
                     itemKey: message.data[0],
                     progress: message.data[1]
                 });
