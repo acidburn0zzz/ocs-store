@@ -37,9 +37,7 @@ export default class OcsManagerHandler {
 
                     const updateCheckAfter = this._ipcRenderer.sendSync('app', 'config').updateCheckAfter;
 
-                    if (!updateCheckedAt
-                        || (updateCheckedAt + updateCheckAfter) < new Date().getTime()
-                    ) {
+                    if (!updateCheckedAt || (updateCheckedAt + updateCheckAfter) < new Date().getTime()) {
                         this._ocsManagerApi.send('UpdateHandler::checkAll', []);
                     }
                 }
@@ -140,8 +138,10 @@ export default class OcsManagerHandler {
             })
             .add('ocsManager_uninstall', (data) => {
                 this._ocsManagerApi.send('ItemHandler::uninstall', [data.itemKey]);
-                // Remove preview pic
+
+                // Remove preview picture
                 this._ipcRenderer.sendSync('previewpic', 'remove', data.itemKey);
+
                 return false;
             })
             .add('ocsManager_update', (data) => {
@@ -176,7 +176,7 @@ export default class OcsManagerHandler {
                     metadata: message.data[0].metadata
                 });
 
-                // Download preview pic
+                // Download preview picture
                 const selector = 'meta[property="og:image"]';
                 this._webviewComponent.executeJavaScript(
                     `document.querySelector('${selector}').content`,
@@ -184,7 +184,8 @@ export default class OcsManagerHandler {
                     (result) => {
                         let previewpicUrl = result || '';
 
-                        // FIXME: Previewpic API maybe deprecated
+                        // FIXME: previewpic API maybe deprecated
+                        /*
                         if (!previewpicUrl
                             && message.data[0].metadata.command === 'install'
                             && message.data[0].metadata.provider
@@ -192,6 +193,7 @@ export default class OcsManagerHandler {
                         ) {
                             previewpicUrl = `${message.data[0].metadata.provider}content/previewpic/${message.data[0].metadata.content_id}`;
                         }
+                        */
 
                         if (previewpicUrl) {
                             this._ipcRenderer.sendSync('previewpic', 'download', message.data[0].metadata.url, previewpicUrl);
