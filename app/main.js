@@ -184,6 +184,17 @@ app.on('activate', () => {
     }
 });
 
+app.on('web-contents-created', (event, webContents) => {
+    if (webContents.getType() === 'webview') {
+        webContents.on('will-navigate', (event, url) => {
+            if (url.startsWith('ocs://') || url.startsWith('ocss://')) {
+                // Cancel ocs protocol navigation
+                event.preventDefault();
+            }
+        });
+    }
+});
+
 ipcMain.on('app', (event, key) => {
     const data = {
         package: appPackage,

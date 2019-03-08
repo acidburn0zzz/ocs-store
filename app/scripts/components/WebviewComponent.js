@@ -124,6 +124,7 @@ export default class WebviewComponent extends BaseComponent {
         });
 
         this._webviewElement.addEventListener('will-navigate', (event) => {
+            // See also "will-navigate" event handling in main.js
             if (event.url.startsWith('ocs://') || event.url.startsWith('ocss://')) {
                 const info = this._detectOcsApiInfo(this._webviewElement.getURL());
                 this.dispatch('ocsManager_getItemByOcsUrl', {
