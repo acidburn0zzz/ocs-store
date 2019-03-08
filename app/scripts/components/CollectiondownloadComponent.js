@@ -6,19 +6,19 @@ export default class CollectiondownloadComponent extends BaseComponent {
 
     init() {
         this._viewHandler_ocsManager_installing = this._viewHandler_ocsManager_installing.bind(this);
-        this._viewHandler_ocsManager_downloading = this._viewHandler_ocsManager_downloading.bind(this);
+        this._viewHandler_ocsManager_downloadProgress = this._viewHandler_ocsManager_downloadProgress.bind(this);
     }
 
     componentConnectedCallback() {
         this.getStateManager().viewHandler
             .add('ocsManager_installing', this._viewHandler_ocsManager_installing)
-            .add('ocsManager_downloading', this._viewHandler_ocsManager_downloading);
+            .add('ocsManager_downloadProgress', this._viewHandler_ocsManager_downloadProgress);
     }
 
     componentDisconnectedCallback() {
         this.getStateManager().viewHandler
             .remove('ocsManager_installing', this._viewHandler_ocsManager_installing)
-            .remove('ocsManager_downloading', this._viewHandler_ocsManager_downloading);
+            .remove('ocsManager_downloadProgress', this._viewHandler_ocsManager_downloadProgress);
     }
 
     render() {
@@ -70,7 +70,7 @@ export default class CollectiondownloadComponent extends BaseComponent {
                 width: 100%;
                 margin: 0.5em 0;
             }
-            progress[data-progress][value=""] {
+            progress[data-progress][value="0"] {
                 display: none;
             }
 
@@ -108,9 +108,9 @@ export default class CollectiondownloadComponent extends BaseComponent {
             <i class="material-icons md-larger md-dark">cloud_download</i>
             </figure>
             <div data-main>
-            <span data-name>${state.metadata.filename}</span>
-            <progress data-progress value="" max=""></progress>
-            <span data-message>${state.message}</span>
+            <h4 data-name>${state.metadata.filename}</h4>
+            <progress data-progress value="0" max="1"></progress>
+            <p data-message>${state.message}</p>
             </div>
             <nav data-action>
             <!--<button data-action="" data-item-key="">Cancel</button>-->
@@ -122,7 +122,10 @@ export default class CollectiondownloadComponent extends BaseComponent {
     _viewHandler_ocsManager_installing(state) {
         const listItem = this.contentRoot.querySelector(`li[data-url="${state.metadata.url}"]`);
         if (listItem) {
-            listItem.querySelector('span[data-message]').textContent = state.message;
+            listItem.querySelector('p[data-message]').textContent = state.message;
+            if (state.status === 'success_install') {
+                listItem.querySelector('progress[data-progress]').value = '0';
+            }
         }
         else {
             this.contentRoot.querySelector('ul[data-container]')
@@ -130,17 +133,15 @@ export default class CollectiondownloadComponent extends BaseComponent {
         }
     }
 
-    _viewHandler_ocsManager_downloading(state) {
+    _viewHandler_ocsManager_downloadProgress(state) {
         const listItem = this.contentRoot.querySelector(`li[data-url="${state.url}"]`);
         if (listItem) {
-            const progress = listItem.querySelector('progress[data-progress]');
-            progress.value = '' + state.bytesReceived;
-            progress.max = '' + state.bytesTotal;
+            listItem.querySelector('progress[data-progress]').value = '' + state.bytesReceived/state.bytesTotal;
             const message = 'Downloading... '
                 + Chilit.Utility.convertByteToHumanReadable(state.bytesReceived)
                 + ' / '
                 + Chilit.Utility.convertByteToHumanReadable(state.bytesTotal);
-            listItem.querySelector('span[data-message]').textContent = message;
+            listItem.querySelector('p[data-message]').textContent = message;
         }
     }
 

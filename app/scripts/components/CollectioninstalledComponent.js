@@ -105,7 +105,7 @@ export default class CollectioninstalledComponent extends BaseComponent {
                         <li>
                         <figure data-previewpic style="background-image: url('${previewpicUrl}');"></figure>
                         <div data-main>
-                        <span data-name>${file}</span>
+                        <h4 data-name>${file}</h4>
                         </div>
                         <nav data-action>
                         <button data-action="ocsManager_openUrl" data-url="${fileUrl}">${openButtonText}</button>
