@@ -68,10 +68,6 @@ export default class OmniboxComponent extends BaseComponent {
                 height: inherit;
                 line-height: 1;
             }
-            div[data-omnibox] div[data-content] div {
-                flex: 0 0 auto;
-                width: 30px;
-            }
             div[data-omnibox] div[data-content] h3 {
                 flex: 1 1 auto;
                 border-right: 1px solid var(--color-border);
@@ -81,6 +77,13 @@ export default class OmniboxComponent extends BaseComponent {
                 line-height: 24px;
                 text-align: center;
                 cursor: pointer;
+            }
+            div[data-omnibox] div[data-content] div {
+                display: flex;
+                flex: 0 0 auto;
+                align-items: center;
+                justify-content: center;
+                width: 30px;
             }
             div[data-omnibox] app-indicator {
                 position: relative;
@@ -161,7 +164,7 @@ export default class OmniboxComponent extends BaseComponent {
             <h3 data-action="omnibox_open">${this.state.title}</h3>
             <div>
             <app-iconbutton data-action="ocsManager_openUrl" data-url="${this.state.url}"
-                data-title="Open in Browser" data-icon="open_in_browser" data-size="medium"></app-iconbutton>
+                data-title="Open in Browser" data-icon="open_in_browser" data-size="small"></app-iconbutton>
             </div>
             </div>
             <app-indicator data-status="inactive"></app-indicator>
