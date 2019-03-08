@@ -194,8 +194,18 @@ export default class CollectionsidebarComponent extends BaseComponent {
     }
 
     _viewHandler_ocsManager_installedItems(state) {
-        this.contentRoot.querySelector('nav ul[data-menu="category"]')
-            .innerHTML = this._categoryMenuItemsHtml(state);
+        const categoryMenu = this.contentRoot.querySelector('nav ul[data-menu="category"]');
+
+        const selectedMenuItem = categoryMenu.querySelector('a[data-selected]');
+        const installType = selectedMenuItem ? selectedMenuItem.getAttribute('data-install-type') : '';
+
+        categoryMenu.innerHTML = this._categoryMenuItemsHtml(state);
+
+        const menuItem = installType ? categoryMenu.querySelector(`a[data-install-type="${installType}"]`) : null;
+
+        if (menuItem) {
+            menuItem.click();
+        }
     }
 
     _viewHandler_ocsManager_updateAvailableItems(state) {

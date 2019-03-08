@@ -42,9 +42,9 @@ export default class CollectiondialogComponent extends BaseComponent {
             <app-page id="collection" slot="content">
             <app-collectionsidebar slot="sidebar"></app-collectionsidebar>
             <app-switchview slot="content">
-            <app-collectiondownload id="download"></app-collectiondownload>
-            <app-collectionupdate id="update"></app-collectionupdate>
             <app-collectioninstalled id="installed"></app-collectioninstalled>
+            <app-collectionupdate id="update"></app-collectionupdate>
+            <app-collectiondownload id="download"></app-collectiondownload>
             </app-switchview>
             </app-page>
             </app-dialog>
@@ -68,14 +68,14 @@ export default class CollectiondialogComponent extends BaseComponent {
     _handleCollectionsidebarSelect(event) {
         const switchviewComponent = this.contentRoot.querySelector('app-switchview');
         switch (event.detail.select) {
-            case 'download':
-                switchviewComponent.switch('download');
+            case 'installed':
+                switchviewComponent.switch('installed');
                 break;
             case 'update':
                 switchviewComponent.switch('update');
                 break;
-            case 'installed':
-                switchviewComponent.switch('installed');
+            case 'download':
+                switchviewComponent.switch('download');
                 break;
         }
     }
