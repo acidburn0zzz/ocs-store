@@ -102,7 +102,7 @@ export default class OmniboxComponent extends BaseComponent {
                 padding: 1em;
                 border: 1px solid var(--color-border);
                 border-radius: 5px;
-                box-shadow: 0 10px 30px var(--color-shadow);
+                box-shadow: 0 5px 20px 0 var(--color-shadow);
                 background-color: var(--color-content);
             }
             div[data-palette][data-state="inactive"] {

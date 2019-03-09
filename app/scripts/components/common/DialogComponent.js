@@ -63,7 +63,7 @@ export default class DialogComponent extends BaseComponent {
                 max-height: ${maxHeight};
                 border: 1px solid var(--color-border);
                 border-radius: 5px;
-                box-shadow: 0 10px 30px var(--color-shadow);
+                box-shadow: 0 0 20px 10px var(--color-shadow);
                 background-color: var(--color-content);
             }
 

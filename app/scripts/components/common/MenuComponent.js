@@ -58,7 +58,7 @@ export default class MenuComponent extends BaseComponent {
                 padding: 3px 0;
                 border: 1px solid var(--color-border);
                 border-radius: 5px;
-                box-shadow: 0 10px 30px var(--color-shadow);
+                box-shadow: 0 5px 20px 0 var(--color-shadow);
                 background-color: var(--color-content);
             }
             nav[data-menu][data-state="inactive"] {
