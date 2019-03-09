@@ -27,4 +27,4 @@ chmod 755 appimagetool
 ./appimagetool --appimage-extract
 ./squashfs-root/AppRun -u "${UPDINFO}" ${APPDIR}
 
-mv *-x86_64.AppImage ${PKGNAME}-${PKGVER}-${PKGREL}-x86_64.AppImage
+mv *-x86_64.AppImage ../${PKGNAME}-${PKGVER}-${PKGREL}-x86_64.AppImage
