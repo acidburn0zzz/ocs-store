@@ -3,26 +3,33 @@ import BaseComponent from './BaseComponent.js';
 export default class IndicatorComponent extends BaseComponent {
 
     static get componentObservedAttributes() {
-        return ['data-status'];
+        return ['data-state'];
     }
 
     render() {
-        const status = this.getAttribute('data-status') || 'inactive';
+        const state = this.getAttribute('data-state') || 'inactive';
 
         return this.html`
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            </style>
 
             <style>
             :host {
                 width: 100%;
                 height: 2px;
             }
+
             div[data-container] {
                 width: inherit;
                 height: inherit;
                 overflow: hidden;
             }
-            div[data-indicator][data-status="active"] {
+            div[data-container][data-state="inactive"] {
+                display: none;
+            }
+
+            div[data-indicator][data-state="active"] {
                 position: relative;
                 top: 0;
                 left: 0;
@@ -34,9 +41,10 @@ export default class IndicatorComponent extends BaseComponent {
                 animation-iteration-count: infinite;
                 animation-direction: alternate;
             }
-            div[data-indicator][data-status="inactive"] {
+            div[data-indicator][data-state="inactive"] {
                 display: none;
             }
+
             @keyframes slide {
                 0% {
                     left: -40%;
@@ -47,8 +55,8 @@ export default class IndicatorComponent extends BaseComponent {
             }
             </style>
 
-            <div data-container>
-            <div data-indicator data-status="${status}"></div>
+            <div data-container data-state="${state}">
+            <div data-indicator data-state="${state}"></div>
             </div>
         `;
     }

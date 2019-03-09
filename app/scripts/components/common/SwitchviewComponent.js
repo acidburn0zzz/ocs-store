@@ -4,7 +4,9 @@ export default class SwitchviewComponent extends BaseComponent {
 
     render() {
         return `
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            </style>
 
             <slot name="content"></slot>
         `;

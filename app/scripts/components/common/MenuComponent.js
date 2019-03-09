@@ -7,7 +7,7 @@ export default class MenuComponent extends BaseComponent {
             'data-width', 'data-min-width', 'data-max-width',
             'data-height', 'data-min-height', 'data-max-height',
             'data-offset-x', 'data-offset-y',
-            'data-status', 'data-auto-close-status'
+            'data-state', 'data-auto-close-state'
         ];
     }
 
@@ -27,13 +27,15 @@ export default class MenuComponent extends BaseComponent {
         const offsetX = this.getAttribute('data-offset-x') || '0';
         const offsetY = this.getAttribute('data-offset-y') || '0';
 
-        const status = this.getAttribute('data-status') || 'inactive';
-        const autoCloseStatus = this.getAttribute('data-auto-close-status') || 'active';
+        const state = this.getAttribute('data-state') || 'inactive';
+        const autoCloseState = this.getAttribute('data-auto-close-state') || 'active';
 
-        const autoCloseAction = (autoCloseStatus === 'active') ? 'menu_autoClose' : '';
+        const autoCloseAction = (autoCloseState === 'active') ? 'menu_autoClose' : '';
 
         return this.html`
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            </style>
 
             <style>
             :host {
@@ -56,10 +58,10 @@ export default class MenuComponent extends BaseComponent {
                 padding: 3px 0;
                 border: 1px solid var(--color-border);
                 border-radius: 5px;
-                box-shadow: 0 10px 30px var(--color-shadow);
+                box-shadow: 0 5px 20px 0 var(--color-shadow);
                 background-color: var(--color-content);
             }
-            nav[data-menu][data-status="inactive"] {
+            nav[data-menu][data-state="inactive"] {
                 display: none;
             }
 
@@ -77,6 +79,7 @@ export default class MenuComponent extends BaseComponent {
                 background-color: var(--color-active);
                 color: var(--color-text);
             }
+
             ::slotted(hr) {
                 border: 0;
                 border-top: 1px solid var(--color-border);
@@ -90,28 +93,28 @@ export default class MenuComponent extends BaseComponent {
                 width: 100%;
                 height: 100%;
             }
-            div[data-overlay][data-status="inactive"] {
+            div[data-overlay][data-state="inactive"] {
                 display: none;
             }
             </style>
 
-            <nav data-menu data-status="${status}" class="fade-in">
+            <nav data-menu data-state="${state}" class="fade-in">
             <slot name="menuitem"></slot>
             </nav>
 
-            <div data-overlay data-status="${status}" data-action="${autoCloseAction}"></div>
+            <div data-overlay data-state="${state}" data-action="${autoCloseAction}"></div>
         `;
     }
 
     open() {
-        this.contentRoot.querySelector('nav[data-menu]').setAttribute('data-status', 'active');
-        this.contentRoot.querySelector('div[data-overlay]').setAttribute('data-status', 'active');
+        this.contentRoot.querySelector('nav[data-menu]').setAttribute('data-state', 'active');
+        this.contentRoot.querySelector('div[data-overlay]').setAttribute('data-state', 'active');
         this.dispatch('menu_open', {});
     }
 
     close() {
-        this.contentRoot.querySelector('nav[data-menu]').setAttribute('data-status', 'inactive');
-        this.contentRoot.querySelector('div[data-overlay]').setAttribute('data-status', 'inactive');
+        this.contentRoot.querySelector('nav[data-menu]').setAttribute('data-state', 'inactive');
+        this.contentRoot.querySelector('div[data-overlay]').setAttribute('data-state', 'inactive');
         this.dispatch('menu_close', {});
     }
 

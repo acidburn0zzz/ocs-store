@@ -31,11 +31,12 @@ export default class AboutdialogComponent extends BaseComponent {
 
     render() {
         return this.html`
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            @import url(images/icon.css);
+            </style>
 
             <style>
-            @import url(images/icon.css);
-
             div[slot="content"] {
                 padding: 1em;
                 text-align: center;
@@ -54,7 +55,7 @@ export default class AboutdialogComponent extends BaseComponent {
             }
             </style>
 
-            <app-dialog data-width="500px" data-footer-status="inactive">
+            <app-dialog data-width="500px" data-footer-state="inactive">
             <h3 slot="header">About This App</h3>
             <div slot="content">
             <figure class="icon-ocs-store"></figure>

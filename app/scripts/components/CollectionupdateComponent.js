@@ -23,7 +23,9 @@ export default class CollectionupdateComponent extends BaseComponent {
 
     render() {
         return `
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            </style>
 
             <style>
             :host {
@@ -90,7 +92,7 @@ export default class CollectionupdateComponent extends BaseComponent {
             nav[data-action] button:hover {
                 border-color: rgba(0,0,0,0.3);
             }
-            nav[data-action] button[data-status="inactive"] {
+            nav[data-action] button[data-state="inactive"] {
                 display: none;
             }
             </style>
@@ -99,14 +101,14 @@ export default class CollectionupdateComponent extends BaseComponent {
         `;
     }
 
-    _listItemsHtml(state) {
-        const listItems = [];
+    _listItemSetHtml(state) {
+        let listItemSet = '';
 
         if (state.count) {
             for (const [key, value] of Object.entries(state.updateAvailableItems)) {
                 const file = value.files[0];
                 const previewpicUrl = `file://${state.previewpicDirectory}/${this.convertItemKeyToPreviewpicFilename(key)}`;
-                listItems.push(`
+                listItemSet += `
                     <li data-item-key="${key}">
                     <figure data-previewpic style="background-image: url('${previewpicUrl}');"></figure>
                     <div data-main>
@@ -115,39 +117,37 @@ export default class CollectionupdateComponent extends BaseComponent {
                     <p data-message></p>
                     </div>
                     <nav data-action>
-                    <button data-action="ocsManager_update" data-item-key="${key}" data-status="active">Update</button>
+                    <button data-action="ocsManager_update" data-item-key="${key}" data-state="active">Update</button>
                     </nav>
                     </li>
-                `);
+                `;
             }
         }
 
-        return listItems.join('');
+        return listItemSet;
     }
 
     _handleClick(event) {
         if (event.target.closest('button[data-action]')) {
-            const button = event.target.closest('button[data-action]');
-            switch (button.getAttribute('data-action')) {
+            const target = event.target.closest('button[data-action]');
+            switch (target.getAttribute('data-action')) {
                 case 'ocsManager_update':
-                    this.dispatch('ocsManager_update', {itemKey: button.getAttribute('data-item-key')});
-                    button.setAttribute('data-status', 'inactive');
+                    this.dispatch('ocsManager_update', {itemKey: target.getAttribute('data-item-key')});
+                    target.setAttribute('data-state', 'inactive');
                     break;
             }
         }
     }
 
     _viewHandler_ocsManager_updateAvailableItems(state) {
-        this.contentRoot.querySelector('ul[data-container]')
-            .innerHTML = this._listItemsHtml(state);
+        this.contentRoot.querySelector('ul[data-container]').innerHTML = this._listItemSetHtml(state);
     }
 
     _viewHandler_ocsManager_updateProgress(state) {
         const listItem = this.contentRoot.querySelector(`li[data-item-key="${state.itemKey}"]`);
         if (listItem) {
             listItem.querySelector('progress[data-progress]').value = '' + state.progress;
-            const message = `Updating... ${Math.ceil(state.progress * 100)}%`;
-            listItem.querySelector('p[data-message]').textContent = message;
+            listItem.querySelector('p[data-message]').textContent = `Updating... ${Math.ceil(state.progress * 100)}%`;
         }
     }
 

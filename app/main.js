@@ -13,17 +13,16 @@ const isDebugMode = process.argv.includes('--debug');
 const previewpicDirectory = `${app.getPath('userData')}/previewpic`;
 const windowIcon = `${__dirname}/images/app-icons/ocs-store.png`;
 const indexFileUrl = `file://${__dirname}/index.html`;
-const storeAppConfigStorage = 'application';
+const appConfigStoreStorage = 'application';
 
-let topWindow = null;
+let mainWindow = null;
 let ocsManager = null;
 let ocsManagerUrl = '';
 
 async function startOcsManager() {
     return new Promise((resolve) => {
-        const resolveUrl = (data) => {
-            const matches = data.toString()
-                .match(/Websocket server started at: "(wss?:\/\/.+)"/);
+        const resolveOcsManagerUrl = (data) => {
+            const matches = data.toString().match(/Websocket server started at: "(wss?:\/\/.+)"/);
             if (matches) {
                 ocsManagerUrl = matches[1];
                 resolve(true);
@@ -35,14 +34,14 @@ async function startOcsManager() {
         ocsManager.stdout.on('data', (data) => {
             console.log(`[${ocsManagerConfig.bin}] ${data}`);
             if (!ocsManagerUrl) {
-                resolveUrl(data);
+                resolveOcsManagerUrl(data);
             }
         });
 
         ocsManager.stderr.on('data', (data) => {
             console.error(`[${ocsManagerConfig.bin}] ${data}`);
             if (!ocsManagerUrl) {
-                resolveUrl(data);
+                resolveOcsManagerUrl(data);
             }
         });
 
@@ -66,13 +65,13 @@ function stopOcsManager() {
 
 function createWindow() {
     const appConfigStore = new ElectronStore({
-        name: storeAppConfigStorage,
+        name: appConfigStoreStorage,
         defaults: appConfig.defaults
     });
 
     const windowBounds = appConfigStore.get('windowBounds');
 
-    topWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         title: appPackage.productName,
         icon: windowIcon,
         x: windowBounds.x,
@@ -85,22 +84,22 @@ function createWindow() {
     });
 
     if (!isDebugMode) {
-        topWindow.setMenu(null);
+        mainWindow.setMenu(null);
     }
 
-    topWindow.loadURL(indexFileUrl);
+    mainWindow.loadURL(indexFileUrl);
 
-    topWindow.on('close', () => {
-        const appConfigStore = new ElectronStore({name: storeAppConfigStorage});
-        appConfigStore.set('windowBounds', topWindow.getBounds());
+    mainWindow.on('close', () => {
+        const appConfigStore = new ElectronStore({name: appConfigStoreStorage});
+        appConfigStore.set('windowBounds', mainWindow.getBounds());
     });
 
-    topWindow.on('closed', () => {
-        topWindow = null;
+    mainWindow.on('closed', () => {
+        mainWindow = null;
     });
 
     if (isDebugMode) {
-        topWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
     }
 }
 
@@ -131,9 +130,9 @@ function btoa(string) {
     return buffer.toString('base64');
 }
 
-/*function atob(string) {
-    return Buffer.from(string, 'base64').toString('binary');
-}*/
+//function atob(string) {
+//    return Buffer.from(string, 'base64').toString('binary');
+//}
 
 function previewpicFilename(itemKey) {
     // "itemKey" will be URL to product file
@@ -145,11 +144,9 @@ function downloadPreviewpic(itemKey, url) {
         fs.mkdirSync(previewpicDirectory);
     }
     const path = `${previewpicDirectory}/${previewpicFilename(itemKey)}`;
-    request.get(url)
-        .on('error', (error) => {
-            console.error(error);
-        })
-        .pipe(fs.createWriteStream(path));
+    request.get(url).on('error', (error) => {
+        console.error(error);
+    }).pipe(fs.createWriteStream(path));
 }
 
 function removePreviewpic(itemKey) {
@@ -179,7 +176,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-    if (topWindow === null) {
+    if (mainWindow === null) {
         createWindow();
     }
 });
@@ -213,25 +210,25 @@ ipcMain.on('ocs-manager', (event, key) => {
 });
 
 ipcMain.on('store', (event, key, value) => {
-    const appConfigStore = new ElectronStore({name: storeAppConfigStorage});
+    const appConfigStore = new ElectronStore({name: appConfigStoreStorage});
     if (key && value) {
         appConfigStore.set(key, value);
     }
     event.returnValue = key ? appConfigStore.get(key) : appConfigStore.store;
 });
 
-ipcMain.on('previewpic', (event, action, itemKey, url) => {
-    if (action === 'directory') {
+ipcMain.on('previewpic', (event, kind, itemKey, url) => {
+    if (kind === 'directory') {
         event.returnValue = previewpicDirectory;
     }
-    else if (action === 'path' && itemKey) {
+    else if (kind === 'path' && itemKey) {
         event.returnValue = `${previewpicDirectory}/${previewpicFilename(itemKey)}`;
     }
-    else if (action === 'download' && itemKey && url) {
+    else if (kind === 'download' && itemKey && url) {
         downloadPreviewpic(itemKey, url);
         event.returnValue = undefined;
     }
-    else if (action === 'remove' && itemKey) {
+    else if (kind === 'remove' && itemKey) {
         removePreviewpic(itemKey);
         event.returnValue = undefined;
     }

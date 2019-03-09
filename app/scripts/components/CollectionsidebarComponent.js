@@ -26,7 +26,9 @@ export default class CollectionsidebarComponent extends BaseComponent {
 
     render() {
         return `
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            </style>
 
             <style>
             :host {
@@ -46,7 +48,7 @@ export default class CollectionsidebarComponent extends BaseComponent {
             nav[data-sidebar] h4 {
                 padding: 0.5em 1em;
             }
-            nav[data-sidebar] ul[data-menu="activity"] {
+            nav[data-sidebar] ul[data-menu="task"] {
                 border-bottom: 1px solid var(--color-border);
             }
             nav[data-sidebar] ul li a {
@@ -61,7 +63,7 @@ export default class CollectionsidebarComponent extends BaseComponent {
             nav[data-sidebar] ul li a[data-selected] {
                 background-color: var(--color-active);
             }
-            nav[data-sidebar] ul li a[data-status="inactive"] {
+            nav[data-sidebar] ul li a[data-state="inactive"] {
                 display: none;
             }
             nav[data-sidebar] ul li a span[data-name] {
@@ -99,44 +101,44 @@ export default class CollectionsidebarComponent extends BaseComponent {
             </style>
 
             <nav data-sidebar>
-            <ul data-menu="activity">
+            <ul data-menu="task">
             <li>
-            <a href="#" data-action="update" data-status="inactive">
+            <a href="#" data-action="update" data-state="inactive">
             <span data-name>Update</span>
             <span data-count="0">0</span>
             </a>
             </li>
             <li>
-            <a href="#" data-action="download" data-status="active">
+            <a href="#" data-action="download" data-state="active">
             <span data-name>Download</span>
             <span data-count="0">0</span>
             </a>
             </li>
             </ul>
             <h4>Installed</h4>
-            <ul data-menu="category"></ul>
+            <ul data-menu="categories"></ul>
             </nav>
         `;
     }
 
-    _categoryMenuItemsHtml(state) {
-        const menuItems = [];
+    _categoriesMenuItemSetHtml(state) {
+        let listItemSet = '';
 
         if (state.count) {
-            const categorizedInstalledItems = {};
+            const categorizedItems = {};
             for (const [key, value] of Object.entries(state.installedItems)) {
-                if (!categorizedInstalledItems[value.install_type]) {
-                    categorizedInstalledItems[value.install_type] = {};
+                if (!categorizedItems[value.install_type]) {
+                    categorizedItems[value.install_type] = {};
                 }
-                categorizedInstalledItems[value.install_type][key] = value;
+                categorizedItems[value.install_type][key] = value;
             }
 
             const categories = [];
-            for (const installType of Object.keys(categorizedInstalledItems)) {
+            for (const installType of Object.keys(categorizedItems)) {
                 categories.push({
                     installType: installType,
                     name: state.installTypes[installType].name,
-                    count: Object.keys(categorizedInstalledItems[installType]).length
+                    count: Object.keys(categorizedItems[installType]).length
                 });
             }
             categories.sort((a, b) => {
@@ -152,35 +154,33 @@ export default class CollectionsidebarComponent extends BaseComponent {
             });
 
             for (const category of categories) {
-                menuItems.push(`
+                listItemSet += `
                     <li>
                     <a href="#" data-action="installed" data-install-type="${category.installType}">
                     <span data-name>${category.name}</span>
                     <span data-count="${category.count}">${category.count}</span>
                     </a>
                     </li>
-                `);
+                `;
             }
         }
 
-        return menuItems.join('');
+        return listItemSet;
     }
 
     _handleClick(event) {
         if (event.target.closest('a[data-action]')) {
             event.preventDefault();
-            const targetMenuItem = event.target.closest('a[data-action]');
+            const target = event.target.closest('a[data-action]');
 
-            for (const menuItem of this.contentRoot.querySelectorAll('a[data-action]')) {
-                menuItem.removeAttribute('data-selected');
+            if (this.contentRoot.querySelector('a[data-action][data-selected]')) {
+                this.contentRoot.querySelector('a[data-action][data-selected]').removeAttribute('data-selected');
             }
-            targetMenuItem.setAttribute('data-selected', 'data-selected');
+            target.setAttribute('data-selected', 'data-selected');
 
-            switch (targetMenuItem.getAttribute('data-action')) {
+            switch (target.getAttribute('data-action')) {
                 case 'installed':
-                    this.dispatch('ocsManager_installedItemsByType', {
-                        installType: targetMenuItem.getAttribute('data-install-type')
-                    });
+                    this.dispatch('ocsManager_installedItemsByType', {installType: target.getAttribute('data-install-type')});
                     this.dispatch('collectionsidebar_select', {select: 'installed'});
                     break;
                 case 'update':
@@ -194,15 +194,14 @@ export default class CollectionsidebarComponent extends BaseComponent {
     }
 
     _viewHandler_ocsManager_installedItems(state) {
-        const categoryMenu = this.contentRoot.querySelector('nav ul[data-menu="category"]');
+        const categoriesMenu = this.contentRoot.querySelector('ul[data-menu="categories"]');
 
-        const selectedMenuItem = categoryMenu.querySelector('a[data-selected]');
+        const selectedMenuItem = categoriesMenu.querySelector('a[data-selected]');
         const installType = selectedMenuItem ? selectedMenuItem.getAttribute('data-install-type') : '';
 
-        categoryMenu.innerHTML = this._categoryMenuItemsHtml(state);
+        categoriesMenu.innerHTML = this._categoriesMenuItemSetHtml(state);
 
-        const menuItem = installType ? categoryMenu.querySelector(`a[data-install-type="${installType}"]`) : null;
-
+        const menuItem = installType ? categoriesMenu.querySelector(`a[data-install-type="${installType}"]`) : null;
         if (menuItem) {
             menuItem.click();
         }
@@ -210,7 +209,7 @@ export default class CollectionsidebarComponent extends BaseComponent {
 
     _viewHandler_ocsManager_updateAvailableItems(state) {
         const menuItem = this.contentRoot.querySelector('a[data-action="update"]');
-        menuItem.setAttribute('data-status', state.count ? 'active' : 'inactive');
+        menuItem.setAttribute('data-state', state.count ? 'active' : 'inactive');
 
         const badge = menuItem.querySelector('span[data-count]');
         badge.setAttribute('data-count', '' + state.count);
@@ -219,7 +218,7 @@ export default class CollectionsidebarComponent extends BaseComponent {
 
     _viewHandler_ocsManager_metadataSet(state) {
         const menuItem = this.contentRoot.querySelector('a[data-action="download"]');
-        //menuItem.setAttribute('data-status', state.count ? 'active' : 'inactive');
+        //menuItem.setAttribute('data-state', state.count ? 'active' : 'inactive');
 
         const badge = menuItem.querySelector('span[data-count]');
         badge.setAttribute('data-count', '' + state.count);

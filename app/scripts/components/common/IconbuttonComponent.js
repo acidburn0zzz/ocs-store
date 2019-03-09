@@ -3,7 +3,7 @@ import BaseComponent from './BaseComponent.js';
 export default class IconbuttonComponent extends BaseComponent {
 
     static get componentObservedAttributes() {
-        return ['data-title', 'data-icon', 'data-size', 'data-color', 'data-status'];
+        return ['data-title', 'data-icon', 'data-size', 'data-color', 'data-state'];
     }
 
     init() {
@@ -21,21 +21,24 @@ export default class IconbuttonComponent extends BaseComponent {
         const icon = this.getAttribute('data-icon') || '';
         const size = this.getAttribute('data-size') || 'medium';
         const color = this.getAttribute('data-color') || 'dark';
-        const status = this.getAttribute('data-status') || 'active';
-        const disabled = (status === 'inactive') ? 'disabled' : '';
+        const state = this.getAttribute('data-state') || 'active';
+
+        const disabled = (state === 'inactive') ? 'disabled' : '';
 
         return this.html`
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            @import url(styles/material-icons.css);
+            </style>
 
             <style>
-            @import url(styles/material-icons.css);
-
             :host {
                 display: inline-block;
                 width: calc(${this._sizes[size]} + 6px);
                 height: calc(${this._sizes[size]} + 6px);
                 line-height: 1;
             }
+
             button {
                 -webkit-appearance: none;
                 appearance: none;
@@ -57,7 +60,7 @@ export default class IconbuttonComponent extends BaseComponent {
             </style>
 
             <button title="${title}" ?disabled=${disabled}>
-            <i class="material-icons md-${size} md-${color} md-${status}">${icon}</i>
+            <i class="material-icons md-${size} md-${color} md-${state}">${icon}</i>
             </button>
         `;
     }
