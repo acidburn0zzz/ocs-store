@@ -14,7 +14,6 @@ appimage() { # docker-image: ubuntu:14.04
     install_build_deps_appimage
     add_pkguser
     su -c "export HOME=/home/${PKGUSER} && "${PKGSCRIPT}" build_appimage" ${PKGUSER}
-    transfer_file "$(find "${BUILDDIR}" -type f -name "${PKGNAME}*-x86_64.AppImage")"
 }
 
 install_build_deps_appimage() {
@@ -45,16 +44,6 @@ add_pkguser() {
 export_srcarchive() {
     if [ "${1}" ]; then
         (cd "${PROJDIR}" && git archive --prefix="${PKGNAME}/" --output="${1}" HEAD)
-    fi
-}
-
-transfer_file() {
-    if [ -f "${1}" ]; then
-        filename="$(basename "${1}")"
-        transferlog="${PROJDIR}/transfer.log"
-        echo "Uploading ${filename}" >> "${transferlog}"
-        curl -fsSL -T "${1}" "https://transfer.sh/${filename}" >> "${transferlog}"
-        echo '' >> "${transferlog}"
     fi
 }
 

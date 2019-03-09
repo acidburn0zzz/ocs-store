@@ -9,4 +9,7 @@ appimage:
     - /^release\-.+/
   script:
     - ./scripts/package appimage
-    - cat transfer.log
+  artifacts:
+    paths:
+    - build_*/ocs-store*.AppImage
+    expire_in: 2 days
