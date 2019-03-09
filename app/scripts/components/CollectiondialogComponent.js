@@ -22,7 +22,9 @@ export default class CollectiondialogComponent extends BaseComponent {
 
     render() {
         return `
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            </style>
 
             <style>
             app-page[slot="content"] {
@@ -37,7 +39,7 @@ export default class CollectiondialogComponent extends BaseComponent {
             }
             </style>
 
-            <app-dialog data-width="80%" data-height="80%" data-footer-status="inactive">
+            <app-dialog data-width="80%" data-height="80%" data-footer-state="inactive">
             <h3 slot="header">My Collection</h3>
             <app-page id="collection" slot="content">
             <app-collectionsidebar slot="sidebar"></app-collectionsidebar>

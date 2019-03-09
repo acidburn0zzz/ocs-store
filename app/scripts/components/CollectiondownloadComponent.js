@@ -23,11 +23,12 @@ export default class CollectiondownloadComponent extends BaseComponent {
 
     render() {
         return `
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            @import url(styles/material-icons.css);
+            </style>
 
             <style>
-            @import url(styles/material-icons.css);
-
             :host {
                 display: flex;
                 flex-flow: column nowrap;
@@ -92,7 +93,7 @@ export default class CollectiondownloadComponent extends BaseComponent {
             nav[data-action] button:hover {
                 border-color: rgba(0,0,0,0.3);
             }
-            nav[data-action] button[data-status="inactive"] {
+            nav[data-action] button[data-state="inactive"] {
                 display: none;
             }
             </style>
@@ -128,8 +129,7 @@ export default class CollectiondownloadComponent extends BaseComponent {
             }
         }
         else {
-            this.contentRoot.querySelector('ul[data-container]')
-                .insertAdjacentHTML('afterbegin', this._listItemHtml(state));
+            this.contentRoot.querySelector('ul[data-container]').insertAdjacentHTML('afterbegin', this._listItemHtml(state));
         }
     }
 
@@ -137,11 +137,10 @@ export default class CollectiondownloadComponent extends BaseComponent {
         const listItem = this.contentRoot.querySelector(`li[data-url="${state.url}"]`);
         if (listItem) {
             listItem.querySelector('progress[data-progress]').value = '' + state.bytesReceived/state.bytesTotal;
-            const message = 'Downloading... '
+            listItem.querySelector('p[data-message]').textContent = 'Downloading... '
                 + Chilit.Utility.convertByteToHumanReadable(state.bytesReceived)
                 + ' / '
                 + Chilit.Utility.convertByteToHumanReadable(state.bytesTotal);
-            listItem.querySelector('p[data-message]').textContent = message;
         }
     }
 

@@ -26,7 +26,9 @@ export default class RootComponent extends BaseComponent {
 
     render() {
         return `
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            </style>
 
             <style>
             app-page {

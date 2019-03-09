@@ -4,21 +4,26 @@ export default class PageComponent extends BaseComponent {
 
     render() {
         return `
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            </style>
 
             <style>
             :host {
                 display: flex;
                 flex-flow: column nowrap;
             }
+
             article[data-container] {
                 display: flex;
                 flex-flow: column nowrap;
                 flex: 1 1 auto;
             }
+
             header[data-header] {
                 flex: 0 0 auto;
             }
+
             div[data-container] {
                 display: flex;
                 flex-flow: row nowrap;
@@ -36,6 +41,7 @@ export default class PageComponent extends BaseComponent {
                 flex: 0 0 auto;
                 order: 1;
             }
+
             footer[data-footer] {
                 flex: 0 0 auto;
             }

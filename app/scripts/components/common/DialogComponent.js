@@ -6,7 +6,7 @@ export default class DialogComponent extends BaseComponent {
         return [
             'data-width', 'data-min-width', 'data-max-width',
             'data-height', 'data-min-height', 'data-max-height',
-            'data-status', 'data-header-status', 'data-footer-status', 'data-auto-close-status'
+            'data-state', 'data-header-state', 'data-footer-state', 'data-auto-close-state'
         ];
     }
 
@@ -23,18 +23,20 @@ export default class DialogComponent extends BaseComponent {
         const minHeight = this.getAttribute('data-min-height') || 'auto';
         const maxHeight = this.getAttribute('data-max-height') || 'auto';
 
-        const status = this.getAttribute('data-status') || 'inactive';
-        const headerStatus = this.getAttribute('data-header-status') || 'active';
-        const footerStatus = this.getAttribute('data-footer-status') || 'active';
-        const autoCloseStatus = this.getAttribute('data-auto-close-status') || 'active';
+        const state = this.getAttribute('data-state') || 'inactive';
+        const headerState = this.getAttribute('data-header-state') || 'active';
+        const footerState = this.getAttribute('data-footer-state') || 'active';
+        const autoCloseState = this.getAttribute('data-auto-close-state') || 'active';
 
-        const autoCloseAction = (autoCloseStatus === 'active') ? 'dialog_autoClose' : '';
+        const autoCloseAction = (autoCloseState === 'active') ? 'dialog_autoClose' : '';
 
         return this.html`
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            </style>
 
             <style>
-            div[data-container] {
+            div[data-overlay] {
                 display: flex;
                 flex-flow: column nowrap;
                 z-index: 1000;
@@ -46,7 +48,7 @@ export default class DialogComponent extends BaseComponent {
                 align-items: center;
                 justify-content: center;
             }
-            div[data-container][data-status="inactive"] {
+            div[data-overlay][data-state="inactive"] {
                 display: none;
             }
 
@@ -64,6 +66,7 @@ export default class DialogComponent extends BaseComponent {
                 box-shadow: 0 10px 30px var(--color-shadow);
                 background-color: var(--color-content);
             }
+
             header[data-header] {
                 display: flex;
                 flex-flow: row nowrap;
@@ -74,7 +77,7 @@ export default class DialogComponent extends BaseComponent {
                 border-top-left-radius: 5px;
                 border-top-right-radius: 5px;
             }
-            header[data-header][data-status="inactive"] {
+            header[data-header][data-state="inactive"] {
                 display: none;
             }
             div[data-header-content] {
@@ -83,11 +86,13 @@ export default class DialogComponent extends BaseComponent {
             div[data-header-control] {
                 flex: 0 0 auto;
             }
+
             article[data-content] {
                 display: flex;
                 flex-flow: column nowrap;
                 flex: 1 1 auto;
             }
+
             footer[data-footer] {
                 flex: 0 0 auto;
                 padding: 5px 10px;
@@ -95,20 +100,20 @@ export default class DialogComponent extends BaseComponent {
                 border-bottom-left-radius: 5px;
                 border-bottom-right-radius: 5px;
             }
-            footer[data-footer][data-status="inactive"] {
+            footer[data-footer][data-state="inactive"] {
                 display: none;
             }
             </style>
 
-            <div data-container data-status="${status}" data-action="${autoCloseAction}">
+            <div data-overlay data-state="${state}" data-action="${autoCloseAction}">
 
             <article data-dialog class="fade-in">
-            <header data-header data-status="${headerStatus}">
+            <header data-header data-state="${headerState}">
             <div data-header-content><slot name="header"></slot></div>
             <div data-header-control><app-iconbutton data-title="Close" data-icon="close" data-action="dialog_close"></app-iconbutton></div>
             </header>
             <article data-content><slot name="content"></slot></article>
-            <footer data-footer data-status="${footerStatus}"><slot name="footer"></slot></footer>
+            <footer data-footer data-state="${footerState}"><slot name="footer"></slot></footer>
             </article>
 
             </div>
@@ -116,12 +121,12 @@ export default class DialogComponent extends BaseComponent {
     }
 
     open() {
-        this.contentRoot.querySelector('div[data-container]').setAttribute('data-status', 'active');
+        this.contentRoot.querySelector('div[data-overlay]').setAttribute('data-state', 'active');
         this.dispatch('dialog_open', {});
     }
 
     close() {
-        this.contentRoot.querySelector('div[data-container]').setAttribute('data-status', 'inactive');
+        this.contentRoot.querySelector('div[data-overlay]').setAttribute('data-state', 'inactive');
         this.dispatch('dialog_close', {});
     }
 

@@ -20,7 +20,9 @@ export default class CollectioninstalledComponent extends BaseComponent {
 
     render() {
         return `
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            </style>
 
             <style>
             :host {
@@ -79,7 +81,7 @@ export default class CollectioninstalledComponent extends BaseComponent {
             nav[data-action] button:hover {
                 border-color: rgba(0,0,0,0.3);
             }
-            nav[data-action] button[data-status="inactive"] {
+            nav[data-action] button[data-state="inactive"] {
                 display: none;
             }
             </style>
@@ -88,11 +90,11 @@ export default class CollectioninstalledComponent extends BaseComponent {
         `;
     }
 
-    _listItemsHtml(state) {
-        const listItems = [];
+    _listItemSetHtml(state) {
+        let listItemSet = '';
 
         if (state.count) {
-            const applyButtonStatus = state.isApplicableType ? 'active' : 'inactive';
+            const applyButtonState = state.isApplicableType ? 'active' : 'inactive';
             const openButtonText = (state.installType === 'bin') ? 'Run' : 'Open';
             const destination = state.installTypes[state.installType].destination;
 
@@ -101,7 +103,7 @@ export default class CollectioninstalledComponent extends BaseComponent {
                 for (const file of value.files) {
                     const filePath = `${destination}/${file}`;
                     const fileUrl = `file://${filePath}`;
-                    listItems.push(`
+                    listItemSet += `
                         <li>
                         <figure data-previewpic style="background-image: url('${previewpicUrl}');"></figure>
                         <div data-main>
@@ -111,42 +113,41 @@ export default class CollectioninstalledComponent extends BaseComponent {
                         <button data-action="ocsManager_openUrl" data-url="${fileUrl}">${openButtonText}</button>
                         <button data-action="ocsManager_applyTheme"
                             data-path="${filePath}" data-install-type="${state.installType}"
-                            data-status="${applyButtonStatus}">Apply</button>
+                            data-state="${applyButtonState}">Apply</button>
                         <button data-action="ocsManager_uninstall" data-item-key="${key}">Delete</button>
                         </nav>
                         </li>
-                    `);
+                    `;
                 }
             }
         }
 
-        return listItems.join('');
+        return listItemSet;
     }
 
     _handleClick(event) {
         if (event.target.closest('button[data-action]')) {
-            const button = event.target.closest('button[data-action]');
-            switch (button.getAttribute('data-action')) {
+            const target = event.target.closest('button[data-action]');
+            switch (target.getAttribute('data-action')) {
                 case 'ocsManager_openUrl':
-                    this.dispatch('ocsManager_openUrl', {url: button.getAttribute('data-url')});
+                    this.dispatch('ocsManager_openUrl', {url: target.getAttribute('data-url')});
                     break;
                 case 'ocsManager_applyTheme':
                     this.dispatch('ocsManager_applyTheme', {
-                        path: button.getAttribute('data-path'),
-                        installType: button.getAttribute('data-install-type')
+                        path: target.getAttribute('data-path'),
+                        installType: target.getAttribute('data-install-type')
                     });
                     break;
                 case 'ocsManager_uninstall':
-                    this.dispatch('ocsManager_uninstall', {itemKey: button.getAttribute('data-item-key')});
-                    button.closest('li').remove();
+                    this.dispatch('ocsManager_uninstall', {itemKey: target.getAttribute('data-item-key')});
+                    target.closest('li').remove();
                     break;
             }
         }
     }
 
     _viewHandler_ocsManager_installedItemsByType(state) {
-        this.contentRoot.querySelector('ul[data-container]')
-            .innerHTML = this._listItemsHtml(state);
+        this.contentRoot.querySelector('ul[data-container]').innerHTML = this._listItemSetHtml(state);
     }
 
 }

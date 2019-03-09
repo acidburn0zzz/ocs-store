@@ -3,7 +3,7 @@ import BaseComponent from './common/BaseComponent.js';
 export default class OmniboxComponent extends BaseComponent {
 
     static get componentObservedAttributes() {
-        return ['data-status', 'data-auto-close-status'];
+        return ['data-state', 'data-auto-close-state'];
     }
 
     init() {
@@ -32,17 +32,18 @@ export default class OmniboxComponent extends BaseComponent {
     }
 
     render() {
-        const status = this.getAttribute('data-status') || 'inactive';
-        const autoCloseStatus = this.getAttribute('data-auto-close-status') || 'active';
+        const state = this.getAttribute('data-state') || 'inactive';
+        const autoCloseState = this.getAttribute('data-auto-close-state') || 'active';
 
-        const autoCloseAction = (autoCloseStatus === 'active') ? 'omnibox_autoClose' : '';
+        const autoCloseAction = (autoCloseState === 'active') ? 'omnibox_autoClose' : '';
 
         return this.html`
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            @import url(styles/material-icons.css);
+            </style>
 
             <style>
-            @import url(styles/material-icons.css);
-
             :host {
                 display: inline-block;
                 width: 500px;
@@ -60,7 +61,8 @@ export default class OmniboxComponent extends BaseComponent {
             div[data-omnibox]:hover {
                 background-color: var(--color-active);
             }
-            div[data-omnibox] div[data-content] {
+
+            div[data-content] {
                 display: flex;
                 flex-flow: row nowrap;
                 align-items: center;
@@ -68,7 +70,7 @@ export default class OmniboxComponent extends BaseComponent {
                 height: inherit;
                 line-height: 1;
             }
-            div[data-omnibox] div[data-content] h3 {
+            div[data-content] h3 {
                 flex: 1 1 auto;
                 border-right: 1px solid var(--color-border);
                 overflow: hidden;
@@ -78,14 +80,15 @@ export default class OmniboxComponent extends BaseComponent {
                 text-align: center;
                 cursor: pointer;
             }
-            div[data-omnibox] div[data-content] div {
+            div[data-content] div {
                 display: flex;
                 flex: 0 0 auto;
                 align-items: center;
                 justify-content: center;
                 width: 30px;
             }
-            div[data-omnibox] app-indicator {
+
+            app-indicator {
                 position: relative;
                 top: -2px;
             }
@@ -102,7 +105,7 @@ export default class OmniboxComponent extends BaseComponent {
                 box-shadow: 0 10px 30px var(--color-shadow);
                 background-color: var(--color-content);
             }
-            div[data-palette][data-status="inactive"] {
+            div[data-palette][data-state="inactive"] {
                 display: none;
             }
             div[data-palette] h4 {
@@ -153,7 +156,7 @@ export default class OmniboxComponent extends BaseComponent {
                 width: 100%;
                 height: 100%;
             }
-            div[data-overlay][data-status="inactive"] {
+            div[data-overlay][data-state="inactive"] {
                 display: none;
             }
             </style>
@@ -167,10 +170,10 @@ export default class OmniboxComponent extends BaseComponent {
                 data-title="Open in Browser" data-icon="open_in_browser" data-size="small"></app-iconbutton>
             </div>
             </div>
-            <app-indicator data-status="inactive"></app-indicator>
+            <app-indicator data-state="inactive"></app-indicator>
             </div>
 
-            <div data-palette data-status="${status}" class="fade-in">
+            <div data-palette data-state="${state}" class="fade-in">
             <h4><i class="material-icons md-small">home</i> Choose Startpage</h4>
             <nav>
             <ul>
@@ -184,19 +187,19 @@ export default class OmniboxComponent extends BaseComponent {
             </nav>
             </div>
 
-            <div data-overlay data-status="${status}" data-action="${autoCloseAction}"></div>
+            <div data-overlay data-state="${state}" data-action="${autoCloseAction}"></div>
         `;
     }
 
     open() {
-        this.contentRoot.querySelector('div[data-palette]').setAttribute('data-status', 'active');
-        this.contentRoot.querySelector('div[data-overlay]').setAttribute('data-status', 'active');
+        this.contentRoot.querySelector('div[data-palette]').setAttribute('data-state', 'active');
+        this.contentRoot.querySelector('div[data-overlay]').setAttribute('data-state', 'active');
         this.dispatch('omnibox_open', {});
     }
 
     close() {
-        this.contentRoot.querySelector('div[data-palette]').setAttribute('data-status', 'inactive');
-        this.contentRoot.querySelector('div[data-overlay]').setAttribute('data-status', 'inactive');
+        this.contentRoot.querySelector('div[data-palette]').setAttribute('data-state', 'inactive');
+        this.contentRoot.querySelector('div[data-overlay]').setAttribute('data-state', 'inactive');
         this.dispatch('omnibox_close', {});
     }
 
@@ -212,31 +215,30 @@ export default class OmniboxComponent extends BaseComponent {
             return;
         }
 
-        let targetElement = null;
+        let target = null;
         if (event.target.closest('app-iconbutton[data-action]')) {
-            targetElement = event.target.closest('app-iconbutton[data-action]');
+            target = event.target.closest('app-iconbutton[data-action]');
         }
         else if (event.target.closest('button[data-action]')) {
-            targetElement = event.target.closest('button[data-action]');
+            target = event.target.closest('button[data-action]');
         }
         else {
             return;
         }
 
-        switch (targetElement.getAttribute('data-action')) {
+        switch (target.getAttribute('data-action')) {
             case 'ocsManager_openUrl':
-                this.dispatch('ocsManager_openUrl', {url: targetElement.getAttribute('data-url')});
+                this.dispatch('ocsManager_openUrl', {url: target.getAttribute('data-url')});
                 break;
             case 'webview_startPage':
-                this.dispatch('webview_startPage', {url: targetElement.getAttribute('data-url')});
+                this.dispatch('webview_startPage', {url: target.getAttribute('data-url')});
                 this.close();
                 break;
         }
     }
 
     _viewHandler_webview_loading(state) {
-        this.contentRoot.querySelector('app-indicator')
-            .setAttribute('data-status', state.isLoading ? 'active' : 'inactive');
+        this.contentRoot.querySelector('app-indicator').setAttribute('data-state', state.isLoading ? 'active' : 'inactive');
     }
 
     _viewHandler_webview_page(state) {

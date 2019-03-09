@@ -18,11 +18,12 @@ export default class SplashscreenComponent extends BaseComponent {
 
     render() {
         return `
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            @import url(images/icon.css);
+            </style>
 
             <style>
-            @import url(images/icon.css);
-
             div[slot="content"] {
                 display: flex;
                 flex-flow: column nowrap;
@@ -43,11 +44,8 @@ export default class SplashscreenComponent extends BaseComponent {
             }
             </style>
 
-            <app-dialog
-                data-width="400px" data-height="300px"
-                data-status="active"
-                data-header-status="inactive" data-footer-status="inactive"
-                data-auto-close-status="inactive">
+            <app-dialog data-width="400px" data-height="300px"
+                data-state="active" data-header-state="inactive" data-footer-state="inactive" data-auto-close-state="inactive">
             <div slot="content">
             <figure class="icon-ocs-store"></figure>
             <h3>Welcome to ${document.title}</h3>
@@ -60,6 +58,7 @@ export default class SplashscreenComponent extends BaseComponent {
     _viewHandler_webview_loading(state) {
         if (!state.isLoading) {
             this.contentRoot.querySelector('app-dialog').close();
+            // Splash screen only shows when app launch, so remove it
             this.remove();
         }
     }

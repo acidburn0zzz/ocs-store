@@ -29,7 +29,9 @@ export default class ToolbarComponent extends BaseComponent {
 
     render() {
         return `
-            <style>${this.sharedStyle}</style>
+            <style>
+            ${this.sharedStyle}
+            </style>
 
             <style>
             :host {
@@ -65,10 +67,10 @@ export default class ToolbarComponent extends BaseComponent {
                 }
             }
 
-            app-iconbutton[data-action="webview_reload"][data-status="inactive"] {
+            app-iconbutton[data-action="webview_reload"][data-state="inactive"] {
                 display: none;
             }
-            app-iconbutton[data-action="webview_stop"][data-status="inactive"] {
+            app-iconbutton[data-action="webview_stop"][data-state="inactive"] {
                 display: none;
             }
 
@@ -89,6 +91,9 @@ export default class ToolbarComponent extends BaseComponent {
                 font-size: 11px;
                 line-height: 1;
             }
+            nav[data-toolbar] ul li span[data-badge][data-count="0"] {
+                display: none;
+            }
             nav[data-toolbar] ul li span[data-badge="update"] {
                 z-index: 2;
                 background-color: var(--color-warning);
@@ -99,26 +104,23 @@ export default class ToolbarComponent extends BaseComponent {
                 background-color: var(--color-information);
                 color: var(--color-content);
             }
-            nav[data-toolbar] ul li span[data-badge][data-count="0"] {
-                display: none;
-            }
             </style>
 
             <nav data-toolbar>
             <ul>
             <li>
             <app-iconbutton data-action="webview_goBack"
-                data-title="Back" data-icon="arrow_back" data-status="inactive"></app-iconbutton>
+                data-title="Back" data-icon="arrow_back" data-state="inactive"></app-iconbutton>
             </li>
             <li>
             <app-iconbutton data-action="webview_goForward"
-                data-title="Forward" data-icon="arrow_forward" data-status="inactive"></app-iconbutton>
+                data-title="Forward" data-icon="arrow_forward" data-state="inactive"></app-iconbutton>
             </li>
             <li>
             <app-iconbutton data-action="webview_reload"
-                data-title="Reload" data-icon="refresh" data-status="active"></app-iconbutton>
+                data-title="Reload" data-icon="refresh" data-state="active"></app-iconbutton>
             <app-iconbutton data-action="webview_stop"
-                data-title="Stop" data-icon="close" data-status="inactive"></app-iconbutton>
+                data-title="Stop" data-icon="close" data-state="inactive"></app-iconbutton>
             </li>
             <li>
             <app-iconbutton data-action="webview_startPage"
@@ -144,19 +146,19 @@ export default class ToolbarComponent extends BaseComponent {
     }
 
     _handleClick(event) {
-        let targetElement = null;
+        let target = null;
         if (event.target.closest('app-iconbutton[data-action]')) {
-            targetElement = event.target.closest('app-iconbutton[data-action]');
+            target = event.target.closest('app-iconbutton[data-action]');
         }
         else if (event.target.closest('a[slot="menuitem"][data-action]')) {
             event.preventDefault();
-            targetElement = event.target.closest('a[slot="menuitem"][data-action]');
+            target = event.target.closest('a[slot="menuitem"][data-action]');
         }
         else {
             return;
         }
 
-        switch (targetElement.getAttribute('data-action')) {
+        switch (target.getAttribute('data-action')) {
             case 'webview_goBack':
                 this.dispatch('webview_goBack', {});
                 break;
@@ -187,16 +189,16 @@ export default class ToolbarComponent extends BaseComponent {
 
     _viewHandler_webview_loading(state) {
         this.contentRoot.querySelector('app-iconbutton[data-action="webview_reload"]')
-            .setAttribute('data-status', state.isLoading ? 'inactive' : 'active');
+            .setAttribute('data-state', state.isLoading ? 'inactive' : 'active');
         this.contentRoot.querySelector('app-iconbutton[data-action="webview_stop"]')
-            .setAttribute('data-status', state.isLoading ? 'active' : 'inactive');
+            .setAttribute('data-state', state.isLoading ? 'active' : 'inactive');
     }
 
     _viewHandler_webview_page(state) {
         this.contentRoot.querySelector('app-iconbutton[data-action="webview_goBack"]')
-            .setAttribute('data-status', state.canGoBack ? 'active' : 'inactive');
+            .setAttribute('data-state', state.canGoBack ? 'active' : 'inactive');
         this.contentRoot.querySelector('app-iconbutton[data-action="webview_goForward"]')
-            .setAttribute('data-status', state.canGoForward ? 'active' : 'inactive');
+            .setAttribute('data-state', state.canGoForward ? 'active' : 'inactive');
     }
 
     _viewHandler_ocsManager_updateAvailableItems(state) {
