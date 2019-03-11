@@ -137,6 +137,7 @@ export default class ToolbarComponent extends BaseComponent {
             <app-iconbutton data-action="menu_open"
                 data-title="Other Operations..." data-icon="more_vert"></app-iconbutton><br>
             <app-menu data-width="250px" data-offset-x="-220px">
+            <a slot="menuitem" href="#" data-action="webview_appBugsPage">Report a Bug</a>
             <a slot="menuitem" href="#" data-action="general_about">About This App</a>
             </app-menu>
             </li>
@@ -179,6 +180,10 @@ export default class ToolbarComponent extends BaseComponent {
                 break;
             case 'menu_open':
                 this.contentRoot.querySelector('app-menu').open();
+                break;
+            case 'webview_appBugsPage':
+                this.dispatch('webview_appBugsPage', {});
+                this.contentRoot.querySelector('app-menu').close();
                 break;
             case 'general_about':
                 this.dispatch('general_about', {});
