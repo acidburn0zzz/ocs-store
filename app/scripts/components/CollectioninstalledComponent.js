@@ -110,10 +110,10 @@ export default class CollectioninstalledComponent extends BaseComponent {
                         <h4 data-name>${file}</h4>
                         </div>
                         <nav data-action>
-                        <button data-action="ocsManager_openUrl" data-url="${fileUrl}">${openButtonText}</button>
                         <button data-action="ocsManager_applyTheme"
                             data-path="${filePath}" data-install-type="${state.installType}"
                             data-state="${applyButtonState}">Apply</button>
+                        <button data-action="ocsManager_openUrl" data-url="${fileUrl}">${openButtonText}</button>
                         <button data-action="ocsManager_uninstall" data-item-key="${key}">Delete</button>
                         </nav>
                         </li>
@@ -129,14 +129,14 @@ export default class CollectioninstalledComponent extends BaseComponent {
         if (event.target.closest('button[data-action]')) {
             const target = event.target.closest('button[data-action]');
             switch (target.getAttribute('data-action')) {
-                case 'ocsManager_openUrl':
-                    this.dispatch('ocsManager_openUrl', {url: target.getAttribute('data-url')});
-                    break;
                 case 'ocsManager_applyTheme':
                     this.dispatch('ocsManager_applyTheme', {
                         path: target.getAttribute('data-path'),
                         installType: target.getAttribute('data-install-type')
                     });
+                    break;
+                case 'ocsManager_openUrl':
+                    this.dispatch('ocsManager_openUrl', {url: target.getAttribute('data-url')});
                     break;
                 case 'ocsManager_uninstall':
                     this.dispatch('ocsManager_uninstall', {itemKey: target.getAttribute('data-item-key')});
