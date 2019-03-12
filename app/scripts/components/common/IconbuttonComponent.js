@@ -51,10 +51,12 @@ export default class IconbuttonComponent extends BaseComponent {
                 border-radius: 3px;
                 background-color: transparent;
                 outline: none;
-                cursor: pointer;
                 transition: background-color 0.2s ease-out;
             }
-            button:not([disabled]):hover {
+            button:enabled {
+                cursor: pointer;
+            }
+            button:enabled:hover {
                 background-color: var(--color-active);
             }
             </style>
