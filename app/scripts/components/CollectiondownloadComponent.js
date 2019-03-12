@@ -78,22 +78,7 @@ export default class CollectiondownloadComponent extends BaseComponent {
             nav[data-action] {
                 flex: 0 0 auto;
             }
-            nav[data-action] button {
-                -webkit-appearance: none;
-                appearance: none;
-                display: inline-block;
-                padding: 0.5em 1em;
-                border: 1px solid var(--color-border);
-                border-radius: 3px;
-                background-color: var(--color-content);
-                line-height: 1;
-                outline: none;
-                cursor: pointer;
-            }
-            nav[data-action] button:hover {
-                border-color: rgba(0,0,0,0.3);
-            }
-            nav[data-action] button[data-state="inactive"] {
+            nav[data-action] app-button[data-state="inactive"] {
                 display: none;
             }
             </style>
@@ -114,7 +99,7 @@ export default class CollectiondownloadComponent extends BaseComponent {
             <p data-message>${state.message}</p>
             </div>
             <nav data-action>
-            <!--<button data-action="" data-item-key="">Cancel</button>-->
+            <!--<app-button data-action="" data-item-key="">Cancel</app-button>-->
             </nav>
             </li>
         `;
