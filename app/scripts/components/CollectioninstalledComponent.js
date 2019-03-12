@@ -110,17 +110,29 @@ export default class CollectioninstalledComponent extends BaseComponent {
         return listItemSet;
     }
 
+    _disposableIndicator(target) {
+        const indicator = document.createElement('app-indicator');
+        target.appendChild(indicator);
+        indicator.start();
+        setTimeout(() => {
+            indicator.stop();
+            indicator.remove();
+        }, 3000);
+    }
+
     _handleClick(event) {
         if (event.target.closest('app-button[data-action]')) {
             const target = event.target.closest('app-button[data-action]');
             switch (target.getAttribute('data-action')) {
                 case 'ocsManager_applyTheme':
+                    this._disposableIndicator(target);
                     this.dispatch('ocsManager_applyTheme', {
                         path: target.getAttribute('data-path'),
                         installType: target.getAttribute('data-install-type')
                     });
                     break;
                 case 'ocsManager_openUrl':
+                    this._disposableIndicator(target);
                     this.dispatch('ocsManager_openUrl', {url: target.getAttribute('data-url')});
                     break;
                 case 'ocsManager_uninstall':
