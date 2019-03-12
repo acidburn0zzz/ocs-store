@@ -151,7 +151,7 @@ export default class OmniboxComponent extends BaseComponent {
                 data-title="Open in Browser" data-icon="open_in_browser" data-size="small"></app-iconbutton>
             </div>
             </div>
-            <app-indicator data-state="inactive"></app-indicator>
+            <app-indicator></app-indicator>
             </div>
 
             <div data-palette data-state="${state}" class="fade-in">
@@ -229,7 +229,8 @@ export default class OmniboxComponent extends BaseComponent {
     }
 
     _viewHandler_webview_loading(state) {
-        this.contentRoot.querySelector('app-indicator').setAttribute('data-state', state.isLoading ? 'active' : 'inactive');
+        const indicator = this.contentRoot.querySelector('app-indicator');
+        state.isLoading ? indicator.start() : indicator.stop();
     }
 
     _viewHandler_webview_page(state) {
