@@ -4,6 +4,9 @@ SwitchviewComponent.define('app-switchview');
 import PageComponent from './common/PageComponent.js';
 PageComponent.define('app-page');
 
+import ButtonComponent from './common/ButtonComponent.js';
+ButtonComponent.define('app-button');
+
 import IconbuttonComponent from './common/IconbuttonComponent.js';
 IconbuttonComponent.define('app-iconbutton');
 
