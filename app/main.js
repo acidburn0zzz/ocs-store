@@ -19,7 +19,7 @@ let mainWindow = null;
 let ocsManager = null;
 let ocsManagerUrl = '';
 
-app.disableHardwareAcceleration();
+//app.disableHardwareAcceleration();
 
 async function startOcsManager() {
     return new Promise((resolve) => {
