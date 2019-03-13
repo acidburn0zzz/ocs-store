@@ -61,4 +61,16 @@ export default class IndicatorComponent extends BaseComponent {
         `;
     }
 
+    start() {
+        this.contentRoot.querySelector('div[data-container]').setAttribute('data-state', 'active');
+        this.contentRoot.querySelector('div[data-indicator]').setAttribute('data-state', 'active');
+        this.dispatch('indicator_start', {});
+    }
+
+    stop() {
+        this.contentRoot.querySelector('div[data-container]').setAttribute('data-state', 'inactive');
+        this.contentRoot.querySelector('div[data-indicator]').setAttribute('data-state', 'inactive');
+        this.dispatch('indicator_stop', {});
+    }
+
 }

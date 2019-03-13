@@ -74,28 +74,10 @@ export default class CollectionsidebarComponent extends BaseComponent {
                 text-overflow: ellipsis;
                 line-height: 1;
             }
-            nav[data-sidebar] ul li a span[data-count] {
+            nav[data-sidebar] ul li a app-badge {
                 flex: 0 0 auto;
-                display: inline-block;
-                padding: 3px 6px;
-                border-radius: 10px;
-                background-color: var(--color-active-secondary);
-                font-size: 11px;
-                line-height: 1;
             }
-
-            nav[data-sidebar] ul li a[data-action="update"] span[data-count] {
-                background-color: var(--color-warning);
-                color: var(--color-content);
-            }
-            nav[data-sidebar] ul li a[data-action="update"] span[data-count="0"] {
-                display: none;
-            }
-            nav[data-sidebar] ul li a[data-action="download"] span[data-count] {
-                background-color: var(--color-information);
-                color: var(--color-content);
-            }
-            nav[data-sidebar] ul li a[data-action="download"] span[data-count="0"] {
+            nav[data-sidebar] ul li app-badge[data-count="0"] {
                 display: none;
             }
             </style>
@@ -105,13 +87,13 @@ export default class CollectionsidebarComponent extends BaseComponent {
             <li>
             <a href="#" data-action="update" data-state="inactive">
             <span data-name>Update</span>
-            <span data-count="0">0</span>
+            <app-badge data-count="0" data-emphasis="high"></app-badge>
             </a>
             </li>
             <li>
             <a href="#" data-action="download" data-state="active">
             <span data-name>Download</span>
-            <span data-count="0">0</span>
+            <app-badge data-count="0" data-emphasis="medium"></app-badge>
             </a>
             </li>
             </ul>
@@ -158,7 +140,7 @@ export default class CollectionsidebarComponent extends BaseComponent {
                     <li>
                     <a href="#" data-action="installed" data-install-type="${category.installType}">
                     <span data-name>${category.name}</span>
-                    <span data-count="${category.count}">${category.count}</span>
+                    <app-badge data-count="${category.count}"></app-badge>
                     </a>
                     </li>
                 `;
@@ -211,18 +193,16 @@ export default class CollectionsidebarComponent extends BaseComponent {
         const menuItem = this.contentRoot.querySelector('a[data-action="update"]');
         menuItem.setAttribute('data-state', state.count ? 'active' : 'inactive');
 
-        const badge = menuItem.querySelector('span[data-count]');
+        const badge = menuItem.querySelector('app-badge');
         badge.setAttribute('data-count', '' + state.count);
-        badge.textContent = '' + state.count;
     }
 
     _viewHandler_ocsManager_metadataSet(state) {
         const menuItem = this.contentRoot.querySelector('a[data-action="download"]');
         //menuItem.setAttribute('data-state', state.count ? 'active' : 'inactive');
 
-        const badge = menuItem.querySelector('span[data-count]');
+        const badge = menuItem.querySelector('app-badge');
         badge.setAttribute('data-count', '' + state.count);
-        badge.textContent = '' + state.count;
     }
 
 }

@@ -66,22 +66,7 @@ export default class CollectioninstalledComponent extends BaseComponent {
             nav[data-action] {
                 flex: 0 0 auto;
             }
-            nav[data-action] button {
-                -webkit-appearance: none;
-                appearance: none;
-                display: inline-block;
-                padding: 0.5em 1em;
-                border: 1px solid var(--color-border);
-                border-radius: 3px;
-                background-color: var(--color-content);
-                line-height: 1;
-                outline: none;
-                cursor: pointer;
-            }
-            nav[data-action] button:hover {
-                border-color: rgba(0,0,0,0.3);
-            }
-            nav[data-action] button[data-state="inactive"] {
+            nav[data-action] app-button[data-state="inactive"] {
                 display: none;
             }
             </style>
@@ -110,11 +95,11 @@ export default class CollectioninstalledComponent extends BaseComponent {
                         <h4 data-name>${file}</h4>
                         </div>
                         <nav data-action>
-                        <button data-action="ocsManager_openUrl" data-url="${fileUrl}">${openButtonText}</button>
-                        <button data-action="ocsManager_applyTheme"
+                        <app-button data-action="ocsManager_applyTheme"
                             data-path="${filePath}" data-install-type="${state.installType}"
-                            data-state="${applyButtonState}">Apply</button>
-                        <button data-action="ocsManager_uninstall" data-item-key="${key}">Delete</button>
+                            data-state="${applyButtonState}">Apply</app-button>
+                        <app-button data-action="ocsManager_openUrl" data-url="${fileUrl}">${openButtonText}</app-button>
+                        <app-button data-action="ocsManager_uninstall" data-item-key="${key}">Delete</app-button>
                         </nav>
                         </li>
                     `;
@@ -125,18 +110,30 @@ export default class CollectioninstalledComponent extends BaseComponent {
         return listItemSet;
     }
 
+    _disposableIndicator(target) {
+        const indicator = document.createElement('app-indicator');
+        target.appendChild(indicator);
+        indicator.start();
+        setTimeout(() => {
+            indicator.stop();
+            indicator.remove();
+        }, 3000);
+    }
+
     _handleClick(event) {
-        if (event.target.closest('button[data-action]')) {
-            const target = event.target.closest('button[data-action]');
+        if (event.target.closest('app-button[data-action]')) {
+            const target = event.target.closest('app-button[data-action]');
             switch (target.getAttribute('data-action')) {
-                case 'ocsManager_openUrl':
-                    this.dispatch('ocsManager_openUrl', {url: target.getAttribute('data-url')});
-                    break;
                 case 'ocsManager_applyTheme':
+                    this._disposableIndicator(target);
                     this.dispatch('ocsManager_applyTheme', {
                         path: target.getAttribute('data-path'),
                         installType: target.getAttribute('data-install-type')
                     });
+                    break;
+                case 'ocsManager_openUrl':
+                    this._disposableIndicator(target);
+                    this.dispatch('ocsManager_openUrl', {url: target.getAttribute('data-url')});
                     break;
                 case 'ocsManager_uninstall':
                     this.dispatch('ocsManager_uninstall', {itemKey: target.getAttribute('data-item-key')});

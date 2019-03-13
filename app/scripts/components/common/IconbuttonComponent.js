@@ -3,7 +3,7 @@ import BaseComponent from './BaseComponent.js';
 export default class IconbuttonComponent extends BaseComponent {
 
     static get componentObservedAttributes() {
-        return ['data-title', 'data-icon', 'data-size', 'data-color', 'data-state'];
+        return ['data-title', 'data-icon', 'data-size', 'data-color', 'data-state', 'data-checked'];
     }
 
     init() {
@@ -24,6 +24,7 @@ export default class IconbuttonComponent extends BaseComponent {
         const state = this.getAttribute('data-state') || 'active';
 
         const disabled = (state === 'inactive') ? 'disabled' : '';
+        const checked = this.hasAttribute('data-checked') ? 'data-checked' : '';
 
         return this.html`
             <style>
@@ -51,15 +52,21 @@ export default class IconbuttonComponent extends BaseComponent {
                 border-radius: 3px;
                 background-color: transparent;
                 outline: none;
-                cursor: pointer;
                 transition: background-color 0.2s ease-out;
             }
-            button:hover {
+            button:enabled {
+                cursor: pointer;
+            }
+            button:enabled:hover {
                 background-color: var(--color-active);
+            }
+            button[data-checked],
+            button[data-checked]:hover {
+                background-color: var(--color-information-secondary);
             }
             </style>
 
-            <button title="${title}" ?disabled=${disabled}>
+            <button title="${title}" ?disabled=${disabled} ?data-checked=${checked}>
             <i class="material-icons md-${size} md-${color} md-${state}">${icon}</i>
             </button>
         `;

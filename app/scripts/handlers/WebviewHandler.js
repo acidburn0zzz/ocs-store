@@ -4,6 +4,8 @@ export default class WebviewHandler {
         this._stateManager = stateManager;
         this._ipcRenderer = ipcRenderer;
 
+        this._appPackage = this._ipcRenderer.sendSync('app', 'package');
+
         this._partition = 'persist:opendesktop';
         this._preload = './scripts/renderers/webview.js';
         this._startPage = this._ipcRenderer.sendSync('store', 'startPage');
@@ -66,6 +68,10 @@ export default class WebviewHandler {
             })
             .add('webview_stop', () => {
                 this._webviewComponent.stop();
+                return false;
+            })
+            .add('webview_appBugsPage', () => {
+                this._webviewComponent.loadUrl(this._appPackage.bugs);
                 return false;
             });
     }

@@ -4,8 +4,14 @@ SwitchviewComponent.define('app-switchview');
 import PageComponent from './common/PageComponent.js';
 PageComponent.define('app-page');
 
+import ButtonComponent from './common/ButtonComponent.js';
+ButtonComponent.define('app-button');
+
 import IconbuttonComponent from './common/IconbuttonComponent.js';
 IconbuttonComponent.define('app-iconbutton');
+
+import BadgeComponent from './common/BadgeComponent.js';
+BadgeComponent.define('app-badge');
 
 import IndicatorComponent from './common/IndicatorComponent.js';
 IndicatorComponent.define('app-indicator');

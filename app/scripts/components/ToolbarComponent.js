@@ -79,30 +79,20 @@ export default class ToolbarComponent extends BaseComponent {
                 color: var(--color-text);
             }
 
-            nav[data-toolbar] ul li span[data-badge] {
+            nav[data-toolbar] ul li app-badge {
                 z-index: 1;
                 position: relative;
                 top: -36px;
                 left: 22px;
-                display: inline-block;
-                padding: 3px 6px;
-                border-radius: 10px;
-                background-color: var(--color-active-secondary);
-                font-size: 11px;
-                line-height: 1;
             }
-            nav[data-toolbar] ul li span[data-badge][data-count="0"] {
+            nav[data-toolbar] ul li app-badge[data-count="0"] {
                 display: none;
             }
-            nav[data-toolbar] ul li span[data-badge="update"] {
+            nav[data-toolbar] ul li app-badge[data-emphasis="high"] {
                 z-index: 2;
-                background-color: var(--color-warning);
-                color: var(--color-content);
             }
-            nav[data-toolbar] ul li span[data-badge="download"] {
+            nav[data-toolbar] ul li app-badge[data-emphasis="medium"] {
                 z-index: 3;
-                background-color: var(--color-information);
-                color: var(--color-content);
             }
             </style>
 
@@ -129,14 +119,15 @@ export default class ToolbarComponent extends BaseComponent {
             <li>
             <app-iconbutton data-action="ocsManager_collection"
                 data-title="My Collection" data-icon="folder"></app-iconbutton><br>
-            <span data-badge="update" data-count="0">0</span>
-            <span data-badge="download" data-count="0">0</span>
+            <app-badge data-count="0" data-emphasis="high"></app-badge>
+            <app-badge data-count="0" data-emphasis="medium"></app-badge>
             </li>
             <li data-omnibox><app-omnibox></app-omnibox></li>
             <li>
             <app-iconbutton data-action="menu_open"
                 data-title="Other Operations..." data-icon="more_vert"></app-iconbutton><br>
             <app-menu data-width="250px" data-offset-x="-220px">
+            <a slot="menuitem" href="#" data-action="webview_appBugsPage">Report a Bug</a>
             <a slot="menuitem" href="#" data-action="general_about">About This App</a>
             </app-menu>
             </li>
@@ -180,6 +171,10 @@ export default class ToolbarComponent extends BaseComponent {
             case 'menu_open':
                 this.contentRoot.querySelector('app-menu').open();
                 break;
+            case 'webview_appBugsPage':
+                this.dispatch('webview_appBugsPage', {});
+                this.contentRoot.querySelector('app-menu').close();
+                break;
             case 'general_about':
                 this.dispatch('general_about', {});
                 this.contentRoot.querySelector('app-menu').close();
@@ -202,15 +197,13 @@ export default class ToolbarComponent extends BaseComponent {
     }
 
     _viewHandler_ocsManager_updateAvailableItems(state) {
-        const badge = this.contentRoot.querySelector('span[data-badge="update"]');
+        const badge = this.contentRoot.querySelector('app-badge[data-emphasis="high"]');
         badge.setAttribute('data-count', '' + state.count);
-        badge.textContent = state.count;
     }
 
     _viewHandler_ocsManager_metadataSet(state) {
-        const badge = this.contentRoot.querySelector('span[data-badge="download"]');
+        const badge = this.contentRoot.querySelector('app-badge[data-emphasis="medium"]');
         badge.setAttribute('data-count', '' + state.count);
-        badge.textContent = state.count;
     }
 
 }

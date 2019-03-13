@@ -125,27 +125,8 @@ export default class OmniboxComponent extends BaseComponent {
                 width: 50%;
                 padding: 5px;
             }
-            div[data-palette] nav ul li button {
-                -webkit-appearance: none;
-                appearance: none;
-                display: inline-block;
+            div[data-palette] nav ul li app-button {
                 width: 100%;
-                padding: 0.4em 0.2em;
-                border: 1px solid var(--color-border);
-                border-radius: 3px;
-                background-color: var(--color-content);
-                line-height: 1;
-                outline: none;
-                cursor: pointer;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-            }
-            div[data-palette] nav ul li button:hover {
-                border-color: rgba(0,0,0,0.3);
-            }
-            div[data-palette] nav ul li button[data-action="webview_startPage"][data-url="${this.state.startPage}"] {
-                border-color: var(--color-information);
             }
 
             div[data-overlay] {
@@ -170,25 +151,35 @@ export default class OmniboxComponent extends BaseComponent {
                 data-title="Open in Browser" data-icon="open_in_browser" data-size="small"></app-iconbutton>
             </div>
             </div>
-            <app-indicator data-state="inactive"></app-indicator>
+            <app-indicator></app-indicator>
             </div>
 
             <div data-palette data-state="${state}" class="fade-in">
             <h4><i class="material-icons md-small">home</i> Choose Startpage</h4>
             <nav>
             <ul>
-            <li><button data-action="webview_startPage" data-url="https://www.opendesktop.org/">opendesktop.org</button></li>
-            <li><button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/Gnome">gnome-look.org</button></li>
-            <li><button data-action="webview_startPage" data-url="https://store.kde.org/">store.kde.org</button></li>
-            <li><button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/XFCE">xfce-look.org</button></li>
-            <li><button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/Window-Managers">box-look.org</button></li>
-            <li><button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</button></li>
+            <li><app-button data-action="webview_startPage" data-url="https://www.opendesktop.org/">opendesktop.org</app-button></li>
+            <li><app-button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/Gnome">gnome-look.org</app-button></li>
+            <li><app-button data-action="webview_startPage" data-url="https://store.kde.org/">store.kde.org</app-button></li>
+            <li><app-button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/XFCE">xfce-look.org</app-button></li>
+            <li><app-button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/Window-Managers">box-look.org</app-button></li>
+            <li><app-button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</app-button></li>
             </ul>
             </nav>
             </div>
 
             <div data-overlay data-state="${state}" data-action="${autoCloseAction}"></div>
         `;
+    }
+
+    componentUpdatedCallback() {
+        if (this.contentRoot.querySelector('app-button[data-action="webview_startPage"][data-checked]')) {
+            this.contentRoot.querySelector('app-button[data-action="webview_startPage"][data-checked]').removeAttribute('data-checked');
+        }
+
+        if (this.contentRoot.querySelector(`app-button[data-action="webview_startPage"][data-url="${this.state.startPage}"]`)) {
+            this.contentRoot.querySelector(`app-button[data-action="webview_startPage"][data-url="${this.state.startPage}"]`).setAttribute('data-checked', 'data-checked');
+        }
     }
 
     open() {
@@ -219,8 +210,8 @@ export default class OmniboxComponent extends BaseComponent {
         if (event.target.closest('app-iconbutton[data-action]')) {
             target = event.target.closest('app-iconbutton[data-action]');
         }
-        else if (event.target.closest('button[data-action]')) {
-            target = event.target.closest('button[data-action]');
+        else if (event.target.closest('app-button[data-action]')) {
+            target = event.target.closest('app-button[data-action]');
         }
         else {
             return;
@@ -238,7 +229,8 @@ export default class OmniboxComponent extends BaseComponent {
     }
 
     _viewHandler_webview_loading(state) {
-        this.contentRoot.querySelector('app-indicator').setAttribute('data-state', state.isLoading ? 'active' : 'inactive');
+        const indicator = this.contentRoot.querySelector('app-indicator');
+        state.isLoading ? indicator.start() : indicator.stop();
     }
 
     _viewHandler_webview_page(state) {
