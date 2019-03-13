@@ -19,6 +19,8 @@ let mainWindow = null;
 let ocsManager = null;
 let ocsManagerUrl = '';
 
+app.disableHardwareAcceleration();
+
 async function startOcsManager() {
     return new Promise((resolve) => {
         const resolveOcsManagerUrl = (data) => {
