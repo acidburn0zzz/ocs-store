@@ -19,7 +19,7 @@ install -D -m 755 /usr/lib/x86_64-linux-gnu/libXss.so.1 ${APPDIR}/usr/lib/ocs-st
 install -D -m 755 /usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libcanberra-gtk-module.so ${APPDIR}/usr/lib/ocs-store-linux-x64/libcanberra-gtk-module.so
 install -D -m 755 /usr/lib/x86_64-linux-gnu/libgnome-keyring.so.0 ${APPDIR}/usr/lib/ocs-store-linux-x64/libgnome-keyring.so.0
 
-install -D -m 644 launcher/imwheelrc ${APPDIR}/etc/imwheelrc
+install -D -m 644 pkg/appimage/.imwheelrc ${APPDIR}/home/appimage/.imwheelrc
 install -D -m 644 /etc/X11/Xsession.d/60imwheel_start-imwheel ${APPDIR}/etc/X11/Xsession.d/60imwheel_start-imwheel
 install -D -m 644 /etc/X11/imwheel/imwheelrc ${APPDIR}/etc/X11/imwheel/imwheelrc
 install -D -m 644 /etc/X11/imwheel/startup.conf ${APPDIR}/etc/X11/imwheel/startup.conf
