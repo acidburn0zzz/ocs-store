@@ -7,6 +7,7 @@ PREFIX="$(cd "$(dirname "${0}")" && pwd)"
 
 if [ ${APPIMAGE} ]; then
     export PATH=${PREFIX}/usr/local/bin:${PREFIX}/usr/bin:${PATH}
+    imwheel
 fi
 
 if [ -f "${PREFIX}/ocs-store-linux-x64/ocs-store" ]; then
