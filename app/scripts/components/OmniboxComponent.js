@@ -17,18 +17,21 @@ export default class OmniboxComponent extends BaseComponent {
 
         this._viewHandler_webview_loading = this._viewHandler_webview_loading.bind(this);
         this._viewHandler_webview_page = this._viewHandler_webview_page.bind(this);
+        this._viewHandler_ocsManager_metadataSet = this._viewHandler_ocsManager_metadataSet.bind(this);
     }
 
     componentConnectedCallback() {
         this.getStateManager().viewHandler
             .add('webview_loading', this._viewHandler_webview_loading)
-            .add('webview_page', this._viewHandler_webview_page);
+            .add('webview_page', this._viewHandler_webview_page)
+            .add('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
     componentDisconnectedCallback() {
         this.getStateManager().viewHandler
             .remove('webview_loading', this._viewHandler_webview_loading)
-            .remove('webview_page', this._viewHandler_webview_page);
+            .remove('webview_page', this._viewHandler_webview_page)
+            .remove('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
     render() {
@@ -60,6 +63,9 @@ export default class OmniboxComponent extends BaseComponent {
             }
             div[data-omnibox]:hover {
                 background-color: var(--color-active);
+            }
+            div[data-omnibox][data-download-state="active"] {
+                background-color: var(--color-information-secondary);
             }
 
             div[data-content] {
@@ -108,6 +114,9 @@ export default class OmniboxComponent extends BaseComponent {
             div[data-palette][data-state="inactive"] {
                 display: none;
             }
+            div[data-palette] div[data-download-state="inactive"] {
+                display: none;
+            }
             div[data-palette] h4 {
                 margin: 1em 0;
                 text-align: center;
@@ -115,6 +124,9 @@ export default class OmniboxComponent extends BaseComponent {
             div[data-palette] h4 i {
                 position: relative;
                 top: 3px;
+            }
+            div[data-palette] p {
+                text-align: center;
             }
             div[data-palette] nav ul {
                 display: flex;
@@ -142,7 +154,7 @@ export default class OmniboxComponent extends BaseComponent {
             }
             </style>
 
-            <div data-omnibox>
+            <div data-omnibox data-download-state="inactive">
             <div data-content>
             <div></div>
             <h3 data-action="omnibox_open">${this.state.title}</h3>
@@ -155,6 +167,11 @@ export default class OmniboxComponent extends BaseComponent {
             </div>
 
             <div data-palette data-state="${state}" class="fade-in">
+            <div data-download-state="inactive">
+            <h4><i class="material-icons md-small">cloud_download</i> Download</h4>
+            <p data-message></p>
+            </div>
+            <div>
             <h4><i class="material-icons md-small">home</i> Choose Startpage</h4>
             <nav>
             <ul>
@@ -166,6 +183,7 @@ export default class OmniboxComponent extends BaseComponent {
             <li><app-button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</app-button></li>
             </ul>
             </nav>
+            </div>
             </div>
 
             <div data-overlay data-state="${state}" data-action="${autoCloseAction}"></div>
@@ -235,6 +253,13 @@ export default class OmniboxComponent extends BaseComponent {
 
     _viewHandler_webview_page(state) {
         this.update({...this.state, ...state});
+    }
+
+    _viewHandler_ocsManager_metadataSet(state) {
+        this.contentRoot.querySelector('div[data-omnibox]').setAttribute('data-download-state', state.count ? 'active' : 'inactive');
+        const download = this.contentRoot.querySelector('div[data-palette] div[data-download-state]');
+        download.setAttribute('data-download-state', state.count ? 'active' : 'inactive');
+        download.querySelector('p[data-message]').textContent = state.count ? `Downloading... ${state.metadataSet[Object.keys(state.metadataSet)[0]].filename}` : '';
     }
 
 }
