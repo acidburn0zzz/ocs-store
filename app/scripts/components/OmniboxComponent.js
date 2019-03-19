@@ -239,6 +239,10 @@ export default class OmniboxComponent extends BaseComponent {
         else if (event.target.closest('app-button[data-action]')) {
             target = event.target.closest('app-button[data-action]');
         }
+        else if (event.target.closest('a[data-action]')) {
+            event.preventDefault();
+            target = event.target.closest('a[data-action]');
+        }
         else {
             return;
         }
@@ -249,6 +253,10 @@ export default class OmniboxComponent extends BaseComponent {
                 break;
             case 'webview_startPage':
                 this.dispatch('webview_startPage', {url: target.getAttribute('data-url')});
+                this.close();
+                break;
+            case 'ocsManager_collection':
+                this.dispatch('ocsManager_collection', {view: target.getAttribute('data-view')});
                 this.close();
                 break;
         }
@@ -267,7 +275,13 @@ export default class OmniboxComponent extends BaseComponent {
         this.contentRoot.querySelector('div[data-omnibox]').setAttribute('data-download-state', state.count ? 'active' : 'inactive');
         const downloadContent = this.contentRoot.querySelector('div[data-palette] div[data-content][data-download-state]');
         downloadContent.setAttribute('data-download-state', state.count ? 'active' : 'inactive');
-        downloadContent.querySelector('p[data-message]').textContent = state.count ? state.metadataSet[Object.keys(state.metadataSet)[0]].filename : '';
+        let messageHtml = '';
+        if (state.count) {
+            let messageText = state.metadataSet[Object.keys(state.metadataSet)[0]].filename;
+            messageText += (state.count > 1) ? ` and ${state.count - 1} file(s)` : '';
+            messageHtml = `<a href="#" data-action="ocsManager_collection" data-view="download">${messageText}</a>`;
+        }
+        downloadContent.querySelector('p[data-message]').innerHTML = messageHtml;
     }
 
 }
