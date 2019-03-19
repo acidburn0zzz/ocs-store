@@ -56,27 +56,29 @@ export default class OmniboxComponent extends BaseComponent {
             div[data-omnibox] {
                 width: inherit;
                 height: inherit;
+                border: 1px solid transparent;
                 border-radius: 5px;
                 background-color: var(--color-active-secondary);
                 overflow: hidden;
-                transition: background-color 0.2s ease-out;
+                transition:
+                    border-color 0.2s ease-out,
+                    background-color 0.2s ease-out;
             }
             div[data-omnibox]:hover {
                 background-color: var(--color-active);
             }
             div[data-omnibox][data-download-state="active"] {
-                background-color: var(--color-information-secondary);
+                border-color: var(--color-information);
             }
-
-            div[data-content] {
+            div[data-omnibox] div[data-content] {
                 display: flex;
                 flex-flow: row nowrap;
                 align-items: center;
-                width: inherit;
-                height: inherit;
+                width: 100%;
+                height: 100%;
                 line-height: 1;
             }
-            div[data-content] h3 {
+            div[data-omnibox] div[data-content] h3 {
                 flex: 1 1 auto;
                 border-right: 1px solid var(--color-border);
                 overflow: hidden;
@@ -86,15 +88,14 @@ export default class OmniboxComponent extends BaseComponent {
                 text-align: center;
                 cursor: pointer;
             }
-            div[data-content] div {
+            div[data-omnibox] div[data-content] div {
                 display: flex;
                 flex: 0 0 auto;
                 align-items: center;
                 justify-content: center;
                 width: 30px;
             }
-
-            app-indicator {
+            div[data-omnibox] app-indicator {
                 position: relative;
                 top: -2px;
             }
@@ -114,30 +115,37 @@ export default class OmniboxComponent extends BaseComponent {
             div[data-palette][data-state="inactive"] {
                 display: none;
             }
-            div[data-palette] div[data-download-state="inactive"] {
+            div[data-palette] div[data-content] {
+                padding: 1em;
+                border-bottom: 1px solid var(--color-border);
+            }
+            div[data-palette] div[data-content]:last-child {
+                border-bottom: 0;
+            }
+            div[data-palette] div[data-content][data-download-state="inactive"] {
                 display: none;
             }
-            div[data-palette] h4 {
+            div[data-palette] div[data-content] h4 {
                 margin: 1em 0;
                 text-align: center;
             }
-            div[data-palette] h4 i {
+            div[data-palette] div[data-content] h4 i {
                 position: relative;
                 top: 3px;
             }
-            div[data-palette] p {
+            div[data-palette] div[data-content] p {
                 text-align: center;
             }
-            div[data-palette] nav ul {
+            div[data-palette] div[data-content] nav ul {
                 display: flex;
                 flex-flow: row wrap;
                 justify-content: center;
             }
-            div[data-palette] nav ul li {
+            div[data-palette] div[data-content] nav ul li {
                 width: 50%;
                 padding: 5px;
             }
-            div[data-palette] nav ul li app-button {
+            div[data-palette] div[data-content] nav ul li app-button {
                 width: 100%;
             }
 
@@ -167,11 +175,11 @@ export default class OmniboxComponent extends BaseComponent {
             </div>
 
             <div data-palette data-state="${state}" class="fade-in">
-            <div data-download-state="inactive">
+            <div data-content data-download-state="inactive">
             <h4><i class="material-icons md-small">cloud_download</i> Download</h4>
             <p data-message></p>
             </div>
-            <div>
+            <div data-content>
             <h4><i class="material-icons md-small">home</i> Choose Startpage</h4>
             <nav>
             <ul>
@@ -247,7 +255,7 @@ export default class OmniboxComponent extends BaseComponent {
     }
 
     _viewHandler_webview_loading(state) {
-        const indicator = this.contentRoot.querySelector('app-indicator');
+        const indicator = this.contentRoot.querySelector('div[data-omnibox] app-indicator');
         state.isLoading ? indicator.start() : indicator.stop();
     }
 
@@ -257,9 +265,9 @@ export default class OmniboxComponent extends BaseComponent {
 
     _viewHandler_ocsManager_metadataSet(state) {
         this.contentRoot.querySelector('div[data-omnibox]').setAttribute('data-download-state', state.count ? 'active' : 'inactive');
-        const download = this.contentRoot.querySelector('div[data-palette] div[data-download-state]');
-        download.setAttribute('data-download-state', state.count ? 'active' : 'inactive');
-        download.querySelector('p[data-message]').textContent = state.count ? `Downloading... ${state.metadataSet[Object.keys(state.metadataSet)[0]].filename}` : '';
+        const downloadContent = this.contentRoot.querySelector('div[data-palette] div[data-content][data-download-state]');
+        downloadContent.setAttribute('data-download-state', state.count ? 'active' : 'inactive');
+        downloadContent.querySelector('p[data-message]').textContent = state.count ? state.metadataSet[Object.keys(state.metadataSet)[0]].filename : '';
     }
 
 }
