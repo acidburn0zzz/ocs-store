@@ -17,6 +17,7 @@ export default class OmniboxComponent extends BaseComponent {
 
         this._viewHandler_webview_loading = this._viewHandler_webview_loading.bind(this);
         this._viewHandler_webview_page = this._viewHandler_webview_page.bind(this);
+        this._viewHandler_ocsManager_updateAvailableItems = this._viewHandler_ocsManager_updateAvailableItems.bind(this);
         this._viewHandler_ocsManager_metadataSet = this._viewHandler_ocsManager_metadataSet.bind(this);
     }
 
@@ -24,6 +25,7 @@ export default class OmniboxComponent extends BaseComponent {
         this.getStateManager().viewHandler
             .add('webview_loading', this._viewHandler_webview_loading)
             .add('webview_page', this._viewHandler_webview_page)
+            .add('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems)
             .add('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
@@ -31,6 +33,7 @@ export default class OmniboxComponent extends BaseComponent {
         this.getStateManager().viewHandler
             .remove('webview_loading', this._viewHandler_webview_loading)
             .remove('webview_page', this._viewHandler_webview_page)
+            .remove('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems)
             .remove('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
@@ -66,6 +69,9 @@ export default class OmniboxComponent extends BaseComponent {
             }
             div[data-omnibox]:hover {
                 background-color: var(--color-active);
+            }
+            div[data-omnibox][data-update-state="active"] {
+                border-color: var(--color-important);
             }
             div[data-omnibox][data-download-state="active"] {
                 border-color: var(--color-information);
@@ -122,6 +128,15 @@ export default class OmniboxComponent extends BaseComponent {
             div[data-palette] div[data-content]:last-child {
                 border-bottom: 0;
             }
+            div[data-palette] div[data-content][data-update-state] a {
+                color: var(--color-important);
+            }
+            div[data-palette] div[data-content][data-update-state="inactive"] {
+                display: none;
+            }
+            div[data-palette] div[data-content][data-download-state] a {
+                color: var(--color-information);
+            }
             div[data-palette] div[data-content][data-download-state="inactive"] {
                 display: none;
             }
@@ -162,7 +177,7 @@ export default class OmniboxComponent extends BaseComponent {
             }
             </style>
 
-            <div data-omnibox data-download-state="inactive">
+            <div data-omnibox data-update-state="inactive" data-download-state="inactive">
             <div data-content>
             <div></div>
             <h3 data-action="omnibox_open">${this.state.title}</h3>
@@ -175,6 +190,10 @@ export default class OmniboxComponent extends BaseComponent {
             </div>
 
             <div data-palette data-state="${state}" class="fade-in">
+            <div data-content data-update-state="inactive">
+            <h4><i class="material-icons md-small">update</i> Update</h4>
+            <p data-message></p>
+            </div>
             <div data-content data-download-state="inactive">
             <h4><i class="material-icons md-small">cloud_download</i> Download</h4>
             <p data-message></p>
@@ -271,8 +290,22 @@ export default class OmniboxComponent extends BaseComponent {
         this.update({...this.state, ...state});
     }
 
+    _viewHandler_ocsManager_updateAvailableItems(state) {
+        this.contentRoot.querySelector('div[data-omnibox]').setAttribute('data-update-state', state.count ? 'active' : 'inactive');
+
+        const updateContent = this.contentRoot.querySelector('div[data-palette] div[data-content][data-update-state]');
+        updateContent.setAttribute('data-update-state', state.count ? 'active' : 'inactive');
+        let messageHtml = '';
+        if (state.count) {
+            let messageText = `${state.count} item(s) update available`;
+            messageHtml = `<a href="#" data-action="ocsManager_collection" data-view="update">${messageText}</a>`;
+        }
+        updateContent.querySelector('p[data-message]').innerHTML = messageHtml;
+    }
+
     _viewHandler_ocsManager_metadataSet(state) {
         this.contentRoot.querySelector('div[data-omnibox]').setAttribute('data-download-state', state.count ? 'active' : 'inactive');
+
         const downloadContent = this.contentRoot.querySelector('div[data-palette] div[data-content][data-download-state]');
         downloadContent.setAttribute('data-download-state', state.count ? 'active' : 'inactive');
         let messageHtml = '';
