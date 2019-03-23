@@ -7,8 +7,6 @@ PREFIX="$(cd "$(dirname "${0}")" && pwd)"
 
 if [ ${APPIMAGE} ]; then
     export PATH=${PREFIX}/usr/local/bin:${PREFIX}/usr/bin:${PATH}
-    (HOME=${PREFIX}/home/appimage && imwheel)
-    trap "echo trapped" EXIT
 fi
 
 if [ -f "${PREFIX}/ocs-store-linux-x64/ocs-store" ]; then

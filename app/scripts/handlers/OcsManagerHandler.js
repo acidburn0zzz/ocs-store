@@ -43,8 +43,8 @@ export default class OcsManagerHandler {
                 }
                 return {};
             })
-            .add('ocsManager_collection', () => {
-                this._collectiondialogComponent.open();
+            .add('ocsManager_collection', (data) => {
+                this._collectiondialogComponent.open(data.view || '');
                 return false;
             })
             .add('ocsManager_openUrl', (data) => {

@@ -59,7 +59,10 @@ export default class CollectiondialogComponent extends BaseComponent {
         }
     }
 
-    open() {
+    open(view = '') {
+        if (view) {
+            this._handleCollectionsidebarSelect({detail: {select: view}});
+        }
         this.contentRoot.querySelector('app-dialog').open();
     }
 

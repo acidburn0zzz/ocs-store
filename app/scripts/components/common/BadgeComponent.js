@@ -36,7 +36,7 @@ export default class BadgeComponent extends BaseComponent {
                 color: var(--color-content);
             }
             span[data-emphasis="high"] {
-                background-color: var(--color-warning);
+                background-color: var(--color-important);
                 color: var(--color-content);
             }
             </style>
