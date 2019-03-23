@@ -23,7 +23,7 @@ install_build_deps_appimage() {
     git clone https://github.com/tj/n.git -b master --single-branch --depth=1 "${PROJDIR}/n"
     (cd "${PROJDIR}/n" && make install && n lts)
     rm -rf "${PROJDIR}/n"
-    apt -y install libgconf-2-4 libxss1 libcanberra-gtk-module libgnome-keyring0 imwheel
+    apt -y install libgconf-2-4 libxss1 libcanberra-gtk-module libgnome-keyring0
 }
 
 build_appimage() {
