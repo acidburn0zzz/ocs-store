@@ -57,24 +57,49 @@ export default class OmniboxComponent extends BaseComponent {
             }
 
             div[data-omnibox] {
+                position: relative;
                 width: inherit;
                 height: inherit;
-                border: 1px solid transparent;
-                border-radius: 5px;
-                background-color: var(--color-active-secondary);
+            }
+            div[data-omnibox]::after {
+                --border-width: 3px;
+                display: block;
+                content: '';
+                z-index: 9;
+                position: absolute;
+                top: calc(-1 * var(--border-width));
+                left: calc(-1 * var(--border-width));
+                width: calc(100% + var(--border-width) * 2);
+                height: calc(100% + var(--border-width) * 2);
+                border-radius: calc(var(--border-width) * 2);
+            }
+            div[data-omnibox][data-update-state="active"]::after {
+                background-color: var(--color-important);
+            }
+            div[data-omnibox][data-download-state="active"]::after {
+                background: linear-gradient(90deg, transparent, var(--color-information), transparent);
+                background-size: 300% 300%;
+                animation: gradient 3s ease alternate infinite;
+            }
+            @keyframes gradient {
+                0% {
+                    background-position: 0% 50%;
+                }
+                50% {
+                    background-position: 100% 50%;
+                }
+                100% {
+                    background-position: 0% 50%;
+                }
+            }
+            div[data-omnibox] div[data-wrapper] {
+                z-index: 10;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border-radius: 3px;
+                background-color: var(--color-widget);
                 overflow: hidden;
-                transition:
-                    border-color 0.2s ease-out,
-                    background-color 0.2s ease-out;
-            }
-            div[data-omnibox]:hover {
-                background-color: var(--color-active);
-            }
-            div[data-omnibox][data-update-state="active"] {
-                border-color: var(--color-important);
-            }
-            div[data-omnibox][data-download-state="active"] {
-                border-color: var(--color-information);
             }
             div[data-omnibox] div[data-content] {
                 display: flex;
@@ -82,7 +107,12 @@ export default class OmniboxComponent extends BaseComponent {
                 align-items: center;
                 width: 100%;
                 height: 100%;
+                background-color: var(--color-active-secondary);
                 line-height: 1;
+                transition: background-color 0.2s ease-out;
+            }
+            div[data-omnibox] div[data-content]:hover {
+                background-color: var(--color-active);
             }
             div[data-omnibox] div[data-content] h3 {
                 flex: 1 1 auto;
@@ -178,6 +208,7 @@ export default class OmniboxComponent extends BaseComponent {
             </style>
 
             <div data-omnibox data-update-state="inactive" data-download-state="inactive">
+            <div data-wrapper>
             <div data-content>
             <div></div>
             <h3 data-action="omnibox_open">${this.state.title}</h3>
@@ -187,6 +218,7 @@ export default class OmniboxComponent extends BaseComponent {
             </div>
             </div>
             <app-indicator></app-indicator>
+            </div>
             </div>
 
             <div data-palette data-state="${state}" class="fade-in">
