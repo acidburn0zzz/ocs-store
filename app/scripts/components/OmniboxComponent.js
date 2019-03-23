@@ -71,7 +71,7 @@ export default class OmniboxComponent extends BaseComponent {
                 background-color: var(--color-active);
             }
             div[data-omnibox][data-update-state="active"] {
-                border-color: var(--color-warning);
+                border-color: var(--color-important);
             }
             div[data-omnibox][data-download-state="active"] {
                 border-color: var(--color-information);
@@ -129,7 +129,7 @@ export default class OmniboxComponent extends BaseComponent {
                 border-bottom: 0;
             }
             div[data-palette] div[data-content][data-update-state] a {
-                color: var(--color-warning);
+                color: var(--color-important);
             }
             div[data-palette] div[data-content][data-update-state="inactive"] {
                 display: none;
