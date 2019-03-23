@@ -77,19 +77,16 @@ export default class OmniboxComponent extends BaseComponent {
                 background-color: var(--color-important);
             }
             div[data-omnibox][data-download-state="active"]::after {
-                background: linear-gradient(90deg, transparent, var(--color-information), transparent);
+                background: linear-gradient(90deg, transparent, var(--color-information) 50%, transparent);
                 background-size: 300% 300%;
-                animation: gradient 3s ease alternate infinite;
+                animation: gradient 2s ease-in-out infinite alternate;
             }
             @keyframes gradient {
                 0% {
-                    background-position: 0% 50%;
-                }
-                50% {
-                    background-position: 100% 50%;
+                    background-position: 0% 0%;
                 }
                 100% {
-                    background-position: 0% 50%;
+                    background-position: 100% 0%;
                 }
             }
             div[data-omnibox] div[data-wrapper] {

@@ -36,10 +36,7 @@ export default class IndicatorComponent extends BaseComponent {
                 width: 50%;
                 height: inherit;
                 background-color: var(--color-information);
-                animation-name: slide;
-                animation-duration: 1s;
-                animation-iteration-count: infinite;
-                animation-direction: alternate;
+                animation: slide 1s ease-in-out infinite alternate;
             }
             div[data-indicator][data-state="inactive"] {
                 display: none;
