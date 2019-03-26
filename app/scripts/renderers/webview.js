@@ -1,38 +1,28 @@
 const {ipcRenderer} = require('electron');
 
 ipcRenderer.on('smooth-scroll', () => {
-    let scrollLeft = document.scrollingElement.scrollLeft;
-    let scrollTop = document.scrollingElement.scrollTop;
-    let previousScrollLeft = 0;
-    let previousScrollTop = 0;
-    let intervalId = null;
+    let timeoutId = null;
+    let deltaX = 0;
+    let deltaY = 0;
+    const amount = 2;
 
     document.scrollingElement.addEventListener('wheel', (event) => {
         event.preventDefault();
 
-        scrollLeft += event.deltaX;
-        scrollTop += event.deltaY;
+        deltaX += event.deltaX * amount;
+        deltaY += event.deltaY * amount;
 
-        if (intervalId === null) {
-            intervalId = setInterval(() => {
-                if (scrollLeft === previousScrollLeft && scrollTop === previousScrollTop) {
-                    window.clearInterval(intervalId);
-                    scrollLeft = document.scrollingElement.scrollLeft;
-                    scrollTop = document.scrollingElement.scrollTop;
-                    previousScrollLeft = 0;
-                    previousScrollTop = 0;
-                    intervalId = null;
-                }
-                else {
-                    document.scrollingElement.scrollTo({
-                        left: scrollLeft,
-                        top: scrollTop,
-                        behavior: 'smooth'
-                    });
-                    previousScrollLeft = scrollLeft;
-                    previousScrollTop = scrollTop;
-                }
-            }, 100);
+        if (timeoutId === null) {
+            timeoutId = setTimeout(() => {
+                document.scrollingElement.scrollBy({
+                    left: deltaX,
+                    top: deltaY,
+                    behavior: 'smooth'
+                });
+                timeoutId = null;
+                deltaX = 0;
+                deltaY = 0;
+            }, 150);
         }
     });
 });
