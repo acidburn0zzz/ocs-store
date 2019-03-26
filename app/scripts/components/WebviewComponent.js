@@ -116,7 +116,9 @@ export default class WebviewComponent extends BaseComponent {
                 this._webview.openDevTools();
             }
 
-            //this._webviewElement.send('ipc-message');
+            //this._webview.send('ipc-message');
+
+            this._webview.send('smooth-scroll');
         });
 
         this._webview.addEventListener('new-window', (event) => {
@@ -133,7 +135,7 @@ export default class WebviewComponent extends BaseComponent {
             }
         });
 
-        //this._webviewElement.addEventListener('ipc-message', (event) => {});
+        //this._webview.addEventListener('ipc-message', (event) => {});
 
         this.contentRoot.appendChild(this._webview);
     }
