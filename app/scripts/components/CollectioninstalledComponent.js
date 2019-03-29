@@ -89,7 +89,7 @@ export default class CollectioninstalledComponent extends BaseComponent {
                     const filePath = `${destination}/${file}`;
                     const fileUrl = `file://${filePath}`;
                     listItemSet += `
-                        <li>
+                        <li data-item-key="${key}">
                         <figure data-previewpic style="background-image: url('${previewpicUrl}');"></figure>
                         <div data-main>
                         <h4 data-name>${file}</h4>
@@ -124,21 +124,27 @@ export default class CollectioninstalledComponent extends BaseComponent {
         if (event.target.closest('app-button[data-action]')) {
             const target = event.target.closest('app-button[data-action]');
             switch (target.getAttribute('data-action')) {
-                case 'ocsManager_applyTheme':
+                case 'ocsManager_applyTheme': {
                     this._disposableIndicator(target);
                     this.dispatch('ocsManager_applyTheme', {
                         path: target.getAttribute('data-path'),
                         installType: target.getAttribute('data-install-type')
                     });
                     break;
-                case 'ocsManager_openUrl':
+                }
+                case 'ocsManager_openUrl': {
                     this._disposableIndicator(target);
                     this.dispatch('ocsManager_openUrl', {url: target.getAttribute('data-url')});
                     break;
-                case 'ocsManager_uninstall':
-                    this.dispatch('ocsManager_uninstall', {itemKey: target.getAttribute('data-item-key')});
-                    target.closest('li').remove();
+                }
+                case 'ocsManager_uninstall': {
+                    const itemKey = target.getAttribute('data-item-key');
+                    this.dispatch('ocsManager_uninstall', {itemKey: itemKey});
+                    for (const listItem of this.contentRoot.querySelectorAll(`li[data-item-key="${itemKey}"]`)) {
+                        listItem.remove();
+                    }
                     break;
+                }
             }
         }
     }

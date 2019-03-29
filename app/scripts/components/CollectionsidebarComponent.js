@@ -161,16 +161,19 @@ export default class CollectionsidebarComponent extends BaseComponent {
             target.setAttribute('data-selected', 'data-selected');
 
             switch (target.getAttribute('data-action')) {
-                case 'installed':
+                case 'installed': {
                     this.dispatch('ocsManager_installedItemsByType', {installType: target.getAttribute('data-install-type')});
                     this.dispatch('collectionsidebar_select', {select: 'installed'});
                     break;
-                case 'update':
+                }
+                case 'update': {
                     this.dispatch('collectionsidebar_select', {select: 'update'});
                     break;
-                case 'download':
+                }
+                case 'download': {
                     this.dispatch('collectionsidebar_select', {select: 'download'});
                     break;
+                }
             }
         }
     }

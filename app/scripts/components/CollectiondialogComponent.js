@@ -73,15 +73,18 @@ export default class CollectiondialogComponent extends BaseComponent {
     _handleCollectionsidebarSelect(event) {
         const switchviewComponent = this.contentRoot.querySelector('app-switchview');
         switch (event.detail.select) {
-            case 'installed':
+            case 'installed': {
                 switchviewComponent.switch('installed');
                 break;
-            case 'update':
+            }
+            case 'update': {
                 switchviewComponent.switch('update');
                 break;
-            case 'download':
+            }
+            case 'download': {
                 switchviewComponent.switch('download');
                 break;
+            }
         }
     }
 

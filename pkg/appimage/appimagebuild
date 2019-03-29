@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PKGNAME='ocs-store'
-PKGVER='4.0.1'
+PKGVER='4.1.0'
 PKGREL='1'
 
 UPDINFO='zsync|http://dl.opendesktop.org/api/files/download/id/1532435039/as/latest/ocs-store-x86_64.AppImage.zsync'
@@ -19,7 +19,7 @@ install -D -m 755 /usr/lib/x86_64-linux-gnu/libXss.so.1 ${APPDIR}/usr/lib/ocs-st
 install -D -m 755 /usr/lib/x86_64-linux-gnu/gtk-2.0/modules/libcanberra-gtk-module.so ${APPDIR}/usr/lib/ocs-store-linux-x64/libcanberra-gtk-module.so
 install -D -m 755 /usr/lib/x86_64-linux-gnu/libgnome-keyring.so.0 ${APPDIR}/usr/lib/ocs-store-linux-x64/libgnome-keyring.so.0
 
-curl -fsSL -o ocs-manager https://git.opendesktop.org/akiraohgaki/ocs-manager/uploads/ebf99a67dcd30bc57cfa371cac1f959e/ocs-manager-0.7.2-1-x86_64.AppImage
+curl -fsSL -o ocs-manager https://git.opendesktop.org/akiraohgaki/ocs-manager/uploads/582f867384808030447c08ff6ed79e6d/ocs-manager-0.8.0-1-x86_64.AppImage
 install -D -m 755 ocs-manager ${APPDIR}/usr/bin/ocs-manager
 
 curl -fsSL -o appimagetool https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage

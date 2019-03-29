@@ -150,35 +150,44 @@ export default class ToolbarComponent extends BaseComponent {
         }
 
         switch (target.getAttribute('data-action')) {
-            case 'webview_goBack':
+            case 'webview_goBack': {
                 this.dispatch('webview_goBack', {});
                 break;
-            case 'webview_goForward':
+            }
+            case 'webview_goForward': {
                 this.dispatch('webview_goForward', {});
                 break;
-            case 'webview_reload':
+            }
+            case 'webview_reload': {
                 this.dispatch('webview_reload', {});
                 break;
-            case 'webview_stop':
+            }
+            case 'webview_stop': {
                 this.dispatch('webview_stop', {});
                 break;
-            case 'webview_startPage':
+            }
+            case 'webview_startPage': {
                 this.dispatch('webview_startPage', {});
                 break;
-            case 'ocsManager_collection':
+            }
+            case 'ocsManager_collection': {
                 this.dispatch('ocsManager_collection', {});
                 break;
-            case 'menu_open':
+            }
+            case 'menu_open': {
                 this.contentRoot.querySelector('app-menu').open();
                 break;
-            case 'webview_appBugsPage':
+            }
+            case 'webview_appBugsPage': {
                 this.dispatch('webview_appBugsPage', {});
                 this.contentRoot.querySelector('app-menu').close();
                 break;
-            case 'general_about':
+            }
+            case 'general_about': {
                 this.dispatch('general_about', {});
                 this.contentRoot.querySelector('app-menu').close();
                 break;
+            }
         }
     }
 
