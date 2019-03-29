@@ -116,9 +116,7 @@ export default class WebviewComponent extends BaseComponent {
                 this._webview.openDevTools();
             }
 
-            //this._webview.send('ipc-message');
-
-            this._webview.send('smooth-scroll');
+            this._webview.send('ipc-message');
         });
 
         this._webview.addEventListener('new-window', (event) => {

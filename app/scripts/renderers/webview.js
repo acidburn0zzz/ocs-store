@@ -1,6 +1,6 @@
 const {ipcRenderer} = require('electron');
 
-ipcRenderer.on('smooth-scroll', () => {
+function applySmoothScroll() {
     let timeoutId = null;
     let deltaX = 0;
     let deltaY = 0;
@@ -25,15 +25,20 @@ ipcRenderer.on('smooth-scroll', () => {
             }, 150);
         }
     });
-});
+}
 
 /*
-ipcRenderer.on('user-profile', () => {
+function detectUserProfile() {
     const profileMenu = document.querySelector('[rel="profile-menu"]');
     if (profileMenu) {
         const userName = profileMenu.querySelector('span').innerHTML;
         const userImage = profileMenu.querySelector('img').src;
         ipcRenderer.sendToHost('user-profile', userName, userImage);
     }
-});
+}
 */
+
+ipcRenderer.on('ipc-message', () => {
+    applySmoothScroll();
+    //detectUserProfile();
+});
