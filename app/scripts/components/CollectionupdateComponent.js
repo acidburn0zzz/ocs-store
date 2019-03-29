@@ -116,10 +116,11 @@ export default class CollectionupdateComponent extends BaseComponent {
         if (event.target.closest('app-button[data-action]')) {
             const target = event.target.closest('app-button[data-action]');
             switch (target.getAttribute('data-action')) {
-                case 'ocsManager_update':
+                case 'ocsManager_update': {
                     this.dispatch('ocsManager_update', {itemKey: target.getAttribute('data-item-key')});
                     target.setAttribute('data-state', 'inactive');
                     break;
+                }
             }
         }
     }

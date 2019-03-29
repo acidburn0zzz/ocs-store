@@ -296,17 +296,20 @@ export default class OmniboxComponent extends BaseComponent {
         }
 
         switch (target.getAttribute('data-action')) {
-            case 'ocsManager_openUrl':
+            case 'ocsManager_openUrl': {
                 this.dispatch('ocsManager_openUrl', {url: target.getAttribute('data-url')});
                 break;
-            case 'webview_startPage':
+            }
+            case 'webview_startPage': {
                 this.dispatch('webview_startPage', {url: target.getAttribute('data-url')});
                 this.close();
                 break;
-            case 'ocsManager_collection':
+            }
+            case 'ocsManager_collection': {
                 this.dispatch('ocsManager_collection', {view: target.getAttribute('data-view')});
                 this.close();
                 break;
+            }
         }
     }
 
