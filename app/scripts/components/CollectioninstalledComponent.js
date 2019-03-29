@@ -140,7 +140,7 @@ export default class CollectioninstalledComponent extends BaseComponent {
                 case 'ocsManager_uninstall': {
                     const itemKey = target.getAttribute('data-item-key');
                     this.dispatch('ocsManager_uninstall', {itemKey: itemKey});
-                    for (const listItem of this.contentRoot.querySelector(`li[data-item-key="${itemKey}"]`)) {
+                    for (const listItem of this.contentRoot.querySelectorAll(`li[data-item-key="${itemKey}"]`)) {
                         listItem.remove();
                     }
                     break;
