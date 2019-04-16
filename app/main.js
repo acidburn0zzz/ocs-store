@@ -87,7 +87,10 @@ function createWindow() {
         }
     });
 
-    if (!isDebugMode) {
+    if (isDebugMode) {
+        mainWindow.webContents.openDevTools({mode: 'detach'});
+    }
+    else {
         mainWindow.setMenu(null);
     }
 
@@ -105,10 +108,6 @@ function createWindow() {
             mainView = null;
         }
     });
-
-    if (isDebugMode) {
-        mainWindow.webContents.openDevTools({mode: 'detach'});
-    }
 
     createView();
 }
