@@ -105,7 +105,7 @@ function createWindow() {
     });
 
     if (isDebugMode) {
-        mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools({mode: 'detach'});
     }
 
     createView();
