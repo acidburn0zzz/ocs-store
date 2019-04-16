@@ -193,6 +193,44 @@ function createView() {
         }
     });
 
+    ipcMain.on('browserView_loadUrl', (event, url) => {
+        mainView.webContents.loadURL(url);
+        event.returnValue = undefined;
+    });
+
+    ipcMain.on('browserView_getUrl', (event) => {
+        event.returnValue = mainView.webContents.getURL();
+    });
+
+    ipcMain.on('browserView_getTitle', (event) => {
+        event.returnValue = mainView.webContents.getTitle();
+    });
+
+    ipcMain.on('browserView_goBack', (event) => {
+        mainView.webContents.goBack();
+        event.returnValue = undefined;
+    });
+
+    ipcMain.on('browserView_goForward', (event) => {
+        mainView.webContents.goForward();
+        event.returnValue = undefined;
+    });
+
+    ipcMain.on('browserView_reload', (event) => {
+        mainView.webContents.reload();
+        event.returnValue = undefined;
+    });
+
+    ipcMain.on('browserView_stop', (event) => {
+        mainView.webContents.stop();
+        event.returnValue = undefined;
+    });
+
+    ipcMain.on('browserView_executeJavaScript', (event, ...args) => {
+        mainView.webContents.executeJavaScript(...args);
+        event.returnValue = undefined;
+    });
+
     //ipcMain.on('ipc-message', (event) => {});
 
     mainView.webContents.loadURL('https://www.opendesktop.org/');
