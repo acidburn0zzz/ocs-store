@@ -12,7 +12,9 @@ const ocsManagerConfig = require('./configs/ocs-manager.json');
 const isDebugMode = process.argv.includes('--debug');
 const previewpicDirectory = `${app.getPath('userData')}/previewpic`;
 const windowIcon = `${__dirname}/images/app-icons/ocs-store.png`;
-const indexFileUrl = `file://${__dirname}/index.html`;
+const windowIndexFileUrl = `file://${__dirname}/index.html`;
+const viewSessionPartition = 'persist:opendesktop';
+const viewPreloadScript = `${__dirname}/scripts/renderers/browser-view.js`;
 const appConfigStoreStorage = 'application';
 
 let mainWindow = null;
@@ -89,7 +91,7 @@ function createWindow() {
         mainWindow.setMenu(null);
     }
 
-    mainWindow.loadURL(indexFileUrl);
+    mainWindow.loadURL(windowIndexFileUrl);
 
     mainWindow.on('close', () => {
         const appConfigStore = new ElectronStore({name: appConfigStoreStorage});
@@ -115,8 +117,8 @@ function createView() {
     mainView = new BrowserView({
         webPreferences: {
             nodeIntegration: false,
-            partition: 'persist:opendesktop',
-            preload: `${__dirname}/scripts/renderers/browser-view.js`
+            partition: viewSessionPartition,
+            preload: viewPreloadScript
         }
     });
 
