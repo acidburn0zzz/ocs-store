@@ -114,7 +114,9 @@ function createWindow() {
 function createView() {
     mainView = new BrowserView({
         webPreferences: {
-            nodeIntegration: false
+            nodeIntegration: false,
+            partition: 'persist:opendesktop',
+            preload: `${__dirname}/scripts/renderers/browser-view.js`
         }
     });
 
@@ -133,6 +135,10 @@ function createView() {
         width: true,
         height: true
     });
+
+    if (isDebugMode) {
+        mainView.webContents.openDevTools({mode: 'detach'});
+    }
 
     mainView.webContents.loadURL('https://www.opendesktop.org/');
 }
