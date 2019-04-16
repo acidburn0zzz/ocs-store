@@ -87,15 +87,6 @@ function createWindow() {
         }
     });
 
-    if (isDebugMode) {
-        mainWindow.webContents.openDevTools({mode: 'detach'});
-    }
-    else {
-        mainWindow.setMenu(null);
-    }
-
-    mainWindow.loadURL(windowIndexFileUrl);
-
     mainWindow.on('close', () => {
         const appConfigStore = new ElectronStore({name: appConfigStoreStorage});
         appConfigStore.set('windowBounds', mainWindow.getBounds());
@@ -109,10 +100,37 @@ function createWindow() {
         }
     });
 
+    if (isDebugMode) {
+        mainWindow.webContents.openDevTools({mode: 'detach'});
+    }
+    else {
+        mainWindow.setMenu(null);
+    }
+
+    mainWindow.loadURL(windowIndexFileUrl);
+
     createView();
 }
 
 function createView() {
+    const detectOcsApiInfo = (url) => {
+        // Detect provider key and content id from page url
+        // https://www.opendesktop.org/s/Gnome/p/123456789/?key=val#hash
+        //
+        // providerKey = https://www.opendesktop.org/ocs/v1/
+        // contentId = 123456789
+        const info = {
+            providerKey: '',
+            contentId: ''
+        };
+        const matches = url.match(/(https?:\/\/[^/]+).*\/p\/([^/?#]+)/);
+        if (matches) {
+            info.providerKey = `${matches[1]}/ocs/v1/`;
+            info.contentId = matches[2];
+        }
+        return info;
+    };
+
     mainView = new BrowserView({
         webPreferences: {
             nodeIntegration: false,
@@ -137,9 +155,45 @@ function createView() {
         height: true
     });
 
-    if (isDebugMode) {
-        mainView.webContents.openDevTools({mode: 'detach'});
-    }
+    mainView.webContents.on('did-start-loading', () => {
+        mainWindow.webContents.send('browserView_loading', {isLoading: true});
+    });
+
+    mainView.webContents.on('did-stop-loading', () => {
+        mainWindow.webContents.send('browserView_loading', {isLoading: false});
+    });
+
+    mainView.webContents.on('dom-ready', () => {
+        mainWindow.webContents.send('browserView_page', {
+            url: mainView.webContents.getURL(),
+            title: mainView.webContents.getTitle(),
+            canGoBack: mainView.webContents.canGoBack(),
+            canGoForward: mainView.webContents.canGoForward()
+        });
+
+        if (isDebugMode) {
+            mainView.webContents.openDevTools({mode: 'detach'});
+        }
+
+        mainView.webContents.send('ipc-message');
+    });
+
+    mainView.webContents.on('new-window', (event, url) => {
+        if (url.startsWith('http://') || url.startsWith('https://')) {
+            event.preventDefault();
+            mainWindow.webContents.send('ocsManager_openUrl', {url: url});
+        }
+    });
+
+    mainView.webContents.on('will-navigate', (event, url) => {
+        if (url.startsWith('ocs://') || url.startsWith('ocss://')) {
+            event.preventDefault();
+            const info = detectOcsApiInfo(mainView.webContents.getURL());
+            mainWindow.webContents.send('ocsManager_getItemByOcsUrl', {url: url, ...info});
+        }
+    });
+
+    //ipcMain.on('ipc-message', (event) => {});
 
     mainView.webContents.loadURL('https://www.opendesktop.org/');
 }
@@ -222,9 +276,8 @@ app.on('activate', () => {
     }
 });
 
-app.on('web-contents-created', (event, webContents) => {
-    const type = webContents.getType();
-    if (type === 'browserView' || type === 'webview') {
+/*app.on('web-contents-created', (event, webContents) => {
+    if (webContents.getType() === 'webview') {
         webContents.on('will-navigate', (event, url) => {
             if (url.startsWith('ocs://') || url.startsWith('ocss://')) {
                 // Cancel ocs protocol navigation
@@ -232,7 +285,7 @@ app.on('web-contents-created', (event, webContents) => {
             }
         });
     }
-});
+});*/
 
 ipcMain.on('app', (event, key) => {
     const data = {
