@@ -1,7 +1,7 @@
 const fs = require('fs');
 const {spawn} = require('child_process');
 
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, BrowserWindow, BrowserView, ipcMain} = require('electron');
 const ElectronStore = require('electron-store');
 const request = require('request');
 
@@ -16,6 +16,7 @@ const indexFileUrl = `file://${__dirname}/index.html`;
 const appConfigStoreStorage = 'application';
 
 let mainWindow = null;
+let mainView = null;
 let ocsManager = null;
 let ocsManagerUrl = '';
 
@@ -59,6 +60,7 @@ async function startOcsManager() {
 function stopOcsManager() {
     if (ocsManager) {
         ocsManager.kill();
+        ocsManager = null;
         ocsManagerUrl = '';
     }
 }
@@ -96,11 +98,43 @@ function createWindow() {
 
     mainWindow.on('closed', () => {
         mainWindow = null;
+        if (mainView) {
+            mainView.destroy();
+            mainView = null;
+        }
     });
 
     if (isDebugMode) {
         mainWindow.webContents.openDevTools();
     }
+
+    createView();
+}
+
+function createView() {
+    mainView = new BrowserView({
+        webPreferences: {
+            nodeIntegration: false
+        }
+    });
+
+    mainWindow.setBrowserView(mainView);
+
+    const offsetY = 340;
+    const windowBounds = mainWindow.getBounds();
+    mainView.setBounds({
+        x: 0,
+        y: offsetY,
+        width: windowBounds.width,
+        height: windowBounds.height - offsetY
+    });
+
+    mainView.setAutoResize({
+        width: true,
+        height: true
+    });
+
+    mainView.webContents.loadURL('https://www.opendesktop.org/');
 }
 
 function isFile(path) {
