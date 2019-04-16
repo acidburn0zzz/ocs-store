@@ -223,7 +223,8 @@ app.on('activate', () => {
 });
 
 app.on('web-contents-created', (event, webContents) => {
-    if (webContents.getType() === 'webview') {
+    const type = webContents.getType();
+    if (type === 'browserView' || type === 'webview') {
         webContents.on('will-navigate', (event, url) => {
             if (url.startsWith('ocs://') || url.startsWith('ocss://')) {
                 // Cancel ocs protocol navigation
