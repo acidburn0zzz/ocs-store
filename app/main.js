@@ -141,13 +141,13 @@ function createView() {
 
     mainWindow.setBrowserView(mainView);
 
-    const offsetY = 340;
+    const toolbarHeight = 40;
     const windowBounds = mainWindow.getBounds();
     mainView.setBounds({
         x: 0,
-        y: offsetY,
+        y: toolbarHeight,
         width: windowBounds.width,
-        height: windowBounds.height - offsetY
+        height: windowBounds.height - toolbarHeight
     });
 
     mainView.setAutoResize({
@@ -175,7 +175,7 @@ function createView() {
             mainView.webContents.openDevTools({mode: 'detach'});
         }
 
-        mainView.webContents.send('ipc-message');
+        mainView.webContents.send('ipcMessage');
     });
 
     mainView.webContents.on('new-window', (event, url) => {
@@ -231,9 +231,12 @@ function createView() {
         event.returnValue = undefined;
     });
 
-    //ipcMain.on('ipc-message', (event) => {});
+    //ipcMain.on('ipcMessage', (event) => {});
 
-    mainView.webContents.loadURL('https://www.opendesktop.org/');
+    const appConfigStore = new ElectronStore({name: appConfigStoreStorage});
+    const startPage = appConfigStore.get('startPage');
+
+    mainView.webContents.loadURL(startPage);
 }
 
 function isFile(path) {

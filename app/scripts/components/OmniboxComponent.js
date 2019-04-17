@@ -15,24 +15,24 @@ export default class OmniboxComponent extends BaseComponent {
 
         this.contentRoot.addEventListener('click', this._handleClick.bind(this));
 
-        this._viewHandler_webview_loading = this._viewHandler_webview_loading.bind(this);
-        this._viewHandler_webview_page = this._viewHandler_webview_page.bind(this);
+        this._viewHandler_browserView_loading = this._viewHandler_browserView_loading.bind(this);
+        this._viewHandler_browserView_page = this._viewHandler_browserView_page.bind(this);
         this._viewHandler_ocsManager_updateAvailableItems = this._viewHandler_ocsManager_updateAvailableItems.bind(this);
         this._viewHandler_ocsManager_metadataSet = this._viewHandler_ocsManager_metadataSet.bind(this);
     }
 
     componentConnectedCallback() {
         this.getStateManager().viewHandler
-            .add('webview_loading', this._viewHandler_webview_loading)
-            .add('webview_page', this._viewHandler_webview_page)
+            .add('browserView_loading', this._viewHandler_browserView_loading)
+            .add('browserView_page', this._viewHandler_browserView_page)
             .add('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems)
             .add('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
     componentDisconnectedCallback() {
         this.getStateManager().viewHandler
-            .remove('webview_loading', this._viewHandler_webview_loading)
-            .remove('webview_page', this._viewHandler_webview_page)
+            .remove('browserView_loading', this._viewHandler_browserView_loading)
+            .remove('browserView_page', this._viewHandler_browserView_page)
             .remove('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems)
             .remove('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
@@ -231,12 +231,12 @@ export default class OmniboxComponent extends BaseComponent {
             <h4><i class="material-icons md-small">home</i> Choose Startpage</h4>
             <nav>
             <ul>
-            <li><app-button data-action="webview_startPage" data-url="https://www.opendesktop.org/">opendesktop.org</app-button></li>
-            <li><app-button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/Gnome">gnome-look.org</app-button></li>
-            <li><app-button data-action="webview_startPage" data-url="https://store.kde.org/">store.kde.org</app-button></li>
-            <li><app-button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/XFCE">xfce-look.org</app-button></li>
-            <li><app-button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/Window-Managers">box-look.org</app-button></li>
-            <li><app-button data-action="webview_startPage" data-url="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</app-button></li>
+            <li><app-button data-action="browserView_startPage" data-url="https://www.opendesktop.org/">opendesktop.org</app-button></li>
+            <li><app-button data-action="browserView_startPage" data-url="https://www.opendesktop.org/s/Gnome">gnome-look.org</app-button></li>
+            <li><app-button data-action="browserView_startPage" data-url="https://store.kde.org/">store.kde.org</app-button></li>
+            <li><app-button data-action="browserView_startPage" data-url="https://www.opendesktop.org/s/XFCE">xfce-look.org</app-button></li>
+            <li><app-button data-action="browserView_startPage" data-url="https://www.opendesktop.org/s/Window-Managers">box-look.org</app-button></li>
+            <li><app-button data-action="browserView_startPage" data-url="https://www.opendesktop.org/s/Enlightenment">enlightenment-themes.org</app-button></li>
             </ul>
             </nav>
             </div>
@@ -247,12 +247,12 @@ export default class OmniboxComponent extends BaseComponent {
     }
 
     componentUpdatedCallback() {
-        if (this.contentRoot.querySelector('app-button[data-action="webview_startPage"][data-checked]')) {
-            this.contentRoot.querySelector('app-button[data-action="webview_startPage"][data-checked]').removeAttribute('data-checked');
+        if (this.contentRoot.querySelector('app-button[data-action="browserView_startPage"][data-checked]')) {
+            this.contentRoot.querySelector('app-button[data-action="browserView_startPage"][data-checked]').removeAttribute('data-checked');
         }
 
-        if (this.contentRoot.querySelector(`app-button[data-action="webview_startPage"][data-url="${this.state.startPage}"]`)) {
-            this.contentRoot.querySelector(`app-button[data-action="webview_startPage"][data-url="${this.state.startPage}"]`).setAttribute('data-checked', 'data-checked');
+        if (this.contentRoot.querySelector(`app-button[data-action="browserView_startPage"][data-url="${this.state.startPage}"]`)) {
+            this.contentRoot.querySelector(`app-button[data-action="browserView_startPage"][data-url="${this.state.startPage}"]`).setAttribute('data-checked', 'data-checked');
         }
     }
 
@@ -300,8 +300,8 @@ export default class OmniboxComponent extends BaseComponent {
                 this.dispatch('ocsManager_openUrl', {url: target.getAttribute('data-url')});
                 break;
             }
-            case 'webview_startPage': {
-                this.dispatch('webview_startPage', {url: target.getAttribute('data-url')});
+            case 'browserView_startPage': {
+                this.dispatch('browserView_startPage', {url: target.getAttribute('data-url')});
                 this.close();
                 break;
             }
@@ -313,12 +313,12 @@ export default class OmniboxComponent extends BaseComponent {
         }
     }
 
-    _viewHandler_webview_loading(state) {
+    _viewHandler_browserView_loading(state) {
         const indicator = this.contentRoot.querySelector('div[data-omnibox] app-indicator');
         state.isLoading ? indicator.start() : indicator.stop();
     }
 
-    _viewHandler_webview_page(state) {
+    _viewHandler_browserView_page(state) {
         this.update({...this.state, ...state});
     }
 

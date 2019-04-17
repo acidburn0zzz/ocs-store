@@ -3,17 +3,17 @@ import BaseComponent from './common/BaseComponent.js';
 export default class SplashscreenComponent extends BaseComponent {
 
     init() {
-        this._viewHandler_webview_loading = this._viewHandler_webview_loading.bind(this);
+        this._viewHandler_browserView_loading = this._viewHandler_browserView_loading.bind(this);
     }
 
     componentConnectedCallback() {
         this.getStateManager().viewHandler
-            .add('webview_loading', this._viewHandler_webview_loading);
+            .add('browserView_loading', this._viewHandler_browserView_loading);
     }
 
     componentDisconnectedCallback() {
         this.getStateManager().viewHandler
-            .remove('webview_loading', this._viewHandler_webview_loading);
+            .remove('browserView_loading', this._viewHandler_browserView_loading);
     }
 
     render() {
@@ -55,7 +55,7 @@ export default class SplashscreenComponent extends BaseComponent {
         `;
     }
 
-    _viewHandler_webview_loading(state) {
+    _viewHandler_browserView_loading(state) {
         if (!state.isLoading) {
             this.contentRoot.querySelector('app-dialog').close();
             // Splash screen only shows when app launch, so remove it

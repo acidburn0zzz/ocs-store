@@ -87,7 +87,7 @@ export default class AboutdialogComponent extends BaseComponent {
     _handleClick(event) {
         if (event.target.closest('a')) {
             event.preventDefault();
-            this.dispatch('webview_loadUrl', {url: event.target.closest('a').href});
+            this.dispatch('browserView_loadUrl', {url: event.target.closest('a').href});
             this.close();
         }
     }

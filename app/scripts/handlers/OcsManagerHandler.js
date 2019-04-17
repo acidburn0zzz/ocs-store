@@ -8,7 +8,7 @@ export default class OcsManagerHandler {
         this._previewpicDirectory = this._ipcRenderer.sendSync('previewpic', 'directory');
         this._installTypes = {};
 
-        this._webviewComponent = null;
+        //this._webviewComponent = null;
         this._collectiondialogComponent = null;
 
         this._subscribe();
@@ -16,11 +16,19 @@ export default class OcsManagerHandler {
     }
 
     _subscribe() {
+        this._ipcRenderer.on('ocsManager_openUrl', (event, data) => {
+            this._stateManager.dispatch('ocsManager_openUrl', data);
+        });
+
+        this._ipcRenderer.on('ocsManager_getItemByOcsUrl', (event, data) => {
+            this._stateManager.dispatch('ocsManager_getItemByOcsUrl', data);
+        });
+
         this._stateManager.actionHandler
-            .add('webview_activate', (data) => {
+            /*.add('webview_activate', (data) => {
                 this._webviewComponent = data.component;
                 return {isActivated: true};
-            })
+            })*/
             .add('ocsManager_activate', (data) => {
                 this._collectiondialogComponent = data.component;
                 return {isActivated: true};
@@ -178,6 +186,7 @@ export default class OcsManagerHandler {
 
                 // Download preview picture
                 const selector = 'meta[property="og:image"]';
+                // TODO: make download method inside main process
                 this._webviewComponent.executeJavaScript(
                     `document.querySelector('${selector}').content`,
                     false,

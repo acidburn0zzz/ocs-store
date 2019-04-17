@@ -5,24 +5,24 @@ export default class ToolbarComponent extends BaseComponent {
     init() {
         this.contentRoot.addEventListener('click', this._handleClick.bind(this));
 
-        this._viewHandler_webview_loading = this._viewHandler_webview_loading.bind(this);
-        this._viewHandler_webview_page = this._viewHandler_webview_page.bind(this);
+        this._viewHandler_browserView_loading = this._viewHandler_browserView_loading.bind(this);
+        this._viewHandler_browserView_page = this._viewHandler_browserView_page.bind(this);
         this._viewHandler_ocsManager_updateAvailableItems = this._viewHandler_ocsManager_updateAvailableItems.bind(this);
         this._viewHandler_ocsManager_metadataSet = this._viewHandler_ocsManager_metadataSet.bind(this);
     }
 
     componentConnectedCallback() {
         this.getStateManager().viewHandler
-            .add('webview_loading', this._viewHandler_webview_loading)
-            .add('webview_page', this._viewHandler_webview_page)
+            .add('browserView_loading', this._viewHandler_browserView_loading)
+            .add('browserView_page', this._viewHandler_browserView_page)
             .add('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems)
             .add('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
 
     componentDisconnectedCallback() {
         this.getStateManager().viewHandler
-            .remove('webview_loading', this._viewHandler_webview_loading)
-            .remove('webview_page', this._viewHandler_webview_page)
+            .remove('browserView_loading', this._viewHandler_browserView_loading)
+            .remove('browserView_page', this._viewHandler_browserView_page)
             .remove('ocsManager_updateAvailableItems', this._viewHandler_ocsManager_updateAvailableItems)
             .remove('ocsManager_metadataSet', this._viewHandler_ocsManager_metadataSet);
     }
@@ -67,10 +67,10 @@ export default class ToolbarComponent extends BaseComponent {
                 }
             }
 
-            app-iconbutton[data-action="webview_reload"][data-state="inactive"] {
+            app-iconbutton[data-action="browserView_reload"][data-state="inactive"] {
                 display: none;
             }
-            app-iconbutton[data-action="webview_stop"][data-state="inactive"] {
+            app-iconbutton[data-action="browserView_stop"][data-state="inactive"] {
                 display: none;
             }
 
@@ -99,21 +99,21 @@ export default class ToolbarComponent extends BaseComponent {
             <nav data-toolbar>
             <ul>
             <li>
-            <app-iconbutton data-action="webview_goBack"
+            <app-iconbutton data-action="browserView_goBack"
                 data-title="Back" data-icon="arrow_back" data-state="inactive"></app-iconbutton>
             </li>
             <li>
-            <app-iconbutton data-action="webview_goForward"
+            <app-iconbutton data-action="browserView_goForward"
                 data-title="Forward" data-icon="arrow_forward" data-state="inactive"></app-iconbutton>
             </li>
             <li>
-            <app-iconbutton data-action="webview_reload"
+            <app-iconbutton data-action="browserView_reload"
                 data-title="Reload" data-icon="refresh" data-state="active"></app-iconbutton>
-            <app-iconbutton data-action="webview_stop"
+            <app-iconbutton data-action="browserView_stop"
                 data-title="Stop" data-icon="close" data-state="inactive"></app-iconbutton>
             </li>
             <li>
-            <app-iconbutton data-action="webview_startPage"
+            <app-iconbutton data-action="browserView_startPage"
                 data-title="Startpage" data-icon="home"></app-iconbutton>
             </li>
             <li>
@@ -127,7 +127,7 @@ export default class ToolbarComponent extends BaseComponent {
             <app-iconbutton data-action="menu_open"
                 data-title="Other Operations..." data-icon="more_vert"></app-iconbutton><br>
             <app-menu data-width="250px" data-offset-x="-220px">
-            <a slot="menuitem" href="#" data-action="webview_appBugsPage">Report a Bug</a>
+            <a slot="menuitem" href="#" data-action="browserView_appBugsPage">Report a Bug</a>
             <a slot="menuitem" href="#" data-action="general_about">About This App</a>
             </app-menu>
             </li>
@@ -150,24 +150,24 @@ export default class ToolbarComponent extends BaseComponent {
         }
 
         switch (target.getAttribute('data-action')) {
-            case 'webview_goBack': {
-                this.dispatch('webview_goBack', {});
+            case 'browserView_goBack': {
+                this.dispatch('browserView_goBack', {});
                 break;
             }
-            case 'webview_goForward': {
-                this.dispatch('webview_goForward', {});
+            case 'browserView_goForward': {
+                this.dispatch('browserView_goForward', {});
                 break;
             }
-            case 'webview_reload': {
-                this.dispatch('webview_reload', {});
+            case 'browserView_reload': {
+                this.dispatch('browserView_reload', {});
                 break;
             }
-            case 'webview_stop': {
-                this.dispatch('webview_stop', {});
+            case 'browserView_stop': {
+                this.dispatch('browserView_stop', {});
                 break;
             }
-            case 'webview_startPage': {
-                this.dispatch('webview_startPage', {});
+            case 'browserView_startPage': {
+                this.dispatch('browserView_startPage', {});
                 break;
             }
             case 'ocsManager_collection': {
@@ -178,8 +178,8 @@ export default class ToolbarComponent extends BaseComponent {
                 this.contentRoot.querySelector('app-menu').open();
                 break;
             }
-            case 'webview_appBugsPage': {
-                this.dispatch('webview_appBugsPage', {});
+            case 'browserView_appBugsPage': {
+                this.dispatch('browserView_appBugsPage', {});
                 this.contentRoot.querySelector('app-menu').close();
                 break;
             }
@@ -191,17 +191,17 @@ export default class ToolbarComponent extends BaseComponent {
         }
     }
 
-    _viewHandler_webview_loading(state) {
-        this.contentRoot.querySelector('app-iconbutton[data-action="webview_reload"]')
+    _viewHandler_browserView_loading(state) {
+        this.contentRoot.querySelector('app-iconbutton[data-action="browserView_reload"]')
             .setAttribute('data-state', state.isLoading ? 'inactive' : 'active');
-        this.contentRoot.querySelector('app-iconbutton[data-action="webview_stop"]')
+        this.contentRoot.querySelector('app-iconbutton[data-action="browserView_stop"]')
             .setAttribute('data-state', state.isLoading ? 'active' : 'inactive');
     }
 
-    _viewHandler_webview_page(state) {
-        this.contentRoot.querySelector('app-iconbutton[data-action="webview_goBack"]')
+    _viewHandler_browserView_page(state) {
+        this.contentRoot.querySelector('app-iconbutton[data-action="browserView_goBack"]')
             .setAttribute('data-state', state.canGoBack ? 'active' : 'inactive');
-        this.contentRoot.querySelector('app-iconbutton[data-action="webview_goForward"]')
+        this.contentRoot.querySelector('app-iconbutton[data-action="browserView_goForward"]')
             .setAttribute('data-state', state.canGoForward ? 'active' : 'inactive');
     }
 
