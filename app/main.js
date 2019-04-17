@@ -226,11 +226,6 @@ function createView() {
         event.returnValue = undefined;
     });
 
-    ipcMain.on('browserView_executeJavaScript', (event, ...args) => {
-        mainView.webContents.executeJavaScript(...args);
-        event.returnValue = undefined;
-    });
-
     //ipcMain.on('ipcMessage', (event) => {});
 
     const appConfigStore = new ElectronStore({name: appConfigStoreStorage});
@@ -275,14 +270,24 @@ function previewpicFilename(itemKey) {
     return btoa(itemKey).slice(-255);
 }
 
-function downloadPreviewpic(itemKey, url) {
-    if (!isDirectory(previewpicDirectory)) {
-        fs.mkdirSync(previewpicDirectory);
-    }
-    const path = `${previewpicDirectory}/${previewpicFilename(itemKey)}`;
-    request.get(url).on('error', (error) => {
-        console.error(error);
-    }).pipe(fs.createWriteStream(path));
+function downloadPreviewpic(itemKey) {
+    const selector = 'meta[property="og:image"]';
+    mainView.webContents.executeJavaScript(
+        `document.querySelector('${selector}').content`,
+        false,
+        (result) => {
+            const previewpicUrl = result || '';
+            if (previewpicUrl) {
+                if (!isDirectory(previewpicDirectory)) {
+                    fs.mkdirSync(previewpicDirectory);
+                }
+                const path = `${previewpicDirectory}/${previewpicFilename(itemKey)}`;
+                request.get(previewpicUrl).on('error', (error) => {
+                    console.error(error);
+                }).pipe(fs.createWriteStream(path));
+            }
+        }
+    );
 }
 
 function removePreviewpic(itemKey) {
@@ -353,15 +358,15 @@ ipcMain.on('store', (event, key, value) => {
     event.returnValue = key ? appConfigStore.get(key) : appConfigStore.store;
 });
 
-ipcMain.on('previewpic', (event, kind, itemKey, url) => {
+ipcMain.on('previewpic', (event, kind, itemKey) => {
     if (kind === 'directory') {
         event.returnValue = previewpicDirectory;
     }
     else if (kind === 'path' && itemKey) {
         event.returnValue = `${previewpicDirectory}/${previewpicFilename(itemKey)}`;
     }
-    else if (kind === 'download' && itemKey && url) {
-        downloadPreviewpic(itemKey, url);
+    else if (kind === 'download' && itemKey) {
+        downloadPreviewpic(itemKey);
         event.returnValue = undefined;
     }
     else if (kind === 'remove' && itemKey) {
