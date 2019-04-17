@@ -141,13 +141,13 @@ function createView() {
 
     mainWindow.setBrowserView(mainView);
 
-    const toolbarHeight = 40;
+    const offsetY = 440;
     const windowBounds = mainWindow.getBounds();
     mainView.setBounds({
         x: 0,
-        y: toolbarHeight,
+        y: offsetY,
         width: windowBounds.width,
-        height: windowBounds.height - toolbarHeight
+        height: windowBounds.height - offsetY
     });
 
     mainView.setAutoResize({
